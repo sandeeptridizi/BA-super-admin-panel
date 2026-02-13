@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap');
 
 
+=======
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
 * {
   margin: 0;
   padding: 0;
@@ -11,5 +14,8 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgba(255, 255, 255, 1);
+<<<<<<< HEAD
   font-family: 'Arimo', sans-serif;
+=======
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
 }

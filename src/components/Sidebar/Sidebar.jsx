@@ -14,8 +14,11 @@ import { LuDollarSign } from 'react-icons/lu';
 import { LuMessageSquare } from 'react-icons/lu';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
+<<<<<<< HEAD
 import { FiActivity } from "react-icons/fi";
 
+=======
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
 
 const linksData = [
   {
@@ -24,6 +27,7 @@ const linksData = [
     title: 'Dashboard',
     link: '/',
   },
+<<<<<<< HEAD
    {
     id: 2,
     icon: <FiActivity />,
@@ -32,42 +36,70 @@ const linksData = [
   },
   {
     id: 3,
+=======
+  {
+    id: 2,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <FiShoppingBag />,
     title: 'Products',
     link: 'products',
   },
   {
+<<<<<<< HEAD
     id: 4,
+=======
+    id: 3,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <GoPeople />,
     title: 'Users',
     link: 'users',
   },
   {
+<<<<<<< HEAD
     id: 5,
+=======
+    id: 4,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <FiTarget />,
     title: 'Leads',
     link: 'leads',
   },
   {
+<<<<<<< HEAD
     id: 6,
+=======
+    id: 5,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <RxPerson />,
     title: 'Employees',
     link: 'employees',
   },
   {
+<<<<<<< HEAD
     id: 7,
+=======
+    id: 6,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <LuDollarSign />,
     title: 'Financials',
     link: 'financials',
   },
   {
+<<<<<<< HEAD
     id: 8,
+=======
+    id: 7,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <LuMessageSquare />,
     title: 'Enquiries',
     link: 'enquiries',
   },
   {
+<<<<<<< HEAD
     id: 9,
+=======
+    id: 8,
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
     icon: <IoSettingsOutline />,
     title: 'Settings',
     link: 'settings',

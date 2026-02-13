@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import "./Enquiries.css";
 import {
@@ -346,3 +347,12 @@ export default function Enquiries() {
     </div>
   );
 }
+=======
+import './Enquiries.css';
+
+const Enquiries = () => {
+  return <h1>Enquiries</h1>;
+};
+
+export default Enquiries;
+>>>>>>> 033d7f0c6160f31e50e9c7b4d002ace7e8e79d0b
