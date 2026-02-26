@@ -4,3 +4,11 @@
   display: flex;
   gap: 16px;
 }
+
+@media screen and (max-width: 600px) {
+  .landing-page-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}

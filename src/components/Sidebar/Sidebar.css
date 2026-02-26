@@ -151,3 +151,9 @@
   color: rgba(251, 44, 54, 1);
   cursor: pointer;
 }
+
+@media screen and (max-width: 600px) {
+  .sidebar-container {
+    display: none;
+  }
+}

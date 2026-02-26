@@ -646,3 +646,77 @@
   height: 24px;
   color: rgba(225, 113, 0, 1);
 }
+
+@media screen and (max-width: 600px) {
+  .employee-dashboard-container {
+    width: 100%;
+    padding: 32px 12px;
+  }
+
+  .employee-dashboard-header {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .employee-dashboard-heading {
+    font-size: 20px;
+  }
+
+  .employee-dashboard-text {
+    font-size: 14px;
+  }
+
+  .employee-dashboard-grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .assigned-leads-container {
+    width: 100%;
+  }
+
+  .assigned-leads-header {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .assigned-leads-text {
+    font-size: 12px;
+  }
+
+  .leads-tag {
+    font-size: 10px;
+  }
+
+  .assigned-leads-grid-container {
+    width: 100%;
+    padding: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .progress-tag {
+    font-size: 10px;
+  }
+
+  .pending-leads-container {
+    width: 100%;
+  }
+
+  .pending-leads-header {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .pending-leads-text {
+    font-size: 10px;
+  }
+  .pending-leads-grid-container {
+    width: 100%;
+    padding: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .employee-dashboard-footer-grid-container {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+}

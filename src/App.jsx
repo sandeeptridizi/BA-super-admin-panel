@@ -19,10 +19,12 @@ import EmployeeDetails from './pages/EmployeeDetails/EmployeeDetails';
 import CreateEmployee from './pages/CreateEmployee/CreateEmployee';
 import EnquiryDetails from './pages/EnquiryDetails/EnquiryDetails';
 import EmployeeDashboard from './pages/EmloyeeDashboard/EmployeeDashboard';
+import MobileNavbar from './components/MobileNavbar/MobileNavbar';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <MobileNavbar />
       <Routes>
         <Route path='/' element={<LandingPage />}>
           <Route index element={<EmployeeDashboard />} />
