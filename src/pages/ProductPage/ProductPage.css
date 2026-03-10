@@ -279,3 +279,30 @@
     border-color: 1.25px rgba(153, 153, 153, 0.1);
     font-size: 14px;
 }
+
+.productdetailsgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.productdetailitem {
+  padding: 12px;
+  background: #FAFAF5;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.productdetailitem .detaillabel {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.productdetailitem .detailvalue {
+  font-size: 14px;
+  color: #0A0A0A;
+  font-weight: 500;
+}

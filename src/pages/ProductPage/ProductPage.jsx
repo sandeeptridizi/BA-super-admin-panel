@@ -13,6 +13,8 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
+import { AiOutlineShop } from "react-icons/ai";
+import { BsStars } from "react-icons/bs";
 
 import pageimageheader from "../../assets/productImageThree.png";
 import pageimageone from "../../assets/productImageOne.png";
@@ -31,6 +33,28 @@ const PLACEHOLDER_IMAGES = [
   pageimagefour,
   pageimagefive,
 ];
+
+const LISTING_TYPE_LABELS = {
+  MARKETPLACE: "Marketplace",
+  BUY_NOW: "Buy Now",
+  AUCTIONS: "Auctions",
+  TO_LET: "To-Let",
+};
+
+const TIER_LABELS = {
+  GENERAL: "General",
+  LUXURY: "Luxury",
+  CLASSIC: "Classic",
+};
+
+const formatMetaLabel = (key) => {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (s) => s.toUpperCase())
+    .trim();
+};
+
+const META_SKIP_KEYS = ["views", "features", "keyFeatures"];
 
 const CATEGORY_LABELS = {
   REAL_ESTATE: "Real Estate",
@@ -166,6 +190,18 @@ const ProductPage = () => {
             <span className="productheaddesc1">
               <IoLocationOutline /> {getLocationText(meta)}
             </span>
+            {product.listingType && (
+              <span className="productheaddesc1">
+                <AiOutlineShop />{" "}
+                {LISTING_TYPE_LABELS[product.listingType] || product.listingType}
+              </span>
+            )}
+            {product.tier && (
+              <span className="productheaddesc1">
+                <BsStars />{" "}
+                {TIER_LABELS[product.tier] || product.tier}
+              </span>
+            )}
           </div>
           <button
             className="addproduct"
@@ -202,6 +238,35 @@ const ProductPage = () => {
               {product.description || "No description."}
             </p>
           </div>
+          {Object.keys(meta).filter(
+            (key) =>
+              !META_SKIP_KEYS.includes(key) &&
+              meta[key] !== null &&
+              meta[key] !== undefined &&
+              meta[key] !== ""
+          ).length > 0 && (
+            <div className="productdescription">
+              <h2 className="producttitle">Product Details</h2>
+              <div className="productdetailsgrid">
+                {Object.entries(meta)
+                  .filter(
+                    ([key, value]) =>
+                      !META_SKIP_KEYS.includes(key) &&
+                      value !== null &&
+                      value !== undefined &&
+                      value !== ""
+                  )
+                  .map(([key, value]) => (
+                    <div key={key} className="productdetailitem">
+                      <div className="detaillabel">{formatMetaLabel(key)}</div>
+                      <div className="detailvalue">
+                        {typeof value === "object" ? JSON.stringify(value) : String(value)}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
           <div className="productdescription">
             <h2 className="producttitle">Key Features</h2>
             <div className="productfeatures">
