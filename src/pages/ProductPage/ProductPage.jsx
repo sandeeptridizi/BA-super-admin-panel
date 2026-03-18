@@ -13,6 +13,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { CiCalendar } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
+import { FaPlayCircle } from "react-icons/fa";
 import { AiOutlineShop } from "react-icons/ai";
 import { BsStars } from "react-icons/bs";
 
@@ -243,6 +244,24 @@ const ProductPage = () => {
               {product.description || "No description."}
             </p>
           </div>
+
+          {product.video && (
+            <div className="productdescription">
+              <h2 className="producttitle">
+                <FaPlayCircle style={{ color: 'rgba(212, 175, 55, 1)', marginRight: '6px' }} /> Product Video
+              </h2>
+              <div className="product-video-wrapper">
+                <video
+                  src={getFile(product.video)}
+                  controls
+                  className="product-video-player"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          )}
+
           {Object.keys(meta).filter(
             (key) =>
               !META_SKIP_KEYS.includes(key) &&

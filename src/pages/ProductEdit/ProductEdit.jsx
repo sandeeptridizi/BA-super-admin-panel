@@ -280,6 +280,13 @@ const ProductEdit = () => {
   const [newPreviews, setNewPreviews] = useState([]);
   const [removedMedia, setRemovedMedia] = useState([]);
 
+  // video
+  const videoInputRef = useRef(null);
+  const [existingVideo, setExistingVideo] = useState(null);
+  const [selectedVideoFile, setSelectedVideoFile] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
+  const [removeExistingVideo, setRemoveExistingVideo] = useState(false);
+
   // ── fetch ──────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!id) {
@@ -321,6 +328,9 @@ const ProductEdit = () => {
         if (Array.isArray(p.media)) {
           setExistingMedia(p.media);
         }
+        if (p.video) {
+          setExistingVideo(p.video);
+        }
       } catch (err) {
         setError(err?.response?.data?.message || err?.message || "Failed to load product");
       } finally {
@@ -356,6 +366,26 @@ const ProductEdit = () => {
   const removeNewFile = (idx) => {
     setNewFiles((prev) => prev.filter((_, i) => i !== idx));
     setNewPreviews((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  // ── video handling ──────────────────────────────────────────────────
+  const handleVideoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (videoPreview) URL.revokeObjectURL(videoPreview);
+    setSelectedVideoFile(file);
+    setVideoPreview(URL.createObjectURL(file));
+    setRemoveExistingVideo(true);
+    e.target.value = "";
+  };
+
+  const removeVideo = () => {
+    if (videoPreview) URL.revokeObjectURL(videoPreview);
+    setSelectedVideoFile(null);
+    setVideoPreview(null);
+    setExistingVideo(null);
+    setRemoveExistingVideo(true);
+    if (videoInputRef.current) videoInputRef.current.value = "";
   };
 
   // ── upload helper ──────────────────────────────────────────────────────
@@ -405,14 +435,26 @@ const ProductEdit = () => {
       await api.patch(`/api/product/${id}`, payload);
 
       // upload new files & update media
+      const mediaPatch = {};
       if (newFiles.length > 0 || removedMedia.length > 0) {
         const uploadedKeys = [];
         for (const file of newFiles) {
           const key = await uploadFile(file);
           uploadedKeys.push(key);
         }
-        const finalMedia = [...existingMedia, ...uploadedKeys];
-        await api.patch(`/api/product/${id}/media`, { media: finalMedia });
+        mediaPatch.media = [...existingMedia, ...uploadedKeys];
+      }
+
+      // upload video
+      if (selectedVideoFile) {
+        const videoKey = await uploadFile(selectedVideoFile);
+        mediaPatch.video = videoKey;
+      } else if (removeExistingVideo) {
+        mediaPatch.video = null;
+      }
+
+      if (Object.keys(mediaPatch).length > 0) {
+        await api.patch(`/api/product/${id}/media`, mediaPatch);
       }
 
       navigate(`/productpage/${id}`);
@@ -827,6 +869,34 @@ const ProductEdit = () => {
         >
           <FiUpload /> Upload Files
         </button>
+
+        <div className="productcreatehead" style={{ marginTop: 24 }}>Product Video</div>
+        <span className="productheaddesc1" style={{ display: "block", marginBottom: 12 }}>
+          Upload an optional product video
+        </span>
+
+        {!videoPreview && !existingVideo ? (
+          <ul className="selectedcategory2 videoUploadBox" onClick={() => videoInputRef.current?.click()} style={{ cursor: "pointer" }}>
+            <li className="selectedcaticon2"><FiUpload /></li>
+            <li className="selectedcatname1">Click to upload a product video</li>
+            <li className="selectedcatdesc">MP4, WEBM, MOV up to 50MB</li>
+          </ul>
+        ) : (
+          <div className="videoPreviewContainer">
+            <video
+              src={videoPreview || getFile(existingVideo)}
+              controls
+              style={{ width: "320px", maxHeight: "220px", borderRadius: "8px" }}
+            />
+            <div className="videoPreviewInfo">
+              <span className="selectedcatdesc">
+                {selectedVideoFile ? selectedVideoFile.name : "Existing video"}
+              </span>
+              <button type="button" className="removeVideoBtn" onClick={removeVideo}>Remove</button>
+            </div>
+          </div>
+        )}
+        <input type="file" ref={videoInputRef} style={{ display: "none" }} accept=".mp4,.webm,.mov" onChange={handleVideoChange} />
       </div>
 
       {/* ── actions ────────────────────────────────────────────────────── */}

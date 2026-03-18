@@ -306,3 +306,15 @@
   color: #0A0A0A;
   font-weight: 500;
 }
+
+.product-video-wrapper {
+  margin-top: 14px;
+}
+
+.product-video-player {
+  width: 100%;
+  max-width: 620px;
+  max-height: 360px;
+  border-radius: 10px;
+  background: #000;
+}
