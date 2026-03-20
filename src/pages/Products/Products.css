@@ -291,6 +291,21 @@
     justify-content: space-between;
 }
 
+.productdeleteicon{
+    cursor: pointer;
+    color: #999;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.productdeleteicon:hover{
+    color: #dc2626;
+}
+
 .productbusinesstag{
     width: fit-content;
     color: #8200DB;

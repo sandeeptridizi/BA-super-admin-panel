@@ -22,6 +22,7 @@ import { HiOutlineCube } from "react-icons/hi2";
 import { BsThreeDots } from "react-icons/bs";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LiaCertificateSolid } from "react-icons/lia";
+import { FiTrash2 } from "react-icons/fi";
 import api from "../../lib/api";
 
 const LISTING_TYPE_BY_TAB = {
@@ -126,6 +127,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -149,6 +151,20 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+
+  const handleDelete = async (e, productId) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      setDeletingId(productId);
+      await api.delete(`/api/product/${productId}`);
+      setProducts((prev) => prev.filter((p) => p.id !== productId));
+    } catch (err) {
+      alert(err?.response?.data?.message || "Failed to delete product.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const stats = useMemo(() => {
     const totalProducts = products.length;
@@ -377,8 +393,16 @@ const Products = () => {
                             <h2 className="producattitle">{product.title}</h2>
                           )}
                         </div>
-                        <div className="producttaggrow2">
-                          <BsThreeDotsVertical />
+                        <div
+                          className="productdeleteicon"
+                          title="Delete product"
+                          onClick={(e) => handleDelete(e, product.id)}
+                        >
+                          {deletingId === product.id ? (
+                            <span>...</span>
+                          ) : (
+                            <FiTrash2 />
+                          )}
                         </div>
                       </div>
 
