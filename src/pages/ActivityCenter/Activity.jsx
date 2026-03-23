@@ -362,6 +362,9 @@ const Activitypage = () => {
                         <li className={isMarketplace ? 'businesscat' : 'businesscat1'}><ListingIcon />{LISTING_LABELS[product.listingType] || product.listingType}</li>
                         <li className='productcat'>{CATEGORY_LABELS[product.category] || product.category}</li>
                         <li className='viewcat'><FaRegEye />{getViews(product.meta).toLocaleString()} views</li>
+                        <li className={`subscriptiontag ${product.owner?.subscriptionStatus === 'ACTIVE' ? 'substag-active' : 'substag-inactive'}`}>
+                            {product.owner?.subscriptionPlan && product.owner.subscriptionPlan !== 'NONE' ? product.owner.subscriptionPlan : ''} {product.owner?.subscriptionStatus || 'N/A'}
+                        </li>
                     </ul>
                 </div>
                 <span className='activityinfoicon'><CiLocationOn />{getLocation(product.meta)}</span>

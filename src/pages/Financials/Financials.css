@@ -363,7 +363,6 @@
 .plan-card {
   padding: 25px;
   border-radius: 18px;
-  height: 300px;
   width: 230px;
   border: 1px solid #D4D4D8;
   background: #fff;
@@ -421,16 +420,41 @@
     color: #FB2C36;
 }
 
-.planediticon{
+.plan-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.plan-action-btn {
     height: 28px;
     width: 28px;
     border-radius: 8px;
-    background-color: #ffffff;
-    color: #0A0A0A;
-    font-size: 16px;
-    padding: 5px 0 4px 6px;
-    margin-left: 160px;
-    border: 1px solid #9dc1f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+}
+
+.plan-action-btn.edit {
+    color: #2563eb;
+    border-color: #93c5fd;
+}
+
+.plan-action-btn.edit:hover {
+    background: #eff6ff;
+}
+
+.plan-action-btn.delete {
+    color: #b91c1c;
+    border-color: #fca5a5;
+}
+
+.plan-action-btn.delete:hover {
+    background: #fef2f2;
 }
 
 .gst {
@@ -451,4 +475,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.features-count {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
 }

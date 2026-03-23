@@ -14,14 +14,15 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { LuUsers } from "react-icons/lu";
 import { CiCalendar } from "react-icons/ci";
 import { LuTarget } from "react-icons/lu";
-import { FaRegEdit } from "react-icons/fa";
 import CouponCreation from "../../components/CouponCreation/CouponCreation";
+import PackageCreation from "../../components/PackageCreation/PackageCreation";
 import {
   getRevenueStats,
   getCoupons,
   getCouponStats,
   deleteCoupon as deleteCouponApi,
   getPackages,
+  deletePackage as deletePackageApi,
 } from "../../lib/financials";
 
 const PERIOD_MAP = {
@@ -51,6 +52,8 @@ function formatCurrency(paise) {
 export default function FinancialDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState(null);
+  const [showPkgModal, setShowPkgModal] = useState(false);
+  const [editingPackage, setEditingPackage] = useState(null);
   const [activeTab, setActiveTab] = useState("subscriptionplans");
   const [period, setPeriod] = useState("today");
 
@@ -140,6 +143,31 @@ export default function FinancialDashboard() {
 
   const isCouponActive = (coupon) =>
     coupon.isActive && new Date(coupon.validTo) >= new Date();
+
+  const handleDeletePackage = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this package?")) return;
+    try {
+      await deletePackageApi(id);
+      fetchPackages(TAB_CATEGORY_MAP[activeTab]);
+    } catch (err) {
+      console.error("Failed to delete package:", err);
+    }
+  };
+
+  const handleEditPackage = (pkg) => {
+    setEditingPackage(pkg);
+    setShowPkgModal(true);
+  };
+
+  const handleClosePkgModal = () => {
+    setShowPkgModal(false);
+    setEditingPackage(null);
+  };
+
+  const handlePackageSaved = () => {
+    handleClosePkgModal();
+    fetchPackages(TAB_CATEGORY_MAP[activeTab]);
+  };
 
   return (
     <div className="finance-page">
@@ -265,7 +293,25 @@ export default function FinancialDashboard() {
             {activeTab === "leadunlocks" && "Lead Unlocks"}
             {activeTab === "digitalmedia" && "Digital Media"}
           </h3>
+          <button
+            className="create-btn"
+            onClick={() => {
+              setEditingPackage(null);
+              setShowPkgModal(true);
+            }}
+          >
+            <FiPlus /> Add Package
+          </button>
         </div>
+
+        {showPkgModal && (
+          <PackageCreation
+            onClose={handleClosePkgModal}
+            onSaved={handlePackageSaved}
+            pkg={editingPackage}
+            defaultCategory={TAB_CATEGORY_MAP[activeTab]}
+          />
+        )}
 
         <div className={packages.length <= 3 ? "plans-grid1" : "plans-grid"}>
           {packages.length === 0 && !loading && (
@@ -276,12 +322,13 @@ export default function FinancialDashboard() {
           {packages.map((pkg) => (
             <PlanCard
               key={pkg.id}
+              pkg={pkg}
               title={pkg.title}
               price={`₹ ${pkg.price.toLocaleString("en-IN")}`}
-              popular={pkg.tag === "POPULAR"}
-              recommended={pkg.tag === "RECOMMENDED"}
-              ultimate={pkg.tag === "ULTIMATE"}
+              tag={pkg.tag}
               features={pkg.features}
+              onEdit={() => handleEditPackage(pkg)}
+              onDelete={() => handleDeletePackage(pkg.id)}
             />
           ))}
         </div>
@@ -402,34 +449,24 @@ function CouponStatsCard({ stats }) {
   );
 }
 
-function PlanCard({ title, price, popular, recommended, ultimate, features }) {
+function PlanCard({ title, price, tag, features, onEdit, onDelete }) {
   return (
-    <div
-      className={`plan-card ${popular ? "popular" : ""} ${recommended ? "recommended" : ""} ${ultimate ? "ultimate" : ""}`}
-    >
-      {popular && <span className="plan-tag blue">POPULAR</span>}
-      {recommended && <span className="plan-tag yellow">RECOMMENDED</span>}
-      {ultimate && <span className="plan-tag dark">ULTIMATE</span>}
-      <p className="planediticon">
-        <FaRegEdit />
-      </p>
+    <div className="plan-card">
+      {tag && <span className="plan-tag blue">{tag}</span>}
+      <div className="plan-actions">
+        <button className="plan-action-btn edit" onClick={onEdit} title="Edit">
+          <FiEdit2 />
+        </button>
+        <button className="plan-action-btn delete" onClick={onDelete} title="Delete">
+          <FiTrash2 />
+        </button>
+      </div>
       <h4>{title}</h4>
       <h2>{price}</h2>
-      <p className="gst">+ GST per month</p>
-
-      <ul>
-        {features && features.length > 0 ? (
-          features.map((f, i) => (
-            <li key={i}>
-              <FiCheck className="noteicon" /> {f}
-            </li>
-          ))
-        ) : (
-          <li>
-            <FiCheck className="noteicon" /> Standard features included
-          </li>
-        )}
-      </ul>
+      <p className="gst">{tag || "+ GST"}</p>
+      {features && features.length > 0 && (
+        <p className="features-count">{features.length} feature{features.length !== 1 ? "s" : ""}</p>
+      )}
     </div>
   );
 }
