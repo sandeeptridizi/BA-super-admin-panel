@@ -7,7 +7,8 @@ import { FiUser } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
-import { getEnquiry, updateEnquiry } from "../../lib/enquiries";
+import { getEnquiry, updateEnquiry, deleteEnquiry } from "../../lib/enquiries";
+import { FiTrash2 } from "react-icons/fi";
 import { getEmployees } from "../../lib/employees";
 
 const statusLabel = { NEW: "new", IN_PROGRESS: "in progress", RESOLVED: "resolved", CLOSED: "closed" };
@@ -29,6 +30,19 @@ export default function EnquiryDetails() {
     const [assignedEmployeeId, setAssignedEmployeeId] = useState("");
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete = async () => {
+      if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
+      try {
+        setDeleting(true);
+        await deleteEnquiry(id);
+        navigate("/enquiries");
+      } catch (err) {
+        alert(err?.response?.data?.message || "Failed to delete enquiry.");
+        setDeleting(false);
+      }
+    };
 
     useEffect(() => {
       async function fetchData() {
@@ -73,7 +87,8 @@ export default function EnquiryDetails() {
   return (
     <div className="enquirypagecontainer">
         <div className="enquiryleadheader">
-            <div className="lead-header-left">
+            <div className="lead-header-left" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <button className="back-btn" onClick={() => navigate("/enquiries")}>
                     <FaArrowLeft />
                   </button>
@@ -85,6 +100,10 @@ export default function EnquiryDetails() {
                       <span className="lead-id">{listingTypeLabel[enquiry.product?.listingType] || ""}</span>
                     </div>
                 </div>
+                </div>
+                <button onClick={handleDelete} disabled={deleting} style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5", padding: "8px 16px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 600 }}>
+                  <FiTrash2 /> {deleting ? "Deleting..." : "Delete"}
+                </button>
             </div>
          </div>
         <div className="enquirydetailssection">

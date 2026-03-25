@@ -181,6 +181,24 @@
   background: #cfa41f;
 }
 
+.deleteBtn {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background: #fecaca;
+}
+
 .divider {
   margin: 18px 0;
   height: 1px;

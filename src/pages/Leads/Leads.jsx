@@ -12,7 +12,8 @@ import { FiPhone } from "react-icons/fi";
 import { MdOutlineVilla } from "react-icons/md";
 import { FiMail } from "react-icons/fi";
 
-import { getEnquiries, getEnquiryStats } from '../../lib/enquiries';
+import { getEnquiries, getEnquiryStats, deleteEnquiry } from '../../lib/enquiries';
+import { FiTrash2 } from "react-icons/fi";
 
 const listingTypeMap = {
   marketplace: 'MARKETPLACE',
@@ -37,6 +38,21 @@ const Leads = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this lead?")) return;
+    try {
+      setDeletingId(id);
+      await deleteEnquiry(id);
+      setEnquiries((prev) => prev.filter((enq) => enq.id !== id));
+    } catch (err) {
+      alert(err?.response?.data?.message || "Failed to delete lead.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -169,6 +185,9 @@ const Leads = () => {
                   <FiPhone /> Contact
                 </button>
               )}
+              <button className="deleteBtn" onClick={(e) => handleDelete(e, enq.id)} disabled={deletingId === enq.id}>
+                <FiTrash2 /> {deletingId === enq.id ? "..." : "Delete"}
+              </button>
             </div>
           </div>
           <div className="leadBottom">

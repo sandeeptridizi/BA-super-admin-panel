@@ -24,3 +24,8 @@ export const updateEnquiry = async (id, data) => {
   const response = await api.patch(`/api/enquiry/${id}`, data);
   return response.data;
 };
+
+export const deleteEnquiry = async (id) => {
+  const response = await api.delete(`/api/enquiry/${id}`);
+  return response.data;
+};

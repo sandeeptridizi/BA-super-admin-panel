@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { GoDotFill } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
-import { getEnquiries, getEnquiryStats, updateEnquiry, getNewsletterLeads } from "../../lib/enquiries";
+import { getEnquiries, getEnquiryStats, updateEnquiry, getNewsletterLeads, deleteEnquiry } from "../../lib/enquiries";
+import { FiTrash2 } from "react-icons/fi";
 import { getEmployees } from "../../lib/employees";
 import { MdOutlineEmail } from "react-icons/md";
 
@@ -106,6 +107,21 @@ export default function Enquiries() {
       setEnquiries((prev) => prev.map((e) => (e.id === id ? { ...e, assignedEmployeeId: updated.assignedEmployeeId, assignedEmployee: updated.assignedEmployee } : e)));
     } catch (err) {
       console.error("Failed to assign employee", err);
+    }
+  };
+
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
+    try {
+      setDeletingId(id);
+      await deleteEnquiry(id);
+      setEnquiries((prev) => prev.filter((e) => e.id !== id));
+    } catch (err) {
+      alert(err?.response?.data?.message || "Failed to delete enquiry.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -301,6 +317,7 @@ export default function Enquiries() {
                     <button className="reply-btn" onClick={() => handleStatusChange(enq.id, "RESOLVED")}>Mark Resolved</button>
                   )}
                   <button className="reply-btn" onClick={() => navigate(`/enquirydetails/${enq.id}`)}>View</button>
+                  <button className="reply-btn delete-btn" onClick={() => handleDelete(enq.id)} disabled={deletingId === enq.id}>{deletingId === enq.id ? "..." : <FiTrash2 />}</button>
                 </div>
               </div>
 

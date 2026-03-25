@@ -362,6 +362,16 @@
   margin: 15px 0;
 }
 
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+}
+
 .enquiry-footer {
   display: flex;
   justify-content: space-between;
