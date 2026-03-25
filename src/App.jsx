@@ -23,8 +23,6 @@ import CreateEmployee from "./pages/CreateEmployee/CreateEmployee";
 import EnquiryDetails from "./pages/EnquiryDetails/EnquiryDetails";
 import EmployeeDashboard from "./pages/EmloyeeDashboard/EmployeeDashboard";
 import MobileNavbar from "./components/MobileNavbar/MobileNavbar";
-import Advertisements from "./pages/Advertisements/Advertisements";
-import AdvertisementForm from "./pages/AdvertisementForm/AdvertisementForm";
 
 
 const App = () => {
@@ -55,9 +53,6 @@ const App = () => {
           <Route path="/employeedetails/:id" element={isAdmin() ? <EmployeeDetails /> : <Navigate to="/dashboard" replace />} />
           <Route path="/createemployee" element={isAdmin() ? <CreateEmployee /> : <Navigate to="/dashboard" replace />} />
           <Route path="/enquirydetails/:id" element={<EnquiryDetails />} />
-          <Route path='advertisements' element={isAdmin() ? <Advertisements /> : <Navigate to="/dashboard" replace />} />
-          <Route path='advertisements/create' element={isAdmin() ? <AdvertisementForm /> : <Navigate to="/dashboard" replace />} />
-          <Route path='advertisements/edit/:id' element={isAdmin() ? <AdvertisementForm /> : <Navigate to="/dashboard" replace />} />
 
         </Route>
       </Routes>

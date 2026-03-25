@@ -16,7 +16,7 @@ import { LuMessageSquare } from 'react-icons/lu';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
 import { FiActivity } from 'react-icons/fi';
-import { MdCampaign } from 'react-icons/md';
+
 
 const linksData = [
   {
@@ -62,12 +62,6 @@ const linksData = [
     link: 'financials',
   },
   {
-    id: 8,
-    icon: <MdCampaign />,
-    title: 'Advertisements',
-    link: 'advertisements',
-  },
-  {
     id: 9,
     icon: <LuMessageSquare />,
     title: 'Enquiries',
@@ -81,7 +75,7 @@ const linksData = [
   },
 ];
 
-const EMPLOYEE_HIDDEN_LINKS = ['Employees', 'Financials', 'Advertisements'];
+const EMPLOYEE_HIDDEN_LINKS = ['Employees', 'Financials'];
 
 const Sidebar = () => {
   const [activeLink, setActiveLink] = useState('');

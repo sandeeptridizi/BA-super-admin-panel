@@ -7,7 +7,7 @@ const CDN_ENDPOINT = import.meta.env.VITE_AWS_CDN_ENDPOINT || "https://bauctionp
 const BUCKET_PREFIX = import.meta.env.VITE_AWS_BUCKET_PREFIX || "ba";
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState("approvals");
+  const [activeTab, setActiveTab] = useState("platform");
   const [admin, setAdmin] = useState(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);

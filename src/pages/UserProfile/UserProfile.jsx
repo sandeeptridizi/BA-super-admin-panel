@@ -6,13 +6,13 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoLocationOutline } from "react-icons/io5";
 import { FiPhone } from "react-icons/fi";
 import { HiOutlineCube } from "react-icons/hi2";
-import { BsEye } from "react-icons/bs";
+
 import { LuUsers } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { PiCube } from "react-icons/pi";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+
 import { MdEmail } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
 import { HiOutlineTrendingUp } from "react-icons/hi";
@@ -105,12 +105,6 @@ const UserProfile = () => {
           <h3 className="statcardvalue gold">—</h3>
         </div>
 
-        <div className="statCard">
-            <div className="statcardrow">
-          <BsEye className="useremailicon purple1" />
-          <p className="statcardname purple2">VIEWS</p></div>
-          <h3 className="statcardvalue">—</h3>
-        </div>
 
       </div>
 
@@ -131,7 +125,6 @@ const UserProfile = () => {
               <th>Price</th>
               <th>Tier</th>
               <th>Status</th>
-              <th>Views</th>
               <th>Leads</th>
             </tr>
           </thead>
@@ -149,7 +142,6 @@ const UserProfile = () => {
                   <td className="price">{p.value != null ? `₹${(p.value / 1e5).toFixed(1)}L` : "—"}</td>
                   <td className="pricetier">{p.tier || "—"}</td>
                   <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "—"}</span></td>
-                  <td className="userviews"><MdOutlineRemoveRedEye className="userviewsicon"/>—</td>
                   <td className="userleads">0</td>
                 </tr>
               ))

@@ -10,7 +10,7 @@ import { LuDot } from "react-icons/lu";
 import { FiUser } from "react-icons/fi";
 import { LuPhone } from "react-icons/lu";
 import { MdOutlineEmail } from "react-icons/md";
-import { IoEyeOutline } from "react-icons/io5";
+
 import { CiCalendar } from "react-icons/ci";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { FaPlayCircle } from "react-icons/fa";
@@ -94,7 +94,7 @@ const getLocationText = (meta) => {
   return location || "Location not added";
 };
 
-const getViews = (meta) => (meta && typeof meta === "object" ? Number(meta.views || 0) : 0);
+
 
 const formatDate = (d) => {
   if (!d) return "—";
@@ -187,7 +187,6 @@ const ProductPage = () => {
   const meta = product.meta || {};
   const features = Array.isArray(meta.features) ? meta.features : (meta.keyFeatures ? [meta.keyFeatures] : []);
   const owner = product.owner || {};
-  const views = getViews(meta);
 
   return (
     <div className="productpagecontainer">
@@ -379,16 +378,6 @@ const ProductPage = () => {
           </div>
           <div className="productperformance">
             <h2 className="producttitle">Performance</h2>
-            <div className="performanceviews">
-              <span className="currentstatus1">
-                <IoEyeOutline />
-                Total Views
-              </span>
-              <span className="performancecount">
-                {new Intl.NumberFormat("en-IN").format(views)}
-              </span>
-            </div>
-            <div className="productbreakline"></div>
             <div className="performanceviews">
               <span className="currentstatus1">
                 <FiUser />

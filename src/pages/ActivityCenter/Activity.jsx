@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import './Activity.css';
 import { FiActivity } from "react-icons/fi"
 import { MdAccessTime } from "react-icons/md";
@@ -25,26 +25,45 @@ import {
   updateFeaturedRecommended as apiUpdateFeaturedRecommended,
 } from "../../lib/activity";
 import { getFile } from "../../lib/s3";
+import api from "../../lib/api";
+import {
+  getAdvertisements,
+  getAdvertisementStats,
+  createAdvertisement,
+  updateAdvertisement,
+  deleteAdvertisement,
+} from "../../lib/advertisements";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
 const LISTING_LABELS = { MARKETPLACE: "Marketplace", BUY_NOW: "Buy Now", AUCTIONS: "Auctions", TO_LET: "To-let" };
 const CATEGORY_LABELS = { REAL_ESTATE: "Properties", CARS: "Cars", BIKES: "Bikes", FURNITURE: "Furniture", JEWELLERY_AND_WATCHES: "Watches", ARTS_AND_PAINTINGS: "Arts", ANTIQUES: "Antiques", COLLECTABLES: "Collectables" };
 const formatCurrency = (v) => v != null ? new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number(v)) : "N/A";
 const getLocation = (meta) => meta && typeof meta === "object" && (meta.location || meta.city || [meta.area, meta.city].filter(Boolean).join(", ") || meta.state || meta.address) || "—";
-const getViews = (meta) => (meta && typeof meta === "object" && Number(meta.views)) || 0;
+
 const formatDate = (d) => d ? new Date(d).toLocaleDateString("en-IN", { year: "numeric", month: "2-digit", day: "2-digit" }) : "—";
 
-
+const PLACEMENT_OPTIONS = ["homepage_banner", "popup_ad", "product_listing"];
+const PLACEMENT_LABELS = { homepage_banner: "Homepage Banner", popup_ad: "Popup Ad", product_listing: "Product Listing" };
 
 const Activitypage = () => {
     const [activeTab, setActiveTab] = useState("approvals");
-    const [isEnabled, setIsEnabled] = useState(false);
-    const handleToggle = () => { setIsEnabled(!isEnabled); };
     const [pendingProducts, setPendingProducts] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [actioningId, setActioningId] = useState(null);
     const [featuredSearch, setFeaturedSearch] = useState("");
+
+    const [ads, setAds] = useState([]);
+    const [adStats, setAdStats] = useState({ total: 0 });
+    const [adsLoading, setAdsLoading] = useState(false);
+    const [adForm, setAdForm] = useState({ title: "", content: "", ctaText: "", ctaUrl: "", placement: "" });
+    const [editingAdId, setEditingAdId] = useState(null);
+    const [adMediaKey, setAdMediaKey] = useState(null);
+    const [adSelectedFile, setAdSelectedFile] = useState(null);
+    const [adFilePreview, setAdFilePreview] = useState(null);
+    const [adSubmitting, setAdSubmitting] = useState(false);
+    const adFileInputRef = useRef(null);
 
     const loadData = useCallback(async () => {
         setLoading(true);
@@ -61,6 +80,122 @@ const Activitypage = () => {
     }, []);
 
     useEffect(() => { loadData(); }, [loadData]);
+
+    const loadAds = useCallback(async () => {
+        setAdsLoading(true);
+        try {
+            const [adsRes, statsRes] = await Promise.all([getAdvertisements(), getAdvertisementStats()]);
+            setAds(adsRes.data || []);
+            setAdStats(statsRes.data || { total: 0 });
+        } catch (err) {
+            setError(err?.response?.data?.message || "Failed to load advertisements");
+        } finally {
+            setAdsLoading(false);
+        }
+    }, []);
+
+    useEffect(() => { if (activeTab === "ads") loadAds(); }, [activeTab, loadAds]);
+
+    const resetAdForm = () => {
+        setAdForm({ title: "", content: "", ctaText: "", ctaUrl: "", placement: "" });
+        setEditingAdId(null);
+        setAdMediaKey(null);
+        setAdSelectedFile(null);
+        setAdFilePreview(null);
+        if (adFileInputRef.current) adFileInputRef.current.value = "";
+    };
+
+    const handleAdFormChange = (e) => {
+        const { name, value } = e.target;
+        setAdForm((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleAdFileSelect = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (adFilePreview && !adMediaKey) URL.revokeObjectURL(adFilePreview);
+        setAdSelectedFile(file);
+        setAdFilePreview(URL.createObjectURL(file));
+        e.target.value = "";
+    };
+
+    const uploadAdFile = async (file, adId) => {
+        const ext = (file.name.split(".").pop() || "bin").toLowerCase();
+        const safeName = file.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 50);
+        const key = `advertisements/${adId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeName}.${ext}`;
+        const presignedRes = await api.get("/api/media/presigned", { params: { key } });
+        const uploadUrl = presignedRes.data?.data?.url || presignedRes.data?.url || presignedRes.data?.data;
+        await fetch(uploadUrl, { method: "PUT", headers: { "Content-Type": file.type || "application/octet-stream" }, body: file });
+        return presignedRes.data?.data?.key || presignedRes.data?.key || key;
+    };
+
+    const handleAdSubmit = async (e) => {
+        e.preventDefault();
+        if (!adForm.title.trim()) { setError("Title is required."); return; }
+        setAdSubmitting(true);
+        setError("");
+        try {
+            const payload = {
+                title: adForm.title.trim(),
+                content: adForm.content.trim() || null,
+                ctaText: adForm.ctaText.trim() || null,
+                ctaUrl: adForm.ctaUrl.trim() || null,
+                placement: adForm.placement || null,
+            };
+            if (editingAdId) {
+                let updatedMedia = adMediaKey;
+                if (adSelectedFile) updatedMedia = await uploadAdFile(adSelectedFile, editingAdId);
+                payload.media = updatedMedia;
+                await updateAdvertisement(editingAdId, payload);
+            } else {
+                const res = await createAdvertisement(payload);
+                const adId = res.data?.id;
+                if (adSelectedFile && adId) {
+                    const uploadedKey = await uploadAdFile(adSelectedFile, adId);
+                    await updateAdvertisement(adId, { media: uploadedKey });
+                }
+            }
+            resetAdForm();
+            loadAds();
+        } catch (err) {
+            setError(err?.response?.data?.message || "Failed to save advertisement.");
+        } finally {
+            setAdSubmitting(false);
+        }
+    };
+
+    const handleAdEdit = (ad) => {
+        setEditingAdId(ad.id);
+        setAdForm({
+            title: ad.title || "",
+            content: ad.content || "",
+            ctaText: ad.ctaText || "",
+            ctaUrl: ad.ctaUrl || "",
+            placement: ad.placement || "",
+        });
+        if (ad.media) {
+            setAdMediaKey(ad.media);
+            setAdFilePreview(getFile(ad.media));
+        } else {
+            setAdMediaKey(null);
+            setAdFilePreview(null);
+        }
+        setAdSelectedFile(null);
+    };
+
+    const handleAdDelete = async (id) => {
+        if (!confirm("Delete this advertisement?")) return;
+        setActioningId(id);
+        try {
+            await deleteAdvertisement(id);
+            setAds((prev) => prev.filter((a) => a.id !== id));
+            setAdStats((prev) => ({ ...prev, total: prev.total - 1 }));
+        } catch (err) {
+            setError(err?.response?.data?.message || "Failed to delete advertisement");
+        } finally {
+            setActioningId(null);
+        }
+    };
 
     const handleApprove = async (id, approvalStatus, tier) => {
         setActioningId(id);
@@ -118,8 +253,8 @@ const Activitypage = () => {
                 <h2>Active Ads</h2>
                 <span className='analyticsicon'><FaArrowTrendUp /></span>
             </div>
-            <h2 className='analyticnum1'>3</h2>
-            <span className='analyticdesc1'>Currently running campaigns</span>
+            <h2 className='analyticnum1'>{adsLoading ? "—" : adStats.total || 0}</h2>
+            <span className='analyticdesc1'>Total advertisements</span>
         </div>
         <div className='activityanalytic2'>
             <div className='analyticheader2'>
@@ -132,7 +267,7 @@ const Activitypage = () => {
     </div>
     <ul className='activitycat'>
         <li className={`catmenu2 ${activeTab === "approvals" ? "active-approvals" : ""}`} onClick={() => setActiveTab("approvals")}><IoCheckmarkCircleOutline />Product Approvals <span className='catnum'>{pendingCount}</span> </li>
-        <li className={`catmenu2 ${activeTab === "ads" ? "active-ads" : ""}`} onClick={() => setActiveTab("ads")}><FaArrowTrendUp />Advertisements <span className='catnum'>3</span> </li>
+        <li className={`catmenu2 ${activeTab === "ads" ? "active-ads" : ""}`} onClick={() => setActiveTab("ads")}><FaArrowTrendUp />Advertisements <span className='catnum'>{adStats.total || 0}</span> </li>
         <li className={`catmenu2 ${activeTab === "featured" ? "active-featured" : ""}`} onClick={() => setActiveTab("featured")}><FaRegStar />Featured & Recommended <span className='catnum'>{featuredCount}</span> </li>
     </ul>
     {error && <p className='analyticdesc' style={{ marginLeft: 20 }}>{error}</p>}
@@ -185,148 +320,84 @@ const Activitypage = () => {
     </div>
     )}
     {activeTab === "ads" && (
-    <div className="activitydetail">
+    <div className="activitydetail" style={{ height: "auto", paddingBottom: 20 }}>
         <div className='detailheader1'>
             <h2 className='detailheading1'>Advertisement Management</h2>
-            <span className='detaildesc1'>Manage product advertisements across Home Page Top, Home Page Bottom, and Product Pages</span>
+            <span className='detaildesc1'>Create, edit, and manage advertisements across the platform</span>
         </div>
-        <div className="advertcreate">
-            <h2 className="advertheader"><FaArrowTrendUp />Create New Advertisement</h2>
+        <form className="advertcreate" onSubmit={handleAdSubmit} style={{ height: "auto" }}>
+            <h2 className="advertheader"><FaArrowTrendUp />{editingAdId ? "Edit Advertisement" : "Create New Advertisement"}</h2>
             <div className="adverttitlediv">
-                <h3 className="adverttitle"><BsStars />Title of Advertisement  </h3>
-                <input type="text" placeholder="Enter advertisement title..." className="advertinputitle" />
+                <h3 className="adverttitle"><BsStars />Title *</h3>
+                <input type="text" name="title" value={adForm.title} onChange={handleAdFormChange} placeholder="Enter advertisement title..." className="advertinputitle" />
             </div>
             <div className="adverttitlediv">
                 <h3 className="adverttitle">Description</h3>
-                <input type="text" placeholder="Enter advertisement title..." className="advertinputdesc" />
+                <textarea name="content" value={adForm.content} onChange={handleAdFormChange} placeholder="Enter advertisement description..." className="advertinputdesc" />
             </div>
             <div className="advertinputrow">
                 <div className="adverttitlediv">
                     <h3 className="adverttitle"><SlBadge />Button Text</h3>
-                    <input type="text" placeholder="Enter advertisement title..." className="advertinputtext" />
+                    <input type="text" name="ctaText" value={adForm.ctaText} onChange={handleAdFormChange} placeholder="e.g. Shop Now, Learn More" className="advertinputtext" />
                 </div>
                 <div className="adverttitlediv">
                     <h3 className="adverttitle"><FaLink />Button Link</h3>
-                    <input type="text" placeholder="Enter advertisement title..." className="advertinputtext" />
+                    <input type="text" name="ctaUrl" value={adForm.ctaUrl} onChange={handleAdFormChange} placeholder="https://example.com or /products" className="advertinputtext" />
                 </div>
             </div>
             <div className="advertinputrow">
                 <div className="adverttitlediv">
                     <h3 className="adverttitle"><MdOutlineFileUpload />Banner / Image Upload</h3>
-                    <input type="file" className="advertinputtext" />
+                    <input type="file" ref={adFileInputRef} accept="image/*" onChange={handleAdFileSelect} className="advertinputtext" />
+                    {adFilePreview && (
+                        <div style={{ marginTop: 8, position: "relative", display: "inline-block" }}>
+                            <img src={adFilePreview} alt="Preview" style={{ maxHeight: 100, borderRadius: 8 }} />
+                            <button type="button" onClick={() => { if (adFilePreview && !adMediaKey) URL.revokeObjectURL(adFilePreview); setAdSelectedFile(null); setAdFilePreview(null); setAdMediaKey(null); if (adFileInputRef.current) adFileInputRef.current.value = ""; }} style={{ position: "absolute", top: -6, right: -6, background: "#ef4444", color: "#fff", border: "none", borderRadius: "50%", width: 20, height: 20, cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>&times;</button>
+                        </div>
+                    )}
                 </div>
                 <div className="adverttitlediv">
                     <h3 className="adverttitle">Ad Placement</h3>
-                    <select className="advertinputtext">
-                        <option>Home Page Banner</option>
-                        <option>Popup Ad</option>
-                        <option>Product Listing</option>
+                    <select name="placement" value={adForm.placement} onChange={handleAdFormChange} className="advertinputtext">
+                        <option value="">Select placement</option>
+                        {PLACEMENT_OPTIONS.map((p) => <option key={p} value={p}>{PLACEMENT_LABELS[p]}</option>)}
                     </select>
                 </div>
             </div>
-            <span className="formdesclaimer">⚠️ Select Ad Placement first to see recommended dimensions</span>
-            <button className="adcreatebutton">Create Advertisement</button>
-        </div>
-        <h2 className="detailheading3"><FaRegEye />Active Advertisements</h2>
-        <div className="advertdiv">
+            <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                <button type="submit" className="adcreatebutton" disabled={adSubmitting}>
+                    {adSubmitting ? (editingAdId ? "Updating..." : "Creating...") : (editingAdId ? "Update Advertisement" : "Create Advertisement")}
+                </button>
+                {editingAdId && <button type="button" className="adcreatebutton" style={{ backgroundColor: "#6b7280", borderColor: "#6b7280" }} onClick={resetAdForm}>Cancel Edit</button>}
+            </div>
+        </form>
+        <h2 className="detailheading3"><FaRegEye />All Advertisements ({ads.length})</h2>
+        {adsLoading ? <p className='activityinfoicon' style={{ marginLeft: 20 }}>Loading...</p> : ads.length === 0 ? <p className='activityinfoicon' style={{ marginLeft: 20 }}>No advertisements found</p> : ads.map((ad) => (
+        <div key={ad.id} className="advertdiv" style={{ height: "auto", gap: 16 }}>
+            {ad.media && <img src={getFile(ad.media)} alt={ad.title} style={{ width: 80, height: 80, borderRadius: 8, objectFit: "cover" }} />}
             <div className="advertinfo">
-                <h2 className="advertheading">Luxury Villa - Bandra West<span className="adverttag">Active</span></h2>
+                <h2 className="advertheading">{ad.title}</h2>
                 <ul className="advertinputs">
                     <li className="advertinput">
-                        <span className="advertinputtitle">Placement</span><br></br>
-                        <span className="advertproductname">Home Page Top</span>
+                        <span className="advertinputtitle">Placement</span><br />
+                        <span className="advertproductname">{PLACEMENT_LABELS[ad.placement] || ad.placement || "—"}</span>
                     </li>
                     <li className="advertinput">
-                        <span className="advertinputtitle">Impressions</span><br></br>
-                        <span className="advertinputinfo">45,234</span>
+                        <span className="advertinputtitle">CTA</span><br />
+                        <span className="advertinputinfo">{ad.ctaText || "—"}</span>
                     </li>
                     <li className="advertinput">
-                        <span className="advertinputtitle">Clicks</span><br></br>
-                        <span className="advertinputinfo">2,156</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Duration</span><br></br>
-                        <span className="advertinputinfo">2024-02-01 - 2024-02-15</span>
+                        <span className="advertinputtitle">Created</span><br />
+                        <span className="advertinputinfo">{formatDate(ad.createdAt)}</span>
                     </li>
                 </ul>
             </div>
-            <div className="toggleContainer"><label className="switch">
-                <input
-                type="checkbox"
-                checked={isEnabled}
-                onChange={handleToggle}
-                />
-                <span className="slider"></span>
-            </label>
-                <span className="toggleStatus">{isEnabled ? "Active" : "Inactive"}</span>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <button onClick={() => handleAdEdit(ad)} style={{ background: "none", border: "1px solid #8ec5ff", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#1447e6", display: "flex", alignItems: "center", gap: 4, fontSize: 12 }}><FiEdit2 size={14} />Edit</button>
+                <button onClick={() => handleAdDelete(ad.id)} disabled={actioningId === ad.id} style={{ background: "none", border: "1px solid #ffa2a2", borderRadius: 6, padding: "4px 8px", cursor: "pointer", color: "#c10007", display: "flex", alignItems: "center", gap: 4, fontSize: 12 }}><FiTrash2 size={14} />Delete</button>
             </div>
         </div>
-        <div className="advertdiv">
-            <div className="advertinfo">
-                <h2 className="advertheading">Lamborghini Aventador<span className="adverttag">Active</span></h2>
-                <ul className="advertinputs">
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Placement</span><br></br>
-                        <span className="advertproductname">Product Page</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Impressions</span><br></br>
-                        <span className="advertinputinfo">28,567</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Clicks</span><br></br>
-                        <span className="advertinputinfo">1,423</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Duration</span><br></br>
-                        <span className="advertinputinfo">2024-01-28 - 2024-02-12</span>
-                    </li>
-                </ul>
-            </div>
-            <div className="toggleContainer"><label className="switch">
-                <input
-                type="checkbox"
-                checked={isEnabled}
-                onChange={handleToggle}
-                />
-                <span className="slider"></span>
-            </label>
-                <span className="toggleStatus">{isEnabled ? "Active" : "Inactive"}</span>
-            </div>
-        </div>
-        <div className="advertdiv">
-            <div className="advertinfo">
-                <h2 className="advertheading">Rolex Daytona - Limited Edition<span className="adverttag">Active</span></h2>
-                <ul className="advertinputs">
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Placement</span><br></br>
-                        <span className="advertproductname">Home Page Bottom</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Impressions</span><br></br>
-                        <span className="advertinputinfo">18,234</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Clicks</span><br></br>
-                        <span className="advertinputinfo">892</span>
-                    </li>
-                    <li className="advertinput">
-                        <span className="advertinputtitle">Duration</span><br></br>
-                        <span className="advertinputinfo">2024-02-03 - 2024-02-17</span>
-                    </li>
-                </ul>
-            </div>
-            <div className="toggleContainer"><label className="switch">
-                <input
-                type="checkbox"
-                checked={isEnabled}
-                onChange={handleToggle}
-                />
-                <span className="slider"></span>
-            </label>
-                <span className="toggleStatus">{isEnabled ? "Active" : "Inactive"}</span>
-            </div>
-        </div>
+        ))}
     </div>
     )}
     {activeTab === "featured" && (
@@ -361,7 +432,6 @@ const Activitypage = () => {
                     <ul className='activityinfotags'>
                         <li className={isMarketplace ? 'businesscat' : 'businesscat1'}><ListingIcon />{LISTING_LABELS[product.listingType] || product.listingType}</li>
                         <li className='productcat'>{CATEGORY_LABELS[product.category] || product.category}</li>
-                        <li className='viewcat'><FaRegEye />{getViews(product.meta).toLocaleString()} views</li>
                         <li className={`subscriptiontag ${product.owner?.subscriptionStatus === 'ACTIVE' ? 'substag-active' : 'substag-inactive'}`}>
                             {product.owner?.subscriptionPlan && product.owner.subscriptionPlan !== 'NONE' ? product.owner.subscriptionPlan : ''} {product.owner?.subscriptionStatus || 'N/A'}
                         </li>

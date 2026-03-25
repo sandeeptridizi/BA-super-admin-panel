@@ -1,5 +1,6 @@
 .activitycontainer {
-  height: 1900px;
+  height: auto;
+  min-height: 100vh;
   width: auto;
   margin: 0;
 }
