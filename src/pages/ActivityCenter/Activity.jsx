@@ -198,10 +198,33 @@ const Activitypage = () => {
         }
     };
 
+    const [rejectModal, setRejectModal] = useState({ open: false, productId: null });
+    const [rejectReason, setRejectReason] = useState("");
+
     const handleApprove = async (id, approvalStatus, tier) => {
+        if (approvalStatus === "REJECTED") {
+            setRejectModal({ open: true, productId: id });
+            setRejectReason("");
+            return;
+        }
         setActioningId(id);
         try {
-            await apiApproveProduct(id, approvalStatus === "APPROVED" ? { approvalStatus: "APPROVED", tier } : { approvalStatus: "REJECTED" });
+            await apiApproveProduct(id, { approvalStatus: "APPROVED", tier });
+            setPendingProducts((prev) => prev.filter((p) => p.id !== id));
+        } catch (err) {
+            setError(err?.response?.data?.message || "Update failed");
+        } finally {
+            setActioningId(null);
+        }
+    };
+
+    const handleRejectConfirm = async () => {
+        if (!rejectReason.trim()) return;
+        const id = rejectModal.productId;
+        setRejectModal({ open: false, productId: null });
+        setActioningId(id);
+        try {
+            await apiApproveProduct(id, { approvalStatus: "REJECTED", rejectionReason: rejectReason.trim() });
             setPendingProducts((prev) => prev.filter((p) => p.id !== id));
         } catch (err) {
             setError(err?.response?.data?.message || "Update failed");
@@ -475,6 +498,27 @@ const Activitypage = () => {
             );
         })}
     </div>
+    )}
+
+    {rejectModal.open && (
+        <div className="reject-modal-overlay" onClick={() => setRejectModal({ open: false, productId: null })}>
+            <div className="reject-modal" onClick={(e) => e.stopPropagation()}>
+                <h3 className="reject-modal-title">Reject Product</h3>
+                <p className="reject-modal-desc">Please provide a reason for rejecting this product. This will be visible to the seller.</p>
+                <textarea
+                    className="reject-modal-textarea"
+                    rows={4}
+                    placeholder="Enter rejection reason..."
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    autoFocus
+                />
+                <div className="reject-modal-actions">
+                    <button className="reject-modal-cancel" onClick={() => setRejectModal({ open: false, productId: null })}>Cancel</button>
+                    <button className="reject-modal-confirm" disabled={!rejectReason.trim()} onClick={handleRejectConfirm}>Reject Product</button>
+                </div>
+            </div>
+        </div>
     )}
   </div>;
 };

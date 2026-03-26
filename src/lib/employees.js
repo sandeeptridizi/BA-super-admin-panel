@@ -39,3 +39,8 @@ export async function updateEmployee(id, data) {
   const res = await api.put(`/api/employee/${id}`, data);
   return res.data;
 }
+
+export async function deleteEmployee(id) {
+  const res = await api.delete(`/api/employee/${id}`);
+  return res.data;
+}

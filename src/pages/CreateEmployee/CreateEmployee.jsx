@@ -16,6 +16,22 @@ export default function CreateEmployee() {
     department: "",
     password: "",
     confirmPassword: "",
+    dateOfBirth: "",
+    gender: "",
+    bloodGroup: "",
+    joiningDate: "",
+    completeAddress: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    aadhaarNumber: "",
+    panNumber: "",
+    emergencyContactName: "",
+    emergencyContactPhone: "",
+    salary: "",
+    bankAccountNumber: "",
+    ifscCode: "",
+    employmentStatus: "ACTIVE",
   });
 
   const handleChange = (e) => {
@@ -52,6 +68,22 @@ export default function CreateEmployee() {
         phone: form.phone.trim() || undefined,
         designation: form.designation.trim() || undefined,
         department: form.department.trim() || undefined,
+        dateOfBirth: form.dateOfBirth || undefined,
+        gender: form.gender || undefined,
+        bloodGroup: form.bloodGroup || undefined,
+        joiningDate: form.joiningDate || undefined,
+        completeAddress: form.completeAddress.trim() || undefined,
+        city: form.city.trim() || undefined,
+        state: form.state.trim() || undefined,
+        postalCode: form.postalCode.trim() || undefined,
+        aadhaarNumber: form.aadhaarNumber.trim() || undefined,
+        panNumber: form.panNumber.trim() || undefined,
+        emergencyContactName: form.emergencyContactName.trim() || undefined,
+        emergencyContactPhone: form.emergencyContactPhone.trim() || undefined,
+        salary: form.salary ? Number(form.salary.replace(/,/g, "")) : undefined,
+        bankAccountNumber: form.bankAccountNumber.trim() || undefined,
+        ifscCode: form.ifscCode.trim() || undefined,
+        employmentStatus: form.employmentStatus || undefined,
       });
       navigate("/employees");
     } catch (err) {
@@ -132,77 +164,145 @@ export default function CreateEmployee() {
 
           <div className="form-group">
             <label>Date of Birth *</label>
-            <input type="date" />
+            <input
+              type="date"
+              name="dateOfBirth"
+              value={form.dateOfBirth}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>Gender *</label>
-            <select className="inputtextoption">
-              <option>Select gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
+            <select
+              className="inputtextoption"
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
           </div>
 
           <div className="form-group">
             <label>Blood Group</label>
-            <select  className="inputtextoption">
-              <option>Select blood group</option>
-              <option>A+</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B-</option>
-              <option>O+</option>
-              <option>O-</option>
-              <option>AB+</option>
-              <option>AB-</option>
+            <select
+              className="inputtextoption"
+              name="bloodGroup"
+              value={form.bloodGroup}
+              onChange={handleChange}
+            >
+              <option value="">Select blood group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
             </select>
           </div>
 
           <div className="form-group">
             <label>Joining Date *</label>
-            <input type="date" />
+            <input
+              type="date"
+              name="joiningDate"
+              value={form.joiningDate}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group full">
             <label>Address *</label>
-            <input type="text" placeholder="e.g., 123, MG Road, Sector 5" />
+            <input
+              type="text"
+              name="completeAddress"
+              value={form.completeAddress}
+              onChange={handleChange}
+              placeholder="e.g., 123, MG Road, Sector 5"
+            />
           </div>
 
           <div className="form-group">
             <label>City *</label>
-            <input type="text" placeholder="e.g., Hyderabad" />
+            <input
+              type="text"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              placeholder="e.g., Hyderabad"
+            />
           </div>
 
           <div className="form-group">
             <label>State *</label>
-            <input type="text" placeholder="e.g., Telangana" />
+            <input
+              type="text"
+              name="state"
+              value={form.state}
+              onChange={handleChange}
+              placeholder="e.g., Telangana"
+            />
           </div>
 
           <div className="form-group">
             <label>Postal Code *</label>
-            <input type="text" placeholder="e.g., 400001" />
+            <input
+              type="text"
+              name="postalCode"
+              value={form.postalCode}
+              onChange={handleChange}
+              placeholder="e.g., 400001"
+            />
           </div>
 
           <div className="form-group">
             <label>Aadhar Number</label>
-            <input type="text" placeholder="e.g., 1234 5678 9012" />
+            <input
+              type="text"
+              name="aadhaarNumber"
+              value={form.aadhaarNumber}
+              onChange={handleChange}
+              placeholder="e.g., 1234 5678 9012"
+            />
           </div>
 
           <div className="form-group">
             <label>PAN Number</label>
-            <input type="text" placeholder="e.g., ABCDE1234F" />
+            <input
+              type="text"
+              name="panNumber"
+              value={form.panNumber}
+              onChange={handleChange}
+              placeholder="e.g., ABCDE1234F"
+            />
           </div>
 
           <div className="form-group">
             <label>Emergency Contact Name</label>
-            <input type="text" placeholder="e.g., Priya Verma" />
+            <input
+              type="text"
+              name="emergencyContactName"
+              value={form.emergencyContactName}
+              onChange={handleChange}
+              placeholder="e.g., Priya Verma"
+            />
           </div>
 
           <div className="form-group">
             <label>Emergency Contact Phone</label>
-            <input type="text" placeholder="+91 98765 12345" />
+            <input
+              type="text"
+              name="emergencyContactPhone"
+              value={form.emergencyContactPhone}
+              onChange={handleChange}
+              placeholder="+91 98765 12345"
+            />
           </div>
 
           <div className="form-group">
@@ -231,18 +331,36 @@ export default function CreateEmployee() {
           </div>
 
           <div className="form-group">
-            <label>Monthly Salary (₹) *</label>
-            <input type="text" placeholder="e.g., 75,000" />
+            <label>Monthly Salary (₹)</label>
+            <input
+              type="text"
+              name="salary"
+              value={form.salary}
+              onChange={handleChange}
+              placeholder="e.g., 75,000"
+            />
           </div>
 
           <div className="form-group">
             <label>Bank Account Number</label>
-            <input type="text" placeholder="1234567890123456" />
+            <input
+              type="text"
+              name="bankAccountNumber"
+              value={form.bankAccountNumber}
+              onChange={handleChange}
+              placeholder="1234567890123456"
+            />
           </div>
 
           <div className="form-group">
             <label>IFSC Code</label>
-            <input type="text" placeholder="HDFC0001234" />
+            <input
+              type="text"
+              name="ifscCode"
+              value={form.ifscCode}
+              onChange={handleChange}
+              placeholder="HDFC0001234"
+            />
           </div>
 
         </div>
@@ -289,9 +407,17 @@ export default function CreateEmployee() {
 
         <div className="form-group status-width">
           <label>Status *</label>
-          <select className="inputtextoption">
-            <option>Active</option>
-            <option>In Active</option>
+          <select
+            className="inputtextoption"
+            name="employmentStatus"
+            value={form.employmentStatus}
+            onChange={handleChange}
+          >
+            <option value="ACTIVE">Active</option>
+            <option value="PROBATION">Probation</option>
+            <option value="ON_LEAVE">On Leave</option>
+            <option value="RESIGNED">Resigned</option>
+            <option value="TERMINATED">Terminated</option>
           </select>
         </div>
 

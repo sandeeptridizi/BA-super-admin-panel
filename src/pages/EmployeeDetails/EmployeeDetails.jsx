@@ -13,12 +13,14 @@ import { CiCalendar } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
 import { CiDroplet } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { GoArrowLeft } from "react-icons/go";
-import { getEmployee } from "../../lib/employees";
+import { IoClose } from "react-icons/io5";
+import { getEmployee, updateEmployee, deleteEmployee } from "../../lib/employees";
 
-const fmt = (v) => (v != null && v !== "" ? String(v) : "—");
+const fmt = (v) => (v != null && v !== "" ? String(v) : "\u2014");
 const fmtDate = (d) =>
-  d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—";
+  d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "\u2014";
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
@@ -26,6 +28,9 @@ const EmployeeDetails = () => {
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -51,10 +56,55 @@ const EmployeeDetails = () => {
     return () => { cancelled = true; };
   }, [id]);
 
+  const openEditModal = () => {
+    setEditForm({
+      name: employee.name || "",
+      email: employee.email || "",
+      phone: employee.phone || "",
+      designation: employee.designation || "",
+      department: employee.department || "",
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditSave = async () => {
+    setSaving(true);
+    try {
+      const res = await updateEmployee(id, editForm);
+      setEmployee((prev) => ({ ...prev, ...res.data }));
+      setShowEditModal(false);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update employee.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete "${employee.name}"? This action cannot be undone.`)) return;
+    try {
+      await deleteEmployee(id);
+      navigate("/employees");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete employee.");
+    }
+  };
+
+  const handleToggleActive = async () => {
+    const newStatus = !employee.isActive;
+    if (!window.confirm(`${newStatus ? "Activate" : "Deactivate"} this employee?`)) return;
+    try {
+      const res = await updateEmployee(id, { isActive: newStatus });
+      setEmployee((prev) => ({ ...prev, ...res.data }));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update status.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="employeeDetails-container">
-        <div className="details-loading">Loading employee…</div>
+        <div className="details-loading">Loading employee...</div>
       </div>
     );
   }
@@ -83,7 +133,7 @@ const EmployeeDetails = () => {
       <div className="details-header">
         <div className="header-left">
           <button className="back-btn" onClick={() => navigate(-1)}>
-            ←
+            \u2190
           </button>
           <div>
             <h1>{employee.name}</h1>
@@ -95,7 +145,13 @@ const EmployeeDetails = () => {
             </div>
           </div>
         </div>
-        <button className="edit-btn"><FiEdit />Edit Employee</button>
+        <div className="header-actions">
+          <button className="toggle-active-btn" onClick={handleToggleActive}>
+            {employee.isActive ? "Deactivate" : "Activate"}
+          </button>
+          <button className="delete-emp-btn" onClick={handleDelete}><FiTrash2 /></button>
+          <button className="edit-btn" onClick={openEditModal}><FiEdit />Edit Employee</button>
+        </div>
       </div>
 
       <div className="details-grid">
@@ -138,7 +194,7 @@ const EmployeeDetails = () => {
                 <p>{employee.email}</p>
               </div>
             </div>
-            <button className="outline-btn">🔒 Reset Password</button>
+            <button className="outline-btn">Reset Password</button>
           </div>
 
           <div className="card">
@@ -168,7 +224,7 @@ const EmployeeDetails = () => {
                 <div className="empinfoicon color5"><IoLocationOutline /></div>
                 <div>
                   <label>Address</label>
-                  <p>{addressLines.join(", ") || "—"}</p>
+                  <p>{addressLines.join(", ") || "\u2014"}</p>
                 </div>
               </div>
             </div>
@@ -281,7 +337,7 @@ const EmployeeDetails = () => {
             {employee.salary != null && (
               <div className="info-box1 highlight-yellow">
                 <label>Monthly Salary</label>
-                <p className="salary">₹ {Number(employee.salary).toLocaleString("en-IN")}</p>
+                <p className="salary">\u20B9 {Number(employee.salary).toLocaleString("en-IN")}</p>
               </div>
             )}
           </div>
@@ -305,7 +361,8 @@ const EmployeeDetails = () => {
           </div>
 
           <div className="card1">
-            <button className="edit-btn full"><FiEdit />Edit Employee</button>
+            <button className="edit-btn full" onClick={openEditModal}><FiEdit />Edit Employee</button>
+            <button className="delete-btn full" onClick={handleDelete}><FiTrash2 />Delete Employee</button>
             <button
               className="outline-btn full"
               onClick={() => navigate("/employees")}
@@ -317,6 +374,34 @@ const EmployeeDetails = () => {
         </div>
 
       </div>
+
+      {showEditModal && (
+        <div className="editModalOverlay" onClick={() => setShowEditModal(false)}>
+          <div className="editModalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="editModalHeader">
+              <h2>Edit Employee</h2>
+              <button className="editModalClose" onClick={() => setShowEditModal(false)}><IoClose /></button>
+            </div>
+            <div className="editModalBody">
+              <label>Name</label>
+              <input type="text" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+              <label>Email</label>
+              <input type="email" value={editForm.email} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} />
+              <label>Phone</label>
+              <input type="text" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} />
+              <label>Designation</label>
+              <input type="text" value={editForm.designation} onChange={(e) => setEditForm({ ...editForm, designation: e.target.value })} />
+              <label>Department</label>
+              <input type="text" value={editForm.department} onChange={(e) => setEditForm({ ...editForm, department: e.target.value })} />
+            </div>
+            <div className="editModalFooter">
+              <button className="editModalCancel" onClick={() => setShowEditModal(false)}>Cancel</button>
+              <button className="editModalSave" onClick={handleEditSave} disabled={saving}>{saving ? "Saving..." : "Save Changes"}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

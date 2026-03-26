@@ -17,7 +17,9 @@ import { MdEmail } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
 import { HiOutlineTrendingUp } from "react-icons/hi";
 import { IoTimeOutline } from "react-icons/io5";
-import { getUser } from "../../lib/users";
+import { IoClose } from "react-icons/io5";
+import { FiTrash2 } from "react-icons/fi";
+import { getUser, updateUser, deleteUser } from "../../lib/users";
 
 
 
@@ -30,6 +32,9 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ name: "", phone: "", city: "", state: "" });
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -53,7 +58,51 @@ const UserProfile = () => {
   const tierLabel = (s) => (s === "ACTIVE" ? "Elite" : s === "INACTIVE" ? "Basic" : s === "EXPIRED" ? "Expired" : s === "CANCELLED" ? "Cancelled" : s || "Basic");
   const formatDate = (d) => d ? new Date(d).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : "";
 
-  if (loading) return <div className="userProfileContainer"><div className="userTopBar"><div className="backUsers" onClick={() => navigate("/users")}><BiLeftArrowAlt /> Back to Users</div></div><p>Loading…</p></div>;
+  const openEditModal = () => {
+    setEditForm({
+      name: user.name || "",
+      phone: user.phone || "",
+      city: user.city || "",
+      state: user.state || "",
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditSave = async () => {
+    setSaving(true);
+    try {
+      const res = await updateUser(id, editForm);
+      setUser((prev) => ({ ...prev, ...res.data }));
+      setShowEditModal(false);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update user.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete "${user.name}"? This action cannot be undone.`)) return;
+    try {
+      await deleteUser(id);
+      navigate("/users");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete user.");
+    }
+  };
+
+  const handleToggleActive = async () => {
+    const newStatus = !user.isActive;
+    if (!window.confirm(`${newStatus ? "Activate" : "Deactivate"} this user?`)) return;
+    try {
+      const res = await updateUser(id, { isActive: newStatus });
+      setUser((prev) => ({ ...prev, ...res.data }));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update status.");
+    }
+  };
+
+  if (loading) return <div className="userProfileContainer"><div className="userTopBar"><div className="backUsers" onClick={() => navigate("/users")}><BiLeftArrowAlt /> Back to Users</div></div><p>Loading...</p></div>;
   if (error || !user) return <div className="userProfileContainer"><div className="userTopBar"><div className="backUsers" onClick={() => navigate("/users")}><BiLeftArrowAlt /> Back to Users</div></div><p>{error || "User not found."}</p></div>;
 
   const productCount = user.ownedProducts?.length ?? 0;
@@ -62,7 +111,13 @@ const UserProfile = () => {
     <div className="userProfileContainer">
       <div className="userTopBar">
         <div className="backUsers" onClick={() => navigate("/users")}><BiLeftArrowAlt /> Back to Users</div>
-        <button className="editUserBtn"><FaRegEdit /> Edit User</button>
+        <div className="userTopBarActions">
+          <button className="toggleActiveBtn" onClick={handleToggleActive}>
+            {user.isActive ? "Deactivate" : "Activate"}
+          </button>
+          <button className="deleteUserBtn" onClick={handleDelete}><FiTrash2 /></button>
+          <button className="editUserBtn" onClick={openEditModal}><FaRegEdit /> Edit User</button>
+        </div>
       </div>
       <div className="userMainCard">
         <div className="usermainleft">
@@ -75,8 +130,8 @@ const UserProfile = () => {
           <p className="memberSince">Member since {formatDate(user.createdAt)}</p>
           <div className="infoGrid">
             <div className="infoBox blue"><MdOutlineEmail  className="useremailicon blue1" /> {user.email}</div>
-            <div className="infoBox green"><FiPhone className="useremailicon green1"/> {user.phone || "—"}</div>
-            <div className="infoBox purple"><IoLocationOutline className="useremailicon purple1"/> {[user.city, user.state].filter(Boolean).join(", ") || "—"}</div>
+            <div className="infoBox green"><FiPhone className="useremailicon green1"/> {user.phone || "\u2014"}</div>
+            <div className="infoBox purple"><IoLocationOutline className="useremailicon purple1"/> {[user.city, user.state].filter(Boolean).join(", ") || "\u2014"}</div>
             <div className="infoBox yellow"><CiCalendar className="useremailicon yellow1"/>Joined: {formatDate(user.createdAt)}</div>
           </div>
         </div>
@@ -102,7 +157,7 @@ const UserProfile = () => {
             <div className="statcardrow">
           <LuUsers className="useremailicon yellow1" />
           <p className="statcardname yellow2">REVENUE</p></div>
-          <h3 className="statcardvalue gold">—</h3>
+          <h3 className="statcardvalue gold">\u2014</h3>
         </div>
 
 
@@ -138,10 +193,10 @@ const UserProfile = () => {
                     <b>{p.title}</b>
                     {p.meta?.location && <div className="sub"><IoLocationOutline />{p.meta.location}</div>}
                   </td>
-                  <td><span className="tag">{p.category?.replace(/_/g, " ") || "—"}</span></td>
-                  <td className="price">{p.value != null ? `₹${(p.value / 1e5).toFixed(1)}L` : "—"}</td>
-                  <td className="pricetier">{p.tier || "—"}</td>
-                  <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "—"}</span></td>
+                  <td><span className="tag">{p.category?.replace(/_/g, " ") || "\u2014"}</span></td>
+                  <td className="price">{p.value != null ? `\u20B9${(p.value / 1e5).toFixed(1)}L` : "\u2014"}</td>
+                  <td className="pricetier">{p.tier || "\u2014"}</td>
+                  <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "\u2014"}</span></td>
                   <td className="userleads">0</td>
                 </tr>
               ))
@@ -340,6 +395,31 @@ const UserProfile = () => {
 
       </div>
     </div>)}
+
+      {showEditModal && (
+        <div className="editModalOverlay" onClick={() => setShowEditModal(false)}>
+          <div className="editModalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="editModalHeader">
+              <h2>Edit User</h2>
+              <button className="editModalClose" onClick={() => setShowEditModal(false)}><IoClose /></button>
+            </div>
+            <div className="editModalBody">
+              <label>Name</label>
+              <input type="text" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />
+              <label>Phone</label>
+              <input type="text" value={editForm.phone} onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })} />
+              <label>City</label>
+              <input type="text" value={editForm.city} onChange={(e) => setEditForm({ ...editForm, city: e.target.value })} />
+              <label>State</label>
+              <input type="text" value={editForm.state} onChange={(e) => setEditForm({ ...editForm, state: e.target.value })} />
+            </div>
+            <div className="editModalFooter">
+              <button className="editModalCancel" onClick={() => setShowEditModal(false)}>Cancel</button>
+              <button className="editModalSave" onClick={handleEditSave} disabled={saving}>{saving ? "Saving..." : "Save Changes"}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

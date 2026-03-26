@@ -217,6 +217,60 @@
   font-weight: 600;
 }
 
+.header-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.toggle-active-btn{
+  background:#f3f4f6;
+  border:1px solid #d1d5db;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+}
+
+.toggle-active-btn:hover{background:#e5e7eb;}
+
+.delete-emp-btn{
+  background:#fee2e2;
+  border:1px solid #fecaca;
+  color:#dc2626;
+  height:40px;
+  width:40px;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+}
+
+.delete-emp-btn:hover{background:#fecaca;}
+
+.delete-btn{
+  background:#fee2e2;
+  border:1px solid #fecaca;
+  color:#dc2626;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  font-weight:600;
+}
+
+.delete-btn.full{
+  width:100%;
+  margin-bottom:10px;
+}
+
+.delete-btn:hover{background:#fecaca;}
+
 .edit-btn {
   background: #FFC300;
   border: none;
@@ -273,4 +327,104 @@
 
 .stat-card h2 {
   margin: 0;
+}
+
+.editModalOverlay{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+
+.editModalContent{
+  background:#fff;
+  border-radius:16px;
+  width:480px;
+  max-height:90vh;
+  overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+
+.editModalHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 24px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.editModalHeader h2{
+  font-size:18px;
+  font-weight:600;
+}
+
+.editModalClose{
+  background:none;
+  border:none;
+  font-size:22px;
+  cursor:pointer;
+  color:#6b7280;
+  display:flex;
+  align-items:center;
+}
+
+.editModalBody{
+  padding:20px 24px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.editModalBody label{
+  font-size:13px;
+  font-weight:600;
+  color:#374151;
+  margin-top:6px;
+}
+
+.editModalBody input{
+  padding:10px 14px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font-size:14px;
+  outline:none;
+  transition:border-color 0.2s;
+}
+
+.editModalBody input:focus{
+  border-color:#FFC300;
+}
+
+.editModalFooter{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  padding:16px 24px;
+  border-top:1px solid #e5e7eb;
+}
+
+.editModalCancel{
+  padding:10px 20px;
+  border:1px solid #d1d5db;
+  background:#fff;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:500;
+}
+
+.editModalSave{
+  padding:10px 20px;
+  border:none;
+  background:#FFC300;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.editModalSave:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
 }

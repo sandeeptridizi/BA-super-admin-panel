@@ -280,3 +280,48 @@
   background: #e5e7eb;
   color: #6b7280;
 }
+
+.employeeediticon{
+    position:relative;
+    margin-left:auto;
+    cursor:pointer;
+}
+
+.empActionMenu{
+    position:absolute;
+    right:0;
+    top:100%;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.12);
+    z-index:100;
+    min-width:140px;
+    overflow:hidden;
+}
+
+.empActionMenu button{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    padding:10px 16px;
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-size:13px;
+    color:#374151;
+    text-align:left;
+}
+
+.empActionMenu button:hover{
+    background:#f3f4f6;
+}
+
+.empActionMenuDelete{
+    color:#dc2626 !important;
+}
+
+.empActionMenuDelete:hover{
+    background:#fee2e2 !important;
+}

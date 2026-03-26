@@ -690,9 +690,9 @@ const ProductEdit = () => {
         </div>
 
         <div className="basicinfotitle">Description</div>
-        <input
+        <textarea
           className="basicinfoinput"
-          type="text"
+          rows={4}
           placeholder="Product description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

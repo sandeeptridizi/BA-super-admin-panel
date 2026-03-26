@@ -29,3 +29,13 @@ export async function createUser(data) {
   const res = await api.post("/api/user", data);
   return res.data;
 }
+
+export async function updateUser(id, data) {
+  const res = await api.put(`/api/user/${id}`, data);
+  return res.data;
+}
+
+export async function deleteUser(id) {
+  const res = await api.delete(`/api/user/${id}`);
+  return res.data;
+}
