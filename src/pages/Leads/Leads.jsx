@@ -15,6 +15,14 @@ import { FiMail } from "react-icons/fi";
 import { getEnquiries, getEnquiryStats, deleteEnquiry } from '../../lib/enquiries';
 import { FiTrash2 } from "react-icons/fi";
 
+const getStartOfWeek = () => {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.getFullYear(), now.getMonth(), diff);
+  return monday.toISOString().split('T')[0];
+};
+
 const listingTypeMap = {
   marketplace: 'MARKETPLACE',
   buynow: 'BUY_NOW',
@@ -57,16 +65,17 @@ const Leads = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await getEnquiryStats();
-        if (data) {
-          const byStatus = data.byStatus || {};
-          setStats({
-            total: (byStatus.NEW || 0) + (byStatus.IN_PROGRESS || 0) + (byStatus.RESOLVED || 0) + (byStatus.CLOSED || 0),
-            new: byStatus.NEW || 0,
-            inProgress: byStatus.IN_PROGRESS || 0,
-            resolved: (byStatus.RESOLVED || 0) + (byStatus.CLOSED || 0),
-          });
-        }
+        const [data, weeklyRes] = await Promise.all([
+          getEnquiryStats(),
+          getEnquiries({ page: 1, limit: 1, startDate: getStartOfWeek() }),
+        ]);
+        const byStatus = data?.byStatus || {};
+        setStats({
+          total: (byStatus.NEW || 0) + (byStatus.IN_PROGRESS || 0) + (byStatus.RESOLVED || 0) + (byStatus.CLOSED || 0),
+          new: weeklyRes.pagination?.total || 0,
+          inProgress: byStatus.IN_PROGRESS || 0,
+          resolved: (byStatus.RESOLVED || 0) + (byStatus.CLOSED || 0),
+        });
       } catch {}
     };
     fetchStats();

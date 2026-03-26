@@ -44,6 +44,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString("en-IN", { year: "n
 
 const PLACEMENT_OPTIONS = ["homepage_banner", "popup_ad", "product_listing"];
 const PLACEMENT_LABELS = { homepage_banner: "Homepage Banner", popup_ad: "Popup Ad", product_listing: "Product Listing" };
+const PLACEMENT_DIMENSIONS = { homepage_banner: "1356 × 428", popup_ad: "398 × 404", product_listing: "398 × 404" };
 
 const Activitypage = () => {
     const [activeTab, setActiveTab] = useState("approvals");
@@ -94,7 +95,7 @@ const Activitypage = () => {
         }
     }, []);
 
-    useEffect(() => { if (activeTab === "ads") loadAds(); }, [activeTab, loadAds]);
+    useEffect(() => { loadAds(); }, [loadAds]);
 
     const resetAdForm = () => {
         setAdForm({ title: "", content: "", ctaText: "", ctaUrl: "", placement: "" });
@@ -349,6 +350,11 @@ const Activitypage = () => {
                 <div className="adverttitlediv">
                     <h3 className="adverttitle"><MdOutlineFileUpload />Banner / Image Upload</h3>
                     <input type="file" ref={adFileInputRef} accept="image/*" onChange={handleAdFileSelect} className="advertinputtext" />
+                    {adForm.placement ? (
+                        <p className="banner-dimension-note">Recommended: {PLACEMENT_DIMENSIONS[adForm.placement]} px ({PLACEMENT_LABELS[adForm.placement]})</p>
+                    ) : (
+                        <p className="banner-dimension-note">Select Banner Placement to see Dimensions</p>
+                    )}
                     {adFilePreview && (
                         <div style={{ marginTop: 8, position: "relative", display: "inline-block" }}>
                             <img src={adFilePreview} alt="Preview" style={{ maxHeight: 100, borderRadius: 8 }} />

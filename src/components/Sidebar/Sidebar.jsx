@@ -43,12 +43,12 @@ const linksData = [
     title: 'Users',
     link: 'users',
   },
-  {
-    id: 5,
-    icon: <FiTarget />,
-    title: 'Leads',
-    link: 'leads',
-  },
+  // {
+  //   id: 5,
+  //   icon: <FiTarget />,
+  //   title: 'Leads',
+  //   link: 'leads',
+  // },
   {
     id: 6,
     icon: <RxPerson />,

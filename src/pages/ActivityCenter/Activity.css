@@ -573,6 +573,13 @@
   outline: none;
 }
 
+.banner-dimension-note {
+  font-size: 12px;
+  color: #e17100;
+  margin: 6px 0 0 0;
+  font-weight: 500;
+}
+
 .formdesclaimer {
   font-size: 12px;
   color: #e17100;

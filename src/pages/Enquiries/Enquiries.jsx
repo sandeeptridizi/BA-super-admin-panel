@@ -141,7 +141,7 @@ export default function Enquiries() {
         <p>Chat and form enquiries across all business modes</p>
       </div>
 
-      <ul className="activitycat1" style={{ marginBottom: "25px" }}>
+      <ul className="activitycat1 activitycat1--compact" style={{ marginBottom: "25px" }}>
         <li className={`catmenu4 ${activeSection === "enquiries" ? "active-allenquiries" : ""}`} onClick={() => setActiveSection("enquiries")}>
           <FiMessageSquare /> Enquiries
         </li>

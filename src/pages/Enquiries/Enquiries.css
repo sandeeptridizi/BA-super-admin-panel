@@ -178,6 +178,11 @@
     gap: 18px;
 }
 
+.activitycat1.activitycat1--compact {
+    width: auto;
+    justify-content: flex-start;
+}
+
 .catmenu4{
     color: #000000;
     font-size: 14px;
