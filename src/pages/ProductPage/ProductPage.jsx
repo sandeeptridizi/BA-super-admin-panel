@@ -108,7 +108,8 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [imageQueue, setImageQueue] = useState(PLACEHOLDER_IMAGES);
+  const [images, setImages] = useState(PLACEHOLDER_IMAGES);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -127,7 +128,8 @@ const ProductPage = () => {
         const urls = Array.isArray(data?.media) && data.media.length > 0
           ? data.media
           : PLACEHOLDER_IMAGES;
-        setImageQueue(urls);
+        setImages(urls);
+        setSelectedImageIndex(0);
       } catch (err) {
         const message = err?.response?.data?.message || err?.message || "Failed to fetch product.";
         setError(message);
@@ -137,19 +139,6 @@ const ProductPage = () => {
     };
     fetchProduct();
   }, [id]);
-
-  useEffect(() => {
-    if (imageQueue.length === 0) return;
-    const interval = setInterval(() => {
-      setImageQueue((prev) => {
-        const updated = [...prev];
-        const first = updated.shift();
-        updated.push(first);
-        return updated;
-      });
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [product?.id]);
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this product? This action cannot be undone.")) return;
@@ -235,17 +224,17 @@ const ProductPage = () => {
         <div className="productpageleft">
           <div className="productpageimage">
             <img
-              src={getFile(imageQueue[0])}
+              src={getFile(images[selectedImageIndex])}
               alt="product"
               className="productheaderimage"
             />
             <ul className="productimagescroller">
-              {imageQueue.slice(1, 4).map((img, index) => (
-                <li key={index}>
+              {images.map((img, index) => (
+                <li key={index} onClick={() => setSelectedImageIndex(index)}>
                   <img
-                    src={getFile(imageQueue[index])}
+                    src={getFile(img)}
                     alt="product"
-                    className="productimageone"
+                    className={`productimageone ${index === selectedImageIndex ? "productimageone-active" : ""}`}
                   />
                 </li>
               ))}

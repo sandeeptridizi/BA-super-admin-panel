@@ -42,6 +42,8 @@
     width: 678px;
     border-radius: 10px;
     margin-bottom: 10px;
+    object-fit: contain;
+    background-color: #f5f5f0;
 }
 
 .productimagescroller{
@@ -52,12 +54,26 @@
     padding: 10px;
     gap: 10px;
     margin-left: 10px;
+    overflow-x: auto;
+}
+
+.productimagescroller li{
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 .productimageone{
     height: 122px;
     width: 208px;
     border-radius: 10px;
+    object-fit: contain;
+    background-color: #f5f5f0;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.productimageone-active{
+    border-color: #D4AF37;
 }
 
 .productdescription{

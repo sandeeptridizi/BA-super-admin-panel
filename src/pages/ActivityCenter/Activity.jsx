@@ -201,15 +201,51 @@ const Activitypage = () => {
     const [rejectModal, setRejectModal] = useState({ open: false, productId: null });
     const [rejectReason, setRejectReason] = useState("");
 
+    const [auctionModal, setAuctionModal] = useState({ open: false, productId: null, tier: null });
+    const [auctionVenue, setAuctionVenue] = useState("");
+    const [auctionDate, setAuctionDate] = useState("");
+
     const handleApprove = async (id, approvalStatus, tier) => {
         if (approvalStatus === "REJECTED") {
             setRejectModal({ open: true, productId: id });
             setRejectReason("");
             return;
         }
+        const product = pendingProducts.find((p) => p.id === id);
+        if (product?.listingType === "AUCTIONS") {
+            setAuctionModal({ open: true, productId: id, tier });
+            setAuctionVenue("");
+            setAuctionDate("");
+            return;
+        }
         setActioningId(id);
         try {
             await apiApproveProduct(id, { approvalStatus: "APPROVED", tier });
+            setPendingProducts((prev) => prev.filter((p) => p.id !== id));
+        } catch (err) {
+            setError(err?.response?.data?.message || "Update failed");
+        } finally {
+            setActioningId(null);
+        }
+    };
+
+    const handleAuctionApproveConfirm = async () => {
+        if (!auctionVenue.trim() || !auctionDate) return;
+        const { productId: id, tier } = auctionModal;
+        setAuctionModal({ open: false, productId: null, tier: null });
+        setActioningId(id);
+        try {
+            const product = pendingProducts.find((p) => p.id === id);
+            const existingMeta = product?.meta && typeof product.meta === "object" ? product.meta : {};
+            await apiApproveProduct(id, {
+                approvalStatus: "APPROVED",
+                tier,
+                meta: {
+                    ...existingMeta,
+                    auctionVenue: auctionVenue.trim(),
+                    auctionDate: new Date(auctionDate).toISOString(),
+                },
+            });
             setPendingProducts((prev) => prev.filter((p) => p.id !== id));
         } catch (err) {
             setError(err?.response?.data?.message || "Update failed");
@@ -516,6 +552,48 @@ const Activitypage = () => {
                 <div className="reject-modal-actions">
                     <button className="reject-modal-cancel" onClick={() => setRejectModal({ open: false, productId: null })}>Cancel</button>
                     <button className="reject-modal-confirm" disabled={!rejectReason.trim()} onClick={handleRejectConfirm}>Reject Product</button>
+                </div>
+            </div>
+        </div>
+    )}
+
+    {auctionModal.open && (
+        <div className="reject-modal-overlay" onClick={() => setAuctionModal({ open: false, productId: null, tier: null })}>
+            <div className="reject-modal" onClick={(e) => e.stopPropagation()}>
+                <h3 className="reject-modal-title">Approve Auction Product</h3>
+                <p className="reject-modal-desc">Please provide the auction venue and date before approving this auction product.</p>
+                <div style={{ marginBottom: 12 }}>
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Venue</label>
+                    <input
+                        type="text"
+                        className="reject-modal-textarea"
+                        style={{ height: 40, resize: "none" }}
+                        placeholder="Enter auction venue..."
+                        value={auctionVenue}
+                        onChange={(e) => setAuctionVenue(e.target.value)}
+                        autoFocus
+                    />
+                </div>
+                <div>
+                    <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Date</label>
+                    <input
+                        type="datetime-local"
+                        className="reject-modal-textarea"
+                        style={{ height: 40, resize: "none" }}
+                        value={auctionDate}
+                        onChange={(e) => setAuctionDate(e.target.value)}
+                    />
+                </div>
+                <div className="reject-modal-actions">
+                    <button className="reject-modal-cancel" onClick={() => setAuctionModal({ open: false, productId: null, tier: null })}>Cancel</button>
+                    <button
+                        className="reject-modal-confirm"
+                        style={{ background: "#d4af37" }}
+                        disabled={!auctionVenue.trim() || !auctionDate}
+                        onClick={handleAuctionApproveConfirm}
+                    >
+                        Approve Auction
+                    </button>
                 </div>
             </div>
         </div>

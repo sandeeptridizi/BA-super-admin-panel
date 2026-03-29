@@ -167,11 +167,7 @@ const Products = () => {
     const activeListings = products.filter(
       (item) => item.approvalStatus === "APPROVED",
     ).length;
-    const totalValue = products.reduce(
-      (sum, item) => sum + Number(item.value || 0),
-      0,
-    );
-    return { totalProducts, activeListings, totalValue };
+    return { totalProducts, activeListings };
   }, [products]);
 
   const visibleProducts = useMemo(() => {
@@ -277,18 +273,6 @@ const Products = () => {
           </div>
           <div className="producthighlighticon1">
             <IoEyeOutline />
-          </div>
-        </li>
-        <li className="producthighlight1">
-          <div className="producthighlightinfo">
-            <span className="producthighlighttitle">Total Value</span>
-            <br />
-            <span className="producthighlightnum">
-              {formatCurrency(stats.totalValue)}
-            </span>
-          </div>
-          <div className="producthighlighticon3">
-            <LuCrown />
           </div>
         </li>
       </ul>
