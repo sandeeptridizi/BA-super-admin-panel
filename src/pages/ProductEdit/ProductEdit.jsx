@@ -31,6 +31,19 @@ const normalizeMetaKey = (label) =>
     )
     .join("");
 
+// Legacy meta keys produced by old form labels → canonical keys expected now.
+// On load we migrate values so edit fields populate; on save old keys are gone.
+const LEGACY_KEY_MAP = {
+  ageOfPropertyYears: 'ageOfProperty',
+  dimensionsLWH: 'dimensions',
+  seatingCapacityIfApplicable: 'seatingCapacity',
+  approximateAgeYears: 'approximateAge',
+  boxPappers: 'boxPapers',
+  raretyLevel: 'rarityLevel',
+  builtUpAreaInSqYards: 'builtUpArea',
+  plotAreaInSqYards: 'plotArea',
+};
+
 // ── mapping tables ───────────────────────────────────────────────────────────
 const listingTypeToMode = {
   MARKETPLACE: "marketplace",
@@ -310,6 +323,13 @@ const ProductEdit = () => {
         setApprovalStatus(p.approvalStatus || "PENDING");
 
         const m = p.meta && typeof p.meta === "object" ? { ...p.meta } : {};
+        // Migrate legacy meta keys to canonical keys
+        for (const [oldKey, newKey] of Object.entries(LEGACY_KEY_MAP)) {
+          if (m[oldKey] !== undefined && !m[newKey]) {
+            m[newKey] = m[oldKey];
+          }
+          delete m[oldKey];
+        }
         setCity(m.city || "");
         setSocialMediaLink(m.socialMediaLink || "");
         setStatus(m.status || "ACTIVE");
