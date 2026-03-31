@@ -797,11 +797,11 @@ const ProductCreation = () => {
                     <option>Ready to Move</option>
                     <option>Under Construction</option>
                     <option>Within 3 Months</option>
-                    <option>Within 6 MOnths</option>
+                    <option>Within 6 Months</option>
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Age of Property (Years)</h3>
+                <h3 className='basicinfotitle'>Age of Property</h3>
                 <input type="text" placeholder="e.g., 5" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -1088,10 +1088,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -1138,7 +1134,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -1156,10 +1152,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -1206,7 +1198,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -1606,7 +1598,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Dimensions (L × W × H)</h3>
+                <h3 className='basicinfotitle'>Dimensions</h3>
                 <input type="text" placeholder="e.g., 180 × 90 × 75 cm" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -1614,7 +1606,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Color" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Seating Capacity (if applicable)</h3>
+                <h3 className='basicinfotitle'>Seating Capacity</h3>
                 <input type="text" placeholder="Enter Seating Capacity" className="basicinfoinput2" />
             </div>  
         </div>
@@ -1689,7 +1681,7 @@ const ProductCreation = () => {
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Male</option>
-                    <option>Femal</option>
+                    <option>Female</option>
                     <option>Unisex</option>
                 </select>
             </div> 
@@ -1804,7 +1796,7 @@ const ProductCreation = () => {
         </div>
         <div className='basicinforow'>  
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Box & Pappers</h3>
+                <h3 className='basicinfotitle'>Box & Papers</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Available</option>
@@ -1912,7 +1904,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Approximate Age (years)</h3>
+                <h3 className='basicinfotitle'>Approximate Age</h3>
                 <input type="text" placeholder="e.g., 150" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -1971,7 +1963,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Type" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Rarety Level</h3>
+                <h3 className='basicinfotitle'>Rarity Level</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Common</option>
@@ -2299,11 +2291,11 @@ const ProductCreation = () => {
                     <option>Ready to Move</option>
                     <option>Under Construction</option>
                     <option>Within 3 Months</option>
-                    <option>Within 6 MOnths</option>
+                    <option>Within 6 Months</option>
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Age of Property (Years)</h3>
+                <h3 className='basicinfotitle'>Age of Property</h3>
                 <input type="text" placeholder="e.g., 5" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -2590,10 +2582,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -2640,7 +2628,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -2658,10 +2646,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -2708,7 +2692,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -3108,7 +3092,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Dimensions (L × W × H)</h3>
+                <h3 className='basicinfotitle'>Dimensions</h3>
                 <input type="text" placeholder="e.g., 180 × 90 × 75 cm" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -3116,7 +3100,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Color" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Seating Capacity (if applicable)</h3>
+                <h3 className='basicinfotitle'>Seating Capacity</h3>
                 <input type="text" placeholder="Enter Seating Capacity" className="basicinfoinput2" />
             </div>  
         </div>
@@ -3191,7 +3175,7 @@ const ProductCreation = () => {
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Male</option>
-                    <option>Femal</option>
+                    <option>Female</option>
                     <option>Unisex</option>
                 </select>
             </div> 
@@ -3306,7 +3290,7 @@ const ProductCreation = () => {
         </div>
         <div className='basicinforow'>  
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Box & Pappers</h3>
+                <h3 className='basicinfotitle'>Box & Papers</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Available</option>
@@ -3414,7 +3398,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Approximate Age (years)</h3>
+                <h3 className='basicinfotitle'>Approximate Age</h3>
                 <input type="text" placeholder="e.g., 150" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -3473,7 +3457,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Type" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Rarety Level</h3>
+                <h3 className='basicinfotitle'>Rarity Level</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Common</option>
@@ -3802,11 +3786,11 @@ const ProductCreation = () => {
                     <option>Ready to Move</option>
                     <option>Under Construction</option>
                     <option>Within 3 Months</option>
-                    <option>Within 6 MOnths</option>
+                    <option>Within 6 Months</option>
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Age of Property (Years)</h3>
+                <h3 className='basicinfotitle'>Age of Property</h3>
                 <input type="text" placeholder="e.g., 5" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -4093,10 +4077,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -4143,7 +4123,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -4161,10 +4141,6 @@ const ProductCreation = () => {
                 <input type="text" placeholder="e.g., 1200 sq.ft" className="basicinfoinput2" />
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Facing</h3>
-                <input type="text" placeholder="e.g., North" className="basicinfoinput2" />
-            </div>
-            <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Road Width</h3>
                 <input type="text" placeholder="e.g., 20 ft" className="basicinfoinput2" />
             </div> 
@@ -4211,7 +4187,7 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Water Connection </h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
-                    <option>Muncipal</option>
+                    <option>Municipal</option>
                     <option>Borewell</option>
                     <option>Both</option>
                     <option>None </option>
@@ -4611,7 +4587,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Dimensions (L × W × H)</h3>
+                <h3 className='basicinfotitle'>Dimensions</h3>
                 <input type="text" placeholder="e.g., 180 × 90 × 75 cm" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -4619,7 +4595,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Color" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Seating Capacity (if applicable)</h3>
+                <h3 className='basicinfotitle'>Seating Capacity</h3>
                 <input type="text" placeholder="Enter Seating Capacity" className="basicinfoinput2" />
             </div>  
         </div>
@@ -4694,7 +4670,7 @@ const ProductCreation = () => {
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Male</option>
-                    <option>Femal</option>
+                    <option>Female</option>
                     <option>Unisex</option>
                 </select>
             </div> 
@@ -4809,7 +4785,7 @@ const ProductCreation = () => {
         </div>
         <div className='basicinforow'>  
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Box & Pappers</h3>
+                <h3 className='basicinfotitle'>Box & Papers</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Available</option>
@@ -4917,7 +4893,7 @@ const ProductCreation = () => {
                 </select>
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Approximate Age (years)</h3>
+                <h3 className='basicinfotitle'>Approximate Age</h3>
                 <input type="text" placeholder="e.g., 150" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
@@ -4976,7 +4952,7 @@ const ProductCreation = () => {
                 <input type="text" placeholder="Enter Type" className="basicinfoinput2" />
             </div> 
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Rarety Level</h3>
+                <h3 className='basicinfotitle'>Rarity Level</h3>
                 <select className="basicinfoinput2">
                     <option value="">Select type<FaChevronDown /></option>
                     <option>Common</option>

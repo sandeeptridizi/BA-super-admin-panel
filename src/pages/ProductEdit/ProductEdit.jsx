@@ -114,7 +114,7 @@ const REAL_ESTATE_COMMON = [
   [
     sel("Approval Status", ["RERA Approved", "Authority Approved", "Not Approved", "Under Process"]),
     sel("Availability", ["Immediate", "Ready to Move", "Under Construction", "Within 3 Months", "Within 6 Months"]),
-    f("Age of Property (Years)"),
+    f("Age of Property"),
     sel("Facing", ["North", "East", "West", "South", "North-East", "North-West", "South-East", "South-West"]),
   ],
   [sel("No of Car Parking", ["1", "2", "3", "4"])],
@@ -134,7 +134,7 @@ const RE_APARTMENT_FLAT = [
 const RE_PLOT_LAND = [
   [f("Plot Dimensions"), f("Plot Area"), f("Facing"), f("Road Width")],
   [sel("Approval Type", ["DTCP", "HMDA", "RERA", "Panchayat", "NA"]), sel("Boundary Wall", ["Yes", "No"]), sel("Corner Plot", ["Yes", "No"]), sel("Electricity Available", ["Yes", "No"])],
-  [sel("Water Connection", ["Muncipal", "Borewell", "Both", "None"])],
+  [sel("Water Connection", ["Municipal", "Borewell", "Both", "None"])],
 ];
 
 const RE_COMMERCIAL = [
@@ -160,7 +160,7 @@ const BIKES_FIELDS = [
 
 const FURNITURE_FIELDS = [
   [sel("Furniture Type", ["Sofa", "Sofa Set", "Bed", "Dining Table", "Chair", "Wardrobe", "Study Table", "TV Unit", "Cabinet", "Mattress", "Office Furniture", "Other"]), sel("Material", ["Solid Wood", "Engineered Wood", "Metal", "Plastic", "Fabric", "Leather", "Cane", "Rattan", "Mixed", "Others"]), sel("Condition", ["Brand New", "Pre-Owned", "Refurbished"]), sel("Usage Condition", ["Never Used", "Lightly Used", "Moderately Used", "Heavily Used"])],
-  [sel("Brand", ["Custom", "Branded"]), f("Dimensions (L × W × H)"), f("Color / Finish"), f("Seating Capacity (if applicable)")],
+  [sel("Brand", ["Custom", "Branded"]), f("Dimensions"), f("Color / Finish"), f("Seating Capacity")],
   [sel("Age of Furniture", ["Less than 1 Year", "1-3 Years", "3-5 Years", "5+ Years"]), sel("Assembly Required", ["Yes", "No"]), f("Original Purchase Price"), sel("Reason for Selling", ["Relocation", "Upgrade", "Not in Use", "Closing Business", "Other"])],
   [sel("Seller Type", ["Owner", "Dealer"])],
 ];
@@ -185,7 +185,7 @@ const ARTS_FIELDS = [
 ];
 
 const ANTIQUES_FIELDS = [
-  [sel("Antique Type", ["Furniture", "Coins", "Artefacts", "Decor"]), f("Approximate Age (years)"), f("Origin"), f("Material")],
+  [sel("Antique Type", ["Furniture", "Coins", "Artefacts", "Decor"]), f("Approximate Age"), f("Origin"), f("Material")],
   [sel("Condition", ["Excellent", "Good", "Fair"]), sel("Restoration", ["Yes", "No"]), sel("Documentation", ["Available", "Not Available"]), sel("Historical Period", ["Colonial", "Victorian", "Mughal", "Other"])],
 ];
 
