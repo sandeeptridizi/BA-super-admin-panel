@@ -1,7 +1,6 @@
 import './Sidebar.css';
 
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { getUserType, clearAuth } from '../../lib/auth';
 
 import companyLogo from '../../assets/company-logo.png';
@@ -9,7 +8,6 @@ import companyLogo from '../../assets/company-logo.png';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
 import { GoPeople } from 'react-icons/go';
-import { FiTarget } from 'react-icons/fi';
 import { RxPerson } from 'react-icons/rx';
 import { LuDollarSign } from 'react-icons/lu';
 import { LuMessageSquare } from 'react-icons/lu';
@@ -43,12 +41,6 @@ const linksData = [
     title: 'Users',
     link: 'users',
   },
-  // {
-  //   id: 5,
-  //   icon: <FiTarget />,
-  //   title: 'Leads',
-  //   link: 'leads',
-  // },
   {
     id: 6,
     icon: <RxPerson />,
@@ -77,8 +69,14 @@ const linksData = [
 
 const EMPLOYEE_HIDDEN_LINKS = ['Employees', 'Financials'];
 
+const isLinkActive = (pathname, link) => {
+  const path = pathname.replace(/^\//, '');
+  if (link === 'dashboard') return path === '' || path === 'dashboard';
+  return path === link || path.startsWith(link + '/');
+};
+
 const Sidebar = () => {
-  const [activeLink, setActiveLink] = useState('');
+  const location = useLocation();
   const userType = getUserType();
   const isEmployee = userType === 'employee';
 
@@ -103,18 +101,18 @@ const Sidebar = () => {
       <div className='sidebar-links-container'>
         {visibleLinks.map((item) => {
           const { id, icon, title, link } = item;
+          const active = isLinkActive(location.pathname, link);
           return (
-            <Link to={link}>
+            <Link to={link} key={id}>
               <div
                 className={
-                  activeLink === title.toLowerCase()
+                  active
                     ? 'link-container active-link'
                     : 'link-container'
                 }
-                key={id}
-                onClick={() => setActiveLink(title.toLowerCase())}
               >
-                {icon} {title}
+                <span className='link-icon'>{icon}</span>
+                <span className='link-title'>{title}</span>
               </div>
             </Link>
           );

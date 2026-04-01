@@ -9,14 +9,13 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
-import { FiTarget } from 'react-icons/fi';
 import { FiMessageSquare } from 'react-icons/fi';
 import { TbActivityHeartbeat } from 'react-icons/tb';
 import { GoPeople } from 'react-icons/go';
 import { GoPerson } from 'react-icons/go';
 import { LuDollarSign } from 'react-icons/lu';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getUserType } from '../../lib/auth';
 
 const linksData = [
@@ -44,12 +43,6 @@ const linksData = [
     title: 'Users',
     link: 'users',
   },
-  // {
-  //   id: 5,
-  //   icon: <FiTarget />,
-  //   title: 'Leads',
-  //   link: 'leads',
-  // },
   {
     id: 6,
     icon: <GoPerson />,
@@ -78,11 +71,15 @@ const linksData = [
 
 const EMPLOYEE_HIDDEN_LINKS = ['Employees', 'Financials'];
 
+const isLinkActive = (pathname, link) => {
+  const path = pathname.replace(/^\//, '');
+  if (link === 'dashboard') return path === '' || path === 'dashboard';
+  return path === link || path.startsWith(link + '/');
+};
+
 const MobileNavbar = () => {
   const [showLinks, setShowLinks] = useState(false);
-  const [activeLink, setActiveLink] = useState(
-    linksData[0].title.toLowerCase(),
-  );
+  const location = useLocation();
   const isEmployee = getUserType() === 'employee';
 
   const visibleLinks = isEmployee
@@ -103,16 +100,15 @@ const MobileNavbar = () => {
         >
           {visibleLinks.map((item) => {
             const { id, icon, title, link } = item;
+            const active = isLinkActive(location.pathname, link);
             return (
-              <Link to={link}>
+              <Link to={link} key={id}>
                 <div
                   className={
-                    activeLink === title.toLowerCase()
+                    active
                       ? 'mobile-link-container mobile-active-link'
                       : 'mobile-link-container'
                   }
-                  key={id}
-                  onClick={() => setActiveLink(title.toLowerCase())}
                 >
                   {icon} {title}
                 </div>
