@@ -134,7 +134,7 @@ export default function CreateEmployee() {
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="Sayyad Basheer Ahamad"
+              placeholder="Enter your Full Name"
               required
             />
           </div>

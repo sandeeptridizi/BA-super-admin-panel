@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { getToken, isAdmin } from "./lib/auth";
+import { getToken, isAdmin, setUser } from "./lib/auth";
+import { getAdminProfile } from "./lib/admin";
 import LandingPage from './pages/LandingPage/LandingPage';
 import Login from './pages/Login/Login';
 import DashboardPage from './pages/Dashboard/Dashboard';
@@ -26,6 +28,13 @@ import MobileNavbar from "./components/MobileNavbar/MobileNavbar";
 
 
 const App = () => {
+  useEffect(() => {
+    if (!getToken()) return;
+    getAdminProfile()
+      .then((res) => setUser(res.data))
+      .catch(() => {});
+  }, []);
+
   return (
     <BrowserRouter>
       <MobileNavbar />
