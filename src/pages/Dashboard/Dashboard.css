@@ -987,4 +987,141 @@
   .lastdashinsight2 {
     width: 100%;
   }
+
+  /* Card text size reductions for mobile */
+  .dashinsightrow p {
+    font-size: 12px;
+  }
+
+  .dashinsight h2,
+  .dashinsight1 h2,
+  .dashinsight2 h2,
+  .dashinsight3 h2 {
+    font-size: 26px;
+    margin: 6px 0 0 16px;
+  }
+
+  .dashgrowth {
+    font-size: 11px;
+    margin: 6px 0 0 16px;
+  }
+
+  .dashinsight span,
+  .dashinsight1 span,
+  .dashinsight2 span,
+  .dashinsight3 span {
+    height: 36px;
+    width: 36px;
+    font-size: 22px;
+    padding: 6px;
+  }
+
+  .catperformanceheader h2 {
+    font-size: 14px;
+  }
+
+  .catperformanceheader p {
+    font-size: 12px;
+  }
+
+  .catperformerlefttitle {
+    font-size: 12px;
+  }
+
+  .catperformerleftnote {
+    font-size: 10px;
+  }
+
+  .catperformerprice,
+  .catperformerprice1,
+  .catperformerprice2,
+  .catperformerprice3,
+  .catperformerprice4,
+  .catperformerprice5,
+  .catperformerprice6,
+  .catperformerprice7 {
+    font-size: 18px;
+    margin-left: 16px;
+  }
+
+  .catperformerdetails {
+    font-size: 10px;
+  }
+
+  .catperformerright,
+  .catperformerright1,
+  .catperformerright2,
+  .catperformerright3,
+  .catperformerright4,
+  .catperformerright5,
+  .catperformerright6,
+  .catperformerright7 {
+    height: 36px;
+    width: 36px;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .dashactivityhead h2 {
+    font-size: 14px;
+  }
+
+  .dashactivitynum {
+    font-size: 22px;
+    margin-top: 12px;
+  }
+
+  .dashactivitynum1 {
+    font-size: 16px;
+    margin-top: 12px;
+  }
+
+  .dashactivitynote {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+
+  .dashactivityendnotes,
+  .dashactivityendnotes1,
+  .dashactivityendnotes2,
+  .dashactivityendnotes3,
+  .dashactivityendnotes4,
+  .dashactivityendnotes5,
+  .dashactivityendnotes6,
+  .dashactivityendnotes7 {
+    font-size: 10px;
+  }
+
+  .dashactivitytag,
+  .dashactivitytag1,
+  .dashactivitytag2,
+  .dashactivitytag3,
+  .dashactivitytag4,
+  .dashactivitytag5,
+  .dashactivitytag6,
+  .dashactivitytag7 {
+    font-size: 10px;
+  }
+
+  .finservshortdetails h2 {
+    font-size: 18px;
+  }
+
+  .finservshortdetails p {
+    font-size: 10px;
+  }
+
+  .lastdashinsighttitle {
+    font-size: 13px;
+  }
+
+  .lastdashinsightvalue {
+    font-size: 34px;
+  }
+
+  .lastdashinsightnote,
+  .lastdashinsightnote1 {
+    font-size: 12px;
+    margin-top: 24px;
+  }
 }
