@@ -127,21 +127,21 @@ const REAL_ESTATE_COMMON = [
   [
     sel("Approval Status", ["RERA Approved", "Authority Approved", "Not Approved", "Under Process"]),
     sel("Availability", ["Immediate", "Ready to Move", "Under Construction", "Within 3 Months", "Within 6 Months"]),
-    f("Age of Property"),
+    f("Age of Property", "number"),
     sel("Facing", ["North", "East", "West", "South", "North-East", "North-West", "South-East", "South-West"]),
   ],
   [sel("No of Car Parking", ["1", "2", "3", "4"])],
 ];
 
 const RE_HOUSE_VILLA = [
-  [f("Built-up Area"), f("Plot Area"), f("Bedrooms"), f("Bathrooms")],
-  [f("Floors"), sel("Furnishing", ["Unfurnished", "Semi-Furnished", "Furnished"]), sel("Garden", ["Yes", "No"]), sel("Gated Community", ["Yes", "No"])],
+  [f("Built-up Area"), f("Plot Area"), f("Bedrooms", "number"), f("Bathrooms", "number")],
+  [f("Floors", "number"), sel("Furnishing", ["Unfurnished", "Semi-Furnished", "Furnished"]), sel("Garden", ["Yes", "No"]), sel("Gated Community", ["Yes", "No"])],
 ];
 
 const RE_APARTMENT_FLAT = [
-  [f("Built-up Area"), f("Floor Number"), f("Bedrooms"), f("Bathrooms")],
-  [f("Total Floors"), sel("Furnishing", ["Unfurnished", "Semi-Furnished", "Furnished"]), f("Society Name"), sel("Maintenance Charges", ["Included", "Excluded", "On Request"])],
-  [sel("Lift", ["Yes", "No"]), f("Amenities"), f("Balcony Count"), sel("Parking Type", ["No", "Open", "Covered"])],
+  [f("Built-up Area"), f("Floor Number", "number"), f("Bedrooms", "number"), f("Bathrooms", "number")],
+  [f("Total Floors", "number"), sel("Furnishing", ["Unfurnished", "Semi-Furnished", "Furnished"]), f("Society Name"), sel("Maintenance Charges", ["Included", "Excluded", "On Request"])],
+  [sel("Lift", ["Yes", "No"]), f("Amenities"), f("Balcony Count", "number"), sel("Parking Type", ["No", "Open", "Covered"])],
 ];
 
 const RE_PLOT_LAND = [
@@ -151,13 +151,13 @@ const RE_PLOT_LAND = [
 ];
 
 const RE_COMMERCIAL = [
-  [sel("Commercial Type", ["Office", "Shop", "Showroom", "Warehouse", "Industrial"]), f("Built-up Area"), f("Floor"), sel("Parking", ["Yes", "No"])],
+  [sel("Commercial Type", ["Office", "Shop", "Showroom", "Warehouse", "Industrial"]), f("Built-up Area"), f("Floor", "number"), sel("Parking", ["Yes", "No"])],
   [sel("Suitable For", ["Office", "Retail", "Clinic", "Restaurant", "Storage"]), sel("Washroom", ["Private", "Common", "None"]), f("Power Load"), sel("Furnished Status", ["Unfurnished", "Semi-Furnished", "Furnished"])],
   [sel("Fire Safety Compliance", ["Yes", "No"])],
 ];
 
 const CARS_FIELDS = [
-  [f("Brand"), f("Model"), f("Year of Manufacture"), f("KM Driven")],
+  [f("Brand"), f("Model"), f("Year of Manufacture", "number"), f("KM Driven", "number")],
   [sel("No of Owners", ["1st Owner", "2nd Owner", "3rd Owner", "4th Owner"]), sel("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"]), sel("Condition", ["Excellent", "Good", "Fair"]), sel("Transmission", ["Manual", "Automatic", "AMT"])],
   [sel("Tyres", ["Brand New", "Used / Part-Own", "Worn Out"]), f("Color"), sel("Accident History", ["Yes", "No"]), sel("Service History", ["Available", "Not Available"])],
   [sel("Number of Keys", ["1", "2", "More"]), sel("Seller Type", ["Owner", "Dealer"]), sel("Negotiable", ["Yes", "No"]), f("Registration State")],
@@ -165,16 +165,16 @@ const CARS_FIELDS = [
 ];
 
 const BIKES_FIELDS = [
-  [f("Brand"), f("Model"), f("Variant"), f("Year of Manufacture")],
-  [f("KM Driven"), sel("No of Owners", ["1st Owner", "2nd Owner", "3rd Owner", "4th Owner"]), sel("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"]), sel("Condition", ["Excellent", "Good", "Fair"])],
+  [f("Brand"), f("Model"), f("Variant"), f("Year of Manufacture", "number")],
+  [f("KM Driven", "number"), sel("No of Owners", ["1st Owner", "2nd Owner", "3rd Owner", "4th Owner"]), sel("Fuel Type", ["Petrol", "Diesel", "CNG", "Electric", "Hybrid"]), sel("Condition", ["Excellent", "Good", "Fair"])],
   [sel("Seller Type", ["Owner", "Dealer"]), sel("Negotiable", ["Yes", "No"]), f("Registration State"), sel("Insurance Status", ["Valid", "Expired"])],
   [sel("RC Available", ["Yes / Available", "No / Missing"]), sel("PUC", ["Current", "Not Available"])],
 ];
 
 const FURNITURE_FIELDS = [
   [sel("Furniture Type", ["Sofa", "Sofa Set", "Bed", "Dining Table", "Chair", "Wardrobe", "Study Table", "TV Unit", "Cabinet", "Mattress", "Office Furniture", "Other"]), sel("Material", ["Solid Wood", "Engineered Wood", "Metal", "Plastic", "Fabric", "Leather", "Cane", "Rattan", "Mixed", "Others"]), sel("Condition", ["Brand New", "Pre-Owned", "Refurbished"]), sel("Usage Condition", ["Never Used", "Lightly Used", "Moderately Used", "Heavily Used"])],
-  [sel("Brand", ["Custom", "Branded"]), f("Dimensions"), f("Color / Finish"), f("Seating Capacity")],
-  [sel("Age of Furniture", ["Less than 1 Year", "1-3 Years", "3-5 Years", "5+ Years"]), sel("Assembly Required", ["Yes", "No"]), f("Original Purchase Price"), sel("Reason for Selling", ["Relocation", "Upgrade", "Not in Use", "Closing Business", "Other"])],
+  [sel("Brand", ["Custom", "Branded"]), f("Dimensions"), f("Color / Finish"), f("Seating Capacity", "number")],
+  [sel("Age of Furniture", ["Less than 1 Year", "1-3 Years", "3-5 Years", "5+ Years"]), sel("Assembly Required", ["Yes", "No"]), f("Original Purchase Price", "number"), sel("Reason for Selling", ["Relocation", "Upgrade", "Not in Use", "Closing Business", "Other"])],
   [sel("Seller Type", ["Owner", "Dealer"])],
 ];
 
@@ -189,16 +189,16 @@ const JEWELLERY_SUB = [
 
 const WATCH_SUB = [
   [f("Brand"), f("Model"), sel("Dial Type", ["Analog", "Digital", "Automatic"]), sel("Strap Type", ["Leather", "Metal", "Rubber", "Fabric"])],
-  [sel("Box & Papers", ["Available", "Not Available"]), f("Year of Purchase"), sel("Working Condition", ["Working", "Needs Repair"]), sel("Original Parts", ["Yes", "No"])],
+  [sel("Box & Papers", ["Available", "Not Available"]), f("Year of Purchase", "number"), sel("Working Condition", ["Working", "Needs Repair"]), sel("Original Parts", ["Yes", "No"])],
 ];
 
 const ARTS_FIELDS = [
   [sel("Art Type", ["Sculpture", "Painting", "Print", "Digital"]), f("Artist Name"), sel("Medium", ["Oil", "Acrylic", "Watercolor", "Mixed"]), f("Size")],
-  [f("Year Created"), sel("Signed", ["Yes", "No"]), sel("Certificate", ["Yes", "No"]), sel("Framed", ["Yes", "No"])],
+  [f("Year Created", "number"), sel("Signed", ["Yes", "No"]), sel("Certificate", ["Yes", "No"]), sel("Framed", ["Yes", "No"])],
 ];
 
 const ANTIQUES_FIELDS = [
-  [sel("Antique Type", ["Furniture", "Coins", "Artefacts", "Decor"]), f("Approximate Age"), f("Origin"), f("Material")],
+  [sel("Antique Type", ["Furniture", "Coins", "Artefacts", "Decor"]), f("Approximate Age", "number"), f("Origin"), f("Material")],
   [sel("Condition", ["Excellent", "Good", "Fair"]), sel("Restoration", ["Yes", "No"]), sel("Documentation", ["Available", "Not Available"]), sel("Historical Period", ["Colonial", "Victorian", "Mughal", "Other"])],
 ];
 
@@ -209,18 +209,18 @@ const COLLECTABLES_FIELDS = [
 
 const OTHERS_FIELDS = [
   [f("Item Category"), f("Brand"), sel("Condition", ["New", "Used"]), sel("Usage", ["Unused", "Lightly Used", "Heavily Used"])],
-  [sel("Warranty", ["Available", "Not Available", "Refurbished"]), f("Purchase Year"), sel("Reason for Selling", ["Upgrade", "Not in Use", "Financial", "Other"]), f("Additional Notes")],
+  [sel("Warranty", ["Available", "Not Available", "Refurbished"]), f("Purchase Year", "number"), sel("Reason for Selling", ["Upgrade", "Not in Use", "Financial", "Other"]), f("Additional Notes")],
 ];
 
 const TOLET_RESIDENTIAL = [
-  [sel("Ownership", ["Owner", "Agent", "Builder"]), sel("Rental Type", ["Flat", "Apartment", "Independent House", "Villa", "Studio", "Penthouse"]), f("Bedrooms"), f("Bathrooms")],
-  [f("Property Floor"), f("Total No of Floors"), f("Carpet Area"), f("Built-up Area")],
+  [sel("Ownership", ["Owner", "Agent", "Builder"]), sel("Rental Type", ["Flat", "Apartment", "Independent House", "Villa", "Studio", "Penthouse"]), f("Bedrooms", "number"), f("Bathrooms", "number")],
+  [f("Property Floor", "number"), f("Total No of Floors", "number"), f("Carpet Area"), f("Built-up Area")],
   [f("Facing"), f("Maintenance Charges"), f("Available From"), f("Preferred Tenants")],
   [sel("Furnished Status", ["Fully - Furnished", "Unfurnished", "Semi-Furnished"]), f("Furnishing Items"), f("Society Amenities")],
 ];
 
 const TOLET_GENERIC = [
-  [f("Rent per Month (₹)"), f("Security Deposit (₹)")],
+  [f("Rent per Month (₹)", "number"), f("Security Deposit (₹)", "number")],
   [sel("Lease Duration", ["11 Months", "1 Year", "2 Years", "3 Years"]), sel("Furnishing Status", ["Furnished", "Semi Furnished", "Unfurnished", "Other"])],
 ];
 
@@ -701,7 +701,7 @@ const ProductEdit = () => {
             <div className="basicinfotitle">Social Media Link</div>
             <input
               className="basicinfoinput1"
-              type="text"
+              type="url"
               placeholder="Social media link"
               value={socialMediaLink}
               onChange={(e) => setSocialMediaLink(e.target.value)}
