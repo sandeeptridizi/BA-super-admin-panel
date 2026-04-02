@@ -339,15 +339,6 @@ th,td{
     color: #64748B;
 }
 
-.userviews{
-    color: #3F3F47;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    height: 62px;
-}
 
 .userleads{
     color: #D4AF37;
