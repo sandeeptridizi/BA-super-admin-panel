@@ -23,6 +23,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LiaCertificateSolid } from "react-icons/lia";
 import { FiTrash2 } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
 import api from "../../lib/api";
 
 const LISTING_TYPE_BY_TAB = {
@@ -386,18 +387,24 @@ const Products = () => {
                         </span>
                       </div>
                       <div className="productviewtag">
-                        {product.tier === "LUXURY" && (
-                          <span className="producttag1">
-                            <LuCrown />
-                            Luxury
-                          </span>
-                        )}
-                        {product.tier === "CLASSIC" && (
-                          <span className="producttag2">
-                            <LiaCertificateSolid />
-                            Classic
-                          </span>
-                        )}
+                        <span className="productleadcount">
+                          <FiUser />
+                          {product._count?.enquiries || 0} Leads
+                        </span>
+                        <div>
+                          {product.tier === "LUXURY" && (
+                            <span className="producttag1">
+                              <LuCrown />
+                              Luxury
+                            </span>
+                          )}
+                          {product.tier === "CLASSIC" && (
+                            <span className="producttag2">
+                              <LiaCertificateSolid />
+                              Classic
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}

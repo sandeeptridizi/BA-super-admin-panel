@@ -372,7 +372,7 @@ const ProductPage = () => {
                 <FiUser />
                 Leads Generated
               </span>
-              <span className="performancecount">—</span>
+              <span className="performancecount">{product._count?.enquiries || 0}</span>
             </div>
           </div>
           <div className="productowner1">

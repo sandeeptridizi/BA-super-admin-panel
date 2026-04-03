@@ -402,6 +402,14 @@
     border-radius: 8px;
 }
 
+.productleadcount{
+    color: #52525C;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .producttaggrow3{
     margin-left: auto ;
 }
