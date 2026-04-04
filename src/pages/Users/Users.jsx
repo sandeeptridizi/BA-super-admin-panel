@@ -218,11 +218,11 @@ const Users = () => {
         </li>
         <li className='userstat1'>
           <div className='userstattitle'>Avg Price</div>
-          <div className='userstatvalue'>\u20B945L</div>
+          <div className='userstatvalue'>₹45L</div>
         </li>
         <li className='userstat1'>
           <div className='userstattitle'>Total Value</div>
-          <div className='userstatvalue'>\u20B9165Cr</div>
+          <div className='userstatvalue'>₹165Cr</div>
         </li>
       </ul>
       </div>}
@@ -238,11 +238,11 @@ const Users = () => {
         </li>
         <li className='userstat1'>
           <div className='userstattitle1'>Avg Price</div>
-          <div className='userstatvalue1'>\u20B945L</div>
+          <div className='userstatvalue1'>₹45L</div>
         </li>
         <li className='userstat1'>
           <div className='userstattitle1'>Total Value</div>
-          <div className='userstatvalue1'>\u20B9165Cr</div>
+          <div className='userstatvalue1'>₹165Cr</div>
         </li>
       </ul>
       </div>}
@@ -258,11 +258,11 @@ const Users = () => {
         </li>
         <li className='userstat1'>
           <div className='userstattitle2'>Avg Price</div>
-          <div className='userstatvalue2'>\u20B945L</div>
+          <div className='userstatvalue2'>₹45L</div>
         </li>
         <li className='userstat1'>
           <div className='userstattitle2'>Total Value</div>
-          <div className='userstatvalue2'>\u20B9165Cr</div>
+          <div className='userstatvalue2'>₹165Cr</div>
         </li>
       </ul>
       </div>}
@@ -278,11 +278,11 @@ const Users = () => {
         </li>
         <li className='userstat1'>
           <div className='userstattitle3'>Avg Price</div>
-          <div className='userstatvalue3'>\u20B945L</div>
+          <div className='userstatvalue3'>₹45L</div>
         </li>
         <li className='userstat1'>
           <div className='userstattitle3'>Total Value</div>
-          <div className='userstatvalue3'>\u20B9165Cr</div>
+          <div className='userstatvalue3'>₹165Cr</div>
         </li>
       </ul>
       </div>}

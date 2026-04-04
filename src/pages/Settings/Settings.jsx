@@ -1,7 +1,7 @@
 import './Settings.css';
 import { useState, useEffect, useRef } from "react";
 import { IoCameraOutline } from "react-icons/io5";
-import { getAdminProfile, updateAdminProfilePicture, removeAdminProfilePicture, getPresignedUrl } from "../../lib/admin";
+import { getAdminProfile, updateAdminProfile, updateAdminProfilePicture, removeAdminProfilePicture, getPresignedUrl, changeAdminPassword } from "../../lib/admin";
 
 const CDN_ENDPOINT = import.meta.env.VITE_AWS_CDN_ENDPOINT || "https://bauctionprod.s3.ap-south-1.amazonaws.com";
 const BUCKET_PREFIX = import.meta.env.VITE_AWS_BUCKET_PREFIX || "ba";
@@ -10,11 +10,23 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState("platform");
   const [admin, setAdmin] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordUpdating, setPasswordUpdating] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [profileUpdating, setProfileUpdating] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     getAdminProfile()
-      .then((res) => setAdmin(res.data))
+      .then((res) => {
+        setAdmin(res.data);
+        const parts = (res.data?.name || "").trim().split(/\s+/);
+        setFirstName(parts[0] || "");
+        setLastName(parts.slice(1).join(" ") || "");
+      })
       .catch((err) => console.error("Failed to load profile", err));
   }, []);
 
@@ -75,6 +87,52 @@ const Settings = () => {
     } catch (err) {
       console.error("Remove failed", err);
       alert("Failed to remove profile picture.");
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Please fill in all password fields.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      alert("New password must be at least 6 characters.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      alert("New password and confirm password do not match.");
+      return;
+    }
+    setPasswordUpdating(true);
+    try {
+      await changeAdminPassword(currentPassword, newPassword);
+      alert("Password updated successfully.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      const msg = err.response?.data?.message || "Failed to update password.";
+      alert(msg);
+    } finally {
+      setPasswordUpdating(false);
+    }
+  };
+
+  const handleProfileUpdate = async () => {
+    const name = `${firstName.trim()} ${lastName.trim()}`.trim();
+    if (!name) {
+      alert("Name cannot be empty.");
+      return;
+    }
+    setProfileUpdating(true);
+    try {
+      const res = await updateAdminProfile({ name });
+      setAdmin(res.data);
+      alert("Profile updated successfully.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update profile.");
+    } finally {
+      setProfileUpdating(false);
     }
   };
 
@@ -164,10 +222,10 @@ const Settings = () => {
         <div className='platformcontactinfo1'>
           <div className='platforminfoinput2'>
             <h3>First Name</h3>
-            <input type='text' placeholder='Super' value={admin?.name?.split(' ')[0] || ''} readOnly></input></div>
+            <input type='text' placeholder='Super' value={firstName} onChange={(e) => setFirstName(e.target.value)}></input></div>
           <div className='platforminfoinput3'>
             <h3>Last Name</h3>
-          <input type='text' placeholder='Admin' value={admin?.name?.split(' ').slice(1).join(' ') || ''} readOnly></input></div>
+          <input type='text' placeholder='Admin' value={lastName} onChange={(e) => setLastName(e.target.value)}></input></div>
           </div>
           <div className='platformcontactinfo1'>
           <div className='platforminfoinput2'>
@@ -177,7 +235,7 @@ const Settings = () => {
             <h3>Phone</h3>
           <input type='text' placeholder='+91 98765 00000' value={admin?.phone || ''} readOnly></input></div>
           </div>
-          <button className='sendreply2'>Update Profile</button>
+          <button className='sendreply2' onClick={handleProfileUpdate} disabled={profileUpdating}>{profileUpdating ? "Updating..." : "Update Profile"}</button>
       </div>
     </div>)}
     {activeTab === "security" && (<div>
@@ -187,17 +245,17 @@ const Settings = () => {
           <p>Update your account Password</p></div>
         <div className='platforminfoinput'>
             <h3>Current Password</h3>
-            <input type='text' placeholder='Enter current password'></input>
+            <input type='password' placeholder='Enter current password' value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)}></input>
         </div>
         <div className='platforminfoinput4'>
             <h3 className='platforminputtitle'>New Password</h3>
-            <input type='text' placeholder='Enter new password'></input>
+            <input type='password' placeholder='Enter new password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)}></input>
         </div>
         <div className='platforminfoinput4'>
             <h3>Confirm New Password</h3>
-            <input type='text' placeholder='Confirm new password'></input>
+            <input type='password' placeholder='Confirm new password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
         </div>
-        <button className='sendreply2'>Update Password</button>
+        <button className='sendreply2' onClick={handlePasswordUpdate} disabled={passwordUpdating}>{passwordUpdating ? "Updating..." : "Update Password"}</button>
       </div>
     </div>)}
   </div>;

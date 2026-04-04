@@ -15,6 +15,16 @@ export async function removeAdminProfilePicture() {
   return res.data;
 }
 
+export async function changeAdminPassword(currentPassword, newPassword) {
+  const res = await api.patch("/api/admin/me/password", { currentPassword, newPassword });
+  return res.data;
+}
+
+export async function updateAdminProfile(data) {
+  const res = await api.patch("/api/admin/me", data);
+  return res.data;
+}
+
 export async function getPresignedUrl(key) {
   const res = await api.get(`/api/media/presigned?key=${encodeURIComponent(key)}`);
   return res.data;
