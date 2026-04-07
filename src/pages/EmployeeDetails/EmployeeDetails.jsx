@@ -133,7 +133,7 @@ const EmployeeDetails = () => {
       <div className="details-header">
         <div className="header-left">
           <button className="back-btn" onClick={() => navigate(-1)}>
-            \u2190
+            <GoArrowLeft />
           </button>
           <div>
             <h1>{employee.name}</h1>
