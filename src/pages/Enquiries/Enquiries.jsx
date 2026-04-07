@@ -295,7 +295,7 @@ export default function Enquiries() {
                       {enq.visitorName}
                       <span className={`status ${enq.status === "NEW" ? "unread" : ""}`}>{statusLabel[enq.status] || enq.status}</span>
                     </h4>
-                    <p>{enq.product?.title || "Unknown Product"}</p>
+                    <p>{enq.product?.title || enq.source || "Unknown Product"}</p>
                   </div>
                 </div>
 
@@ -329,7 +329,7 @@ export default function Enquiries() {
               <div className="enquiry-footer">
                 <span><FiClock /> {timeAgo(enq.createdAt)}</span>
                 <span className="type">{enq.visitorPhone || enq.visitorEmail}</span>
-                <span className="type">{listingTypeLabel[enq.product?.listingType] || ""}</span>
+                <span className="type">{listingTypeLabel[enq.product?.listingType] || enq.source || ""}</span>
               </div>
             </div>
           ))}

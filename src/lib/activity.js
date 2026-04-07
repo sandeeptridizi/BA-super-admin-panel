@@ -29,7 +29,7 @@ export async function approveProduct(id, body) {
 
 /**
  * @param {string} id
- * @param {{ isFeatured?: boolean, isRecommended?: boolean }} body
+ * @param {{ isFeatured?: boolean, isRecommended?: boolean, isVerified?: boolean }} body
  */
 export async function updateFeaturedRecommended(id, body) {
   const res = await api.patch(`/api/product/${id}`, body);

@@ -94,10 +94,10 @@ export default function EnquiryDetails() {
                   </button>
 
                 <div>
-                    <h1 className="enquirynameheader">{enquiry.product?.title || "Enquiry"}</h1>
+                    <h1 className="enquirynameheader">{enquiry.product?.title || enquiry.source || "Enquiry"}</h1>
                     <div className="lead-meta">
                       <span className="badge">{statusLabel[enquiry.status] || enquiry.status}</span>
-                      <span className="lead-id">{listingTypeLabel[enquiry.product?.listingType] || ""}</span>
+                      <span className="lead-id">{listingTypeLabel[enquiry.product?.listingType] || enquiry.source || ""}</span>
                     </div>
                 </div>
                 </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import './Activity.css';
 import { FiActivity } from "react-icons/fi"
-import { MdAccessTime } from "react-icons/md";
+import { MdAccessTime, MdVerified } from "react-icons/md";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaRegStar } from "react-icons/fa";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
@@ -269,11 +269,11 @@ const Activitypage = () => {
         }
     };
 
-    const handleFeaturedRecommended = async (id, isFeatured, isRecommended) => {
+    const handleFeaturedRecommended = async (id, isFeatured, isRecommended, isVerified) => {
         setActioningId(id);
         try {
-            await apiUpdateFeaturedRecommended(id, { isFeatured, isRecommended });
-            setFeaturedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isFeatured, isRecommended } : p)));
+            await apiUpdateFeaturedRecommended(id, { isFeatured, isRecommended, isVerified });
+            setFeaturedProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isFeatured, isRecommended, isVerified } : p)));
         } catch (err) {
             setError(err?.response?.data?.message || "Update failed");
         } finally {
@@ -282,7 +282,7 @@ const Activitypage = () => {
     };
 
     const pendingCount = pendingProducts.length;
-    const featuredCount = featuredProducts.filter((p) => p.isFeatured || p.isRecommended).length;
+    const featuredCount = featuredProducts.filter((p) => p.isFeatured || p.isRecommended || p.isVerified).length;
     const featuredFiltered = !featuredSearch.trim()
         ? featuredProducts
         : featuredProducts.filter((p) => {
@@ -510,7 +510,7 @@ const Activitypage = () => {
                                 type="checkbox"
                                 checked={!!product.isFeatured}
                                 disabled={actioningId === product.id}
-                                onChange={() => handleFeaturedRecommended(product.id, !product.isFeatured, product.isRecommended)}
+                                onChange={() => handleFeaturedRecommended(product.id, !product.isFeatured, product.isRecommended, product.isVerified)}
                             />
                             <span className="slider"></span>
                         </label>
@@ -522,11 +522,23 @@ const Activitypage = () => {
                                 type="checkbox"
                                 checked={!!product.isRecommended}
                                 disabled={actioningId === product.id}
-                                onChange={() => handleFeaturedRecommended(product.id, product.isFeatured, !product.isRecommended)}
+                                onChange={() => handleFeaturedRecommended(product.id, product.isFeatured, !product.isRecommended, product.isVerified)}
                             />
                             <span className="slider"></span>
                         </label>
                         <span className="switchedtag"><FaArrowTrendUp /> Recommended</span>
+                    </div>
+                    <div>
+                        <label className="switcher">
+                            <input
+                                type="checkbox"
+                                checked={!!product.isVerified}
+                                disabled={actioningId === product.id}
+                                onChange={() => handleFeaturedRecommended(product.id, product.isFeatured, product.isRecommended, !product.isVerified)}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                        <span className="switchedtag"><MdVerified /> Verified</span>
                     </div>
                 </div>
             </div>
