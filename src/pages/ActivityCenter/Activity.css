@@ -250,6 +250,7 @@
   width: 160px;
   border-radius: 14px;
   border: 1px solid #fee685;
+  object-fit: cover;
 }
 
 .activityinfodiv {
