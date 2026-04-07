@@ -130,8 +130,8 @@ const UserProfile = () => {
           <p className="memberSince">Member since {formatDate(user.createdAt)}</p>
           <div className="infoGrid">
             <div className="infoBox blue"><MdOutlineEmail  className="useremailicon blue1" /> {user.email}</div>
-            <div className="infoBox green"><FiPhone className="useremailicon green1"/> {user.phone || "\u2014"}</div>
-            <div className="infoBox purple"><IoLocationOutline className="useremailicon purple1"/> {[user.city, user.state].filter(Boolean).join(", ") || "\u2014"}</div>
+            <div className="infoBox green"><FiPhone className="useremailicon green1"/> {user.phone || "-"}</div>
+            <div className="infoBox purple"><IoLocationOutline className="useremailicon purple1"/> {[user.city, user.state].filter(Boolean).join(", ") || "-"}</div>
             <div className="infoBox yellow"><CiCalendar className="useremailicon yellow1"/>Joined: {formatDate(user.createdAt)}</div>
           </div>
         </div>
@@ -157,7 +157,7 @@ const UserProfile = () => {
             <div className="statcardrow">
           <LuUsers className="useremailicon yellow1" />
           <p className="statcardname yellow2">REVENUE</p></div>
-          <h3 className="statcardvalue gold">\u2014</h3>
+          <h3 className="statcardvalue gold">-</h3>
         </div>
 
 
@@ -193,10 +193,10 @@ const UserProfile = () => {
                     <b>{p.title}</b>
                     {p.meta?.location && <div className="sub"><IoLocationOutline />{p.meta.location}</div>}
                   </td>
-                  <td><span className="tag">{p.category?.replace(/_/g, " ") || "\u2014"}</span></td>
-                  <td className="price">{p.value != null ? `\u20B9${(p.value / 1e5).toFixed(1)}L` : "\u2014"}</td>
-                  <td className="pricetier">{p.tier || "\u2014"}</td>
-                  <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "\u2014"}</span></td>
+                  <td><span className="tag">{p.category?.replace(/_/g, " ") || "-"}</span></td>
+                  <td className="price">{p.value != null ? `\u20B9${(p.value / 1e5).toFixed(1)}L` : "-"}</td>
+                  <td className="pricetier">{p.tier || "-"}</td>
+                  <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "-"}</span></td>
                   <td className="userleads">0</td>
                 </tr>
               ))

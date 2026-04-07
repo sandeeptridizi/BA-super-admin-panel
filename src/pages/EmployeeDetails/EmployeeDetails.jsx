@@ -18,9 +18,9 @@ import { GoArrowLeft } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { getEmployee, updateEmployee, deleteEmployee } from "../../lib/employees";
 
-const fmt = (v) => (v != null && v !== "" ? String(v) : "\u2014");
+const fmt = (v) => (v != null && v !== "" ? String(v) : "-");
 const fmtDate = (d) =>
-  d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "\u2014";
+  d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "-";
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
@@ -224,7 +224,7 @@ const EmployeeDetails = () => {
                 <div className="empinfoicon color5"><IoLocationOutline /></div>
                 <div>
                   <label>Address</label>
-                  <p>{addressLines.join(", ") || "\u2014"}</p>
+                  <p>{addressLines.join(", ") || "-"}</p>
                 </div>
               </div>
             </div>

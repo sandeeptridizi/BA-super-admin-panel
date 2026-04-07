@@ -22,7 +22,7 @@ const getInitials = (name) => {
 };
 
 const formatJoined = (dateStr) => {
-  if (!dateStr) return "\u2014";
+  if (!dateStr) return "-";
   const d = new Date(dateStr);
   return `Joined ${d.toLocaleDateString("en-IN", { month: "short", year: "numeric" })}`;
 };
@@ -118,7 +118,7 @@ const Employees = () => {
             <p className="statcardname">TOTAL EMPLOYEES</p>
             <FiUser className="statcardicon" />
           </div>
-          <h2>{loading ? "\u2014" : employees.length}</h2>
+          <h2>{loading ? "-" : employees.length}</h2>
           <div className="statcardline orange"></div>
         </div>
         <div className="stat-card">
@@ -126,7 +126,7 @@ const Employees = () => {
             <p className="statcardname">Active</p>
             <GoDotFill className="statcardicon1" />
           </div>
-          <h2 className="statcardicon1">{loading ? "\u2014" : activeCount}</h2>
+          <h2 className="statcardicon1">{loading ? "-" : activeCount}</h2>
           <div className="statcardline green"></div>
         </div>
         <div className="stat-card">
@@ -134,7 +134,7 @@ const Employees = () => {
             <p className="statcardname">DEPARTMENTS</p>
             <FiBriefcase className="statcardicon2" />
           </div>
-          <h2>{loading ? "\u2014" : departments.length}</h2>
+          <h2>{loading ? "-" : departments.length}</h2>
           <div className="statcardline blue"></div>
         </div>
         <div className="stat-card1 highlight">
@@ -142,7 +142,7 @@ const Employees = () => {
             <p className="statcardicon3">ADMIN USERS</p>
             <MdOutlineShield className="statcardicon3" />
           </div>
-          <h2 className="statcardicon3">{loading ? "\u2014" : adminCount}</h2>
+          <h2 className="statcardicon3">{loading ? "-" : adminCount}</h2>
           <div className="statcardline gold1"></div>
         </div>
       </div>
@@ -169,7 +169,7 @@ const Employees = () => {
                 <div className="avatar" onClick={() => navigate(`/employeedetails/${emp.id}`)}>{getInitials(emp.name)}</div>
                 <div onClick={() => navigate(`/employeedetails/${emp.id}`)}>
                   <h3 className="empname">{emp.name}</h3>
-                  <span className="role">{emp.designation || "\u2014"}</span>
+                  <span className="role">{emp.designation || "-"}</span>
                 </div>
                 <div className="employeeediticon" ref={actionMenuId === emp.id ? actionMenuRef : null}>
                   <HiDotsVertical onClick={(e) => { e.stopPropagation(); setActionMenuId(actionMenuId === emp.id ? null : emp.id); }} />
@@ -189,7 +189,7 @@ const Employees = () => {
                 </p>
                 <p className="empdatainfo">
                   <FiBriefcase className="empcase" />
-                  {emp.department || "\u2014"}
+                  {emp.department || "-"}
                 </p>
                 <p className="empdatainfo">
                   <CiCalendar className="empjoin" />
@@ -197,7 +197,7 @@ const Employees = () => {
                 </p>
               </div>
               <div className="employee-footer" onClick={() => navigate(`/employeedetails/${emp.id}`)}>
-                <span className="dept">{emp.department || "\u2014"}</span>
+                <span className="dept">{emp.department || "-"}</span>
                 <span className={emp.isActive ? "status active" : "status inactive"}>
                   {emp.isActive ? "active" : "inactive"}
                 </span>
