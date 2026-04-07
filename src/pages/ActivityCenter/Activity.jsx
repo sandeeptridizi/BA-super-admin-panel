@@ -5,7 +5,7 @@ import { MdAccessTime, MdVerified } from "react-icons/md";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { FaRegStar } from "react-icons/fa";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import luxuryVilla from '../../assets/Luxury Villa.png';
+
 import { AiOutlineShop } from "react-icons/ai";
 import { LuCrown } from "react-icons/lu";
 import { CiLocationOn } from "react-icons/ci";

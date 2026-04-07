@@ -276,6 +276,7 @@ const ProductEdit = () => {
   const [socialMediaLink, setSocialMediaLink] = useState("");
   const [status, setStatus] = useState("ACTIVE");
   const [tier, setTier] = useState("GENERAL");
+  const [pendingTier, setPendingTier] = useState(null);
   const [country, setCountry] = useState("INDIA");
   const [approvalStatus, setApprovalStatus] = useState("PENDING");
 
@@ -735,7 +736,10 @@ const ProductEdit = () => {
             <select
               className="basicinfoinput2"
               value={tier}
-              onChange={(e) => setTier(e.target.value)}
+              onChange={(e) => {
+                const selected = e.target.value;
+                if (selected !== tier) setPendingTier(selected);
+              }}
             >
               <option value="GENERAL">GENERAL</option>
               <option value="LUXURY">LUXURY</option>
@@ -938,6 +942,38 @@ const ProductEdit = () => {
           {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>
+      {pendingTier && (
+        <div className="tierModalOverlay" onClick={() => setPendingTier(null)}>
+          <div className="tierModalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="tierModalHeader">
+              <h2>Confirm Tier Change</h2>
+            </div>
+            <div className="tierModalBody">
+              <p>
+                Are you sure you want to approve the product as{" "}
+                <strong>{pendingTier}</strong>?
+              </p>
+            </div>
+            <div className="tierModalFooter">
+              <button
+                className="tierModalCancel"
+                onClick={() => setPendingTier(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="tierModalConfirm"
+                onClick={() => {
+                  setTier(pendingTier);
+                  setPendingTier(null);
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

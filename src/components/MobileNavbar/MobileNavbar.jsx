@@ -2,7 +2,7 @@ import './MobileNavbar.css';
 
 import { HiMenu } from 'react-icons/hi';
 
-import companyLogo from '../../assets/company-logo.png';
+import { getFile } from '../../lib/s3';
 import { useState } from 'react';
 
 import { LuLayoutDashboard } from 'react-icons/lu';
@@ -88,7 +88,7 @@ const MobileNavbar = () => {
 
   return (
     <div className='mobile-navbar-container'>
-      <img src={companyLogo} alt='company' className='mobile-logo' />
+      <img src={getFile("static/logo.png")} alt='company' className='mobile-logo' />
       <HiMenu
         className='mobile-menu-icon'
         onClick={() => setShowLinks(!showLinks)}

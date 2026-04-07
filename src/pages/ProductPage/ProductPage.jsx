@@ -17,23 +17,10 @@ import { FaPlayCircle } from "react-icons/fa";
 import { AiOutlineShop } from "react-icons/ai";
 import { BsStars } from "react-icons/bs";
 
-import pageimageheader from "../../assets/productImageThree.png";
-import pageimageone from "../../assets/productImageOne.png";
-import pageimagetwo from "../../assets/productImageTwo.png";
-import pageimagethree from "../../assets/Luxury Villa.png";
-import pageimagefour from "../../assets/Beachfront.png";
-import pageimagefive from "../../assets/Penthouse.png";
 
 import api from "../../lib/api";
 
-const PLACEHOLDER_IMAGES = [
-  pageimageheader,
-  pageimageone,
-  pageimagetwo,
-  pageimagethree,
-  pageimagefour,
-  pageimagefive,
-];
+const PLACEHOLDER_IMAGES = [];
 
 const LISTING_TYPE_LABELS = {
   MARKETPLACE: "Marketplace",

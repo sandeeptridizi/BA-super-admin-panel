@@ -3,7 +3,7 @@ import './Sidebar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { getUserType, clearAuth } from '../../lib/auth';
 
-import companyLogo from '../../assets/company-logo.png';
+import { getFile } from '../../lib/s3';
 
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiShoppingBag } from 'react-icons/fi';
@@ -93,7 +93,7 @@ const Sidebar = () => {
     <div className='sidebar-container'>
       <div className='sibebar-logo-container'>
         <img
-          src={companyLogo}
+          src={getFile("static/logo.png")}
           alt='Billionaire Auction'
           className='company-logo'
         />
