@@ -202,6 +202,7 @@ const Activitypage = () => {
     const [rejectReason, setRejectReason] = useState("");
 
     const [auctionModal, setAuctionModal] = useState({ open: false, productId: null, tier: null });
+    const [auctionOption, setAuctionOption] = useState("tba");
     const [auctionVenue, setAuctionVenue] = useState("");
     const [auctionDate, setAuctionDate] = useState("");
 
@@ -214,6 +215,7 @@ const Activitypage = () => {
         const product = pendingProducts.find((p) => p.id === id);
         if (product?.listingType === "AUCTIONS") {
             setAuctionModal({ open: true, productId: id, tier });
+            setAuctionOption("tba");
             setAuctionVenue("");
             setAuctionDate("");
             return;
@@ -230,21 +232,20 @@ const Activitypage = () => {
     };
 
     const handleAuctionApproveConfirm = async () => {
-        if (!auctionVenue.trim() || !auctionDate) return;
+        if (auctionOption === "enter" && (!auctionVenue.trim() || !auctionDate)) return;
         const { productId: id, tier } = auctionModal;
         setAuctionModal({ open: false, productId: null, tier: null });
         setActioningId(id);
         try {
             const product = pendingProducts.find((p) => p.id === id);
             const existingMeta = product?.meta && typeof product.meta === "object" ? product.meta : {};
+            const auctionMeta = auctionOption === "tba"
+                ? { auctionVenue: "Will be announced soon", auctionDate: "TBA" }
+                : { auctionVenue: auctionVenue.trim(), auctionDate: new Date(auctionDate).toISOString() };
             await apiApproveProduct(id, {
                 approvalStatus: "APPROVED",
                 tier,
-                meta: {
-                    ...existingMeta,
-                    auctionVenue: auctionVenue.trim(),
-                    auctionDate: new Date(auctionDate).toISOString(),
-                },
+                meta: { ...existingMeta, ...auctionMeta },
             });
             setPendingProducts((prev) => prev.filter((p) => p.id !== id));
         } catch (err) {
@@ -573,35 +574,55 @@ const Activitypage = () => {
         <div className="reject-modal-overlay" onClick={() => setAuctionModal({ open: false, productId: null, tier: null })}>
             <div className="reject-modal" onClick={(e) => e.stopPropagation()}>
                 <h3 className="reject-modal-title">Approve Auction Product</h3>
-                <p className="reject-modal-desc">Please provide the auction venue and date before approving this auction product.</p>
-                <div style={{ marginBottom: 12 }}>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Venue</label>
-                    <input
-                        type="text"
-                        className="reject-modal-textarea"
-                        style={{ height: 40, resize: "none" }}
-                        placeholder="Enter auction venue..."
-                        value={auctionVenue}
-                        onChange={(e) => setAuctionVenue(e.target.value)}
-                        autoFocus
-                    />
+                <p className="reject-modal-desc">Choose how to set the auction venue and date.</p>
+                <div style={{ marginBottom: 16 }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", padding: "10px 12px", borderRadius: 8, border: auctionOption === "tba" ? "2px solid #d4af37" : "1px solid #e4e4e7", background: auctionOption === "tba" ? "#fefce8" : "#fff", marginBottom: 8 }}>
+                        <input type="radio" name="auctionOption" value="tba" checked={auctionOption === "tba"} onChange={() => setAuctionOption("tba")} />
+                        <div>
+                            <div style={{ fontSize: 14, fontWeight: 600, color: "#18181b" }}>Will be announced soon</div>
+                            <div style={{ fontSize: 12, color: "#71717b" }}>Venue and date will be set as "To be announced"</div>
+                        </div>
+                    </label>
+                    <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", padding: "10px 12px", borderRadius: 8, border: auctionOption === "enter" ? "2px solid #d4af37" : "1px solid #e4e4e7", background: auctionOption === "enter" ? "#fefce8" : "#fff" }}>
+                        <input type="radio" name="auctionOption" value="enter" checked={auctionOption === "enter"} onChange={() => setAuctionOption("enter")} />
+                        <div>
+                            <div style={{ fontSize: 14, fontWeight: 600, color: "#18181b" }}>Enter date and venue</div>
+                            <div style={{ fontSize: 12, color: "#71717b" }}>Provide the auction venue and date now</div>
+                        </div>
+                    </label>
                 </div>
-                <div>
-                    <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Date</label>
-                    <input
-                        type="datetime-local"
-                        className="reject-modal-textarea"
-                        style={{ height: 40, resize: "none" }}
-                        value={auctionDate}
-                        onChange={(e) => setAuctionDate(e.target.value)}
-                    />
-                </div>
+                {auctionOption === "enter" && (
+                    <>
+                        <div style={{ marginBottom: 12 }}>
+                            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Venue</label>
+                            <input
+                                type="text"
+                                className="reject-modal-textarea"
+                                style={{ height: 40, resize: "none" }}
+                                placeholder="Enter auction venue..."
+                                value={auctionVenue}
+                                onChange={(e) => setAuctionVenue(e.target.value)}
+                                autoFocus
+                            />
+                        </div>
+                        <div style={{ marginBottom: 12 }}>
+                            <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: "#3f3f47", marginBottom: 6 }}>Auction Date</label>
+                            <input
+                                type="datetime-local"
+                                className="reject-modal-textarea"
+                                style={{ height: 40, resize: "none" }}
+                                value={auctionDate}
+                                onChange={(e) => setAuctionDate(e.target.value)}
+                            />
+                        </div>
+                    </>
+                )}
                 <div className="reject-modal-actions">
                     <button className="reject-modal-cancel" onClick={() => setAuctionModal({ open: false, productId: null, tier: null })}>Cancel</button>
                     <button
                         className="reject-modal-confirm"
                         style={{ background: "#d4af37" }}
-                        disabled={!auctionVenue.trim() || !auctionDate}
+                        disabled={auctionOption === "enter" && (!auctionVenue.trim() || !auctionDate)}
                         onClick={handleAuctionApproveConfirm}
                     >
                         Approve Auction

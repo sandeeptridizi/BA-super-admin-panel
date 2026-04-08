@@ -783,6 +783,65 @@ const ProductEdit = () => {
         </div>
       </div>
 
+      {/* ── auction venue & date (auction mode only) ─────────────────── */}
+      {mode === "auction" && (
+        <div className="basicinfoform">
+          <div className="productcreatehead">Auction Details</div>
+          <span className="productheaddesc1">Set the auction venue and date</span>
+          <div className="basicinforow" style={{ marginTop: 12 }}>
+            <div className="basicinfoinputdiv">
+              <div className="basicinfotitle">Auction Venue</div>
+              <input
+                className="basicinfoinput1"
+                type="text"
+                placeholder="Enter venue or 'Will be announced soon'"
+                value={meta.auctionVenue || ""}
+                onChange={(e) => setMeta((prev) => ({ ...prev, auctionVenue: e.target.value }))}
+              />
+            </div>
+            <div className="basicinfoinputdiv">
+              <div className="basicinfotitle">Auction Date</div>
+              {meta.auctionDate && meta.auctionDate !== "TBA" ? (
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input
+                    className="basicinfoinput1"
+                    type="datetime-local"
+                    value={(() => {
+                      try {
+                        const d = new Date(meta.auctionDate);
+                        if (isNaN(d.getTime())) return "";
+                        return d.toISOString().slice(0, 16);
+                      } catch { return ""; }
+                    })()}
+                    onChange={(e) => setMeta((prev) => ({ ...prev, auctionDate: e.target.value ? new Date(e.target.value).toISOString() : "TBA" }))}
+                  />
+                  <button
+                    type="button"
+                    className="cancelbutton"
+                    style={{ fontSize: 11, padding: "6px 10px", whiteSpace: "nowrap" }}
+                    onClick={() => setMeta((prev) => ({ ...prev, auctionDate: "TBA" }))}
+                  >
+                    Set as TBA
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <span style={{ color: "#71717b", fontSize: 14, padding: "10px 0" }}>To be announced</span>
+                  <button
+                    type="button"
+                    className="cancelbutton"
+                    style={{ fontSize: 11, padding: "6px 10px", whiteSpace: "nowrap" }}
+                    onClick={() => setMeta((prev) => ({ ...prev, auctionDate: new Date().toISOString() }))}
+                  >
+                    Set Date
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── category-specific fields ───────────────────────────────────── */}
       {categoryRows.length > 0 && (
         <div className="basicinfoform">
