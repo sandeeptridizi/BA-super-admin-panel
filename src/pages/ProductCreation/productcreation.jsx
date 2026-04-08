@@ -475,7 +475,7 @@ const ProductCreation = () => {
       ? "selectedcategory"
       : "selectedcategory1"
   }
-  onClick={() => setListingMode("marketplace")}
+  onClick={() => navigate("/productcreation/marketplace", { replace: true })}
 >
         <li
             className={
@@ -513,7 +513,7 @@ const ProductCreation = () => {
             ? "selectedcategory"
             : "selectedcategory1"
         }
-        onClick={() => setListingMode("buynow")}
+        onClick={() => navigate("/productcreation/buynow", { replace: true })}
         >
         <li
             className={
@@ -551,7 +551,7 @@ const ProductCreation = () => {
             ? "selectedcategory"
             : "selectedcategory1"
         }
-        onClick={() => setListingMode("auction")}
+        onClick={() => navigate("/productcreation/auction", { replace: true })}
         >
         <li
             className={
@@ -589,7 +589,7 @@ const ProductCreation = () => {
                 ? "selectedcategory"
                 : "selectedcategory1"
             }
-            onClick={() => setListingMode("tolet")}
+            onClick={() => navigate("/productcreation/tolet", { replace: true })}
             >
             <li
                 className={
