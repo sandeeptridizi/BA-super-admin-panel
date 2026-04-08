@@ -206,6 +206,8 @@ const Activitypage = () => {
     const [auctionVenue, setAuctionVenue] = useState("");
     const [auctionDate, setAuctionDate] = useState("");
 
+    const [tierModal, setTierModal] = useState({ open: false, productId: null, tier: null, productTitle: "" });
+
     const handleApprove = async (id, approvalStatus, tier) => {
         if (approvalStatus === "REJECTED") {
             setRejectModal({ open: true, productId: id });
@@ -220,6 +222,12 @@ const Activitypage = () => {
             setAuctionDate("");
             return;
         }
+        setTierModal({ open: true, productId: id, tier, productTitle: product?.title || "" });
+    };
+
+    const handleTierApproveConfirm = async () => {
+        const { productId: id, tier } = tierModal;
+        setTierModal({ open: false, productId: null, tier: null, productTitle: "" });
         setActioningId(id);
         try {
             await apiApproveProduct(id, { approvalStatus: "APPROVED", tier });
@@ -565,6 +573,27 @@ const Activitypage = () => {
                 <div className="reject-modal-actions">
                     <button className="reject-modal-cancel" onClick={() => setRejectModal({ open: false, productId: null })}>Cancel</button>
                     <button className="reject-modal-confirm" disabled={!rejectReason.trim()} onClick={handleRejectConfirm}>Reject Product</button>
+                </div>
+            </div>
+        </div>
+    )}
+
+    {tierModal.open && (
+        <div className="reject-modal-overlay" onClick={() => setTierModal({ open: false, productId: null, tier: null, productTitle: "" })}>
+            <div className="reject-modal" onClick={(e) => e.stopPropagation()} style={{ borderTop: "4px solid #d4af37" }}>
+                <h3 className="reject-modal-title" style={{ color: "#92710a" }}>Confirm Approval</h3>
+                <p className="reject-modal-desc">
+                    Are you sure you want to approve <strong style={{ color: "#18181b" }}>{tierModal.productTitle}</strong> as <strong style={{ color: "#92710a" }}>{tierModal.tier}</strong> tier?
+                </p>
+                <div className="reject-modal-actions">
+                    <button className="reject-modal-cancel" onClick={() => setTierModal({ open: false, productId: null, tier: null, productTitle: "" })}>Cancel</button>
+                    <button
+                        className="reject-modal-confirm"
+                        style={{ background: "#d4af37" }}
+                        onClick={handleTierApproveConfirm}
+                    >
+                        Approve as {tierModal.tier}
+                    </button>
                 </div>
             </div>
         </div>
