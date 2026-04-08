@@ -135,6 +135,8 @@ const ProductCreation = () => {
       const nextMode = modeByRoute[(mode || "").toLowerCase()];
       if (nextMode) {
         setListingMode(nextMode);
+        if (nextMode === "tolet") setActiveTab("residential");
+        else setActiveTab("realestate");
       }
     }, [mode]);
 
@@ -392,6 +394,7 @@ const ProductCreation = () => {
         const stateOverrides = {};
         if (propertyType) stateOverrides.propertyType = propertyType;
         if (ItemType) stateOverrides.itemType = ItemType;
+        if (listingMode === "tolet") stateOverrides.toletCategory = activeTab;
 
         const createPayload = {
           title,
