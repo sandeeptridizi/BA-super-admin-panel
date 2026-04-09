@@ -1,7 +1,7 @@
 import './Settings.css';
 import { useState, useEffect, useRef } from "react";
 import { IoCameraOutline } from "react-icons/io5";
-import { getAdminProfile, updateAdminProfile, updateAdminProfilePicture, removeAdminProfilePicture, getPresignedUrl, changeAdminPassword } from "../../lib/admin";
+import { getAdminProfile, updateAdminProfile, updateAdminProfilePicture, removeAdminProfilePicture, getPresignedUrl, changeAdminPassword, getPlatformDetails, updatePlatformDetails } from "../../lib/admin";
 
 const CDN_ENDPOINT = import.meta.env.VITE_AWS_CDN_ENDPOINT || "https://bauctionprod.s3.ap-south-1.amazonaws.com";
 const BUCKET_PREFIX = import.meta.env.VITE_AWS_BUCKET_PREFIX || "ba";
@@ -14,20 +14,38 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordUpdating, setPasswordUpdating] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [adminName, setAdminName] = useState("");
+  const [phone, setPhone] = useState("");
   const [profileUpdating, setProfileUpdating] = useState(false);
+  const [platformName, setPlatformName] = useState("");
+  const [platformTagline, setPlatformTagline] = useState("");
+  const [platformAbout, setPlatformAbout] = useState("");
+  const [platformEmails, setPlatformEmails] = useState(["", ""]);
+  const [platformPhones, setPlatformPhones] = useState(["", ""]);
+  const [platformAddress, setPlatformAddress] = useState("");
+  const [platformUpdating, setPlatformUpdating] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     getAdminProfile()
       .then((res) => {
         setAdmin(res.data);
-        const parts = (res.data?.name || "").trim().split(/\s+/);
-        setFirstName(parts[0] || "");
-        setLastName(parts.slice(1).join(" ") || "");
+        setAdminName(res.data?.name || "");
+        setPhone(res.data?.phone || "");
       })
       .catch((err) => console.error("Failed to load profile", err));
+
+    getPlatformDetails()
+      .then((res) => {
+        const p = res.data;
+        setPlatformName(p.name || "");
+        setPlatformTagline(p.tagline || "");
+        setPlatformAbout(p.about || "");
+        setPlatformEmails([p.email?.[0] || "", p.email?.[1] || ""]);
+        setPlatformPhones([p.phone?.[0] || "", p.phone?.[1] || ""]);
+        setPlatformAddress(p.address || "");
+      })
+      .catch((err) => console.error("Failed to load platform details", err));
   }, []);
 
   const getInitials = () => {
@@ -119,20 +137,51 @@ const Settings = () => {
   };
 
   const handleProfileUpdate = async () => {
-    const name = `${firstName.trim()} ${lastName.trim()}`.trim();
-    if (!name) {
+    if (!adminName.trim()) {
       alert("Name cannot be empty.");
       return;
     }
     setProfileUpdating(true);
     try {
-      const res = await updateAdminProfile({ name });
+      const res = await updateAdminProfile({ name: adminName.trim(), phone: phone.trim() });
       setAdmin(res.data);
       alert("Profile updated successfully.");
     } catch (err) {
       alert(err.response?.data?.message || "Failed to update profile.");
     } finally {
       setProfileUpdating(false);
+    }
+  };
+
+  const handlePlatformUpdate = async () => {
+    if (!platformName.trim()) { alert("Platform Name is required."); return; }
+    if (!platformTagline.trim()) { alert("Tagline is required."); return; }
+    if (!platformAbout.trim()) { alert("About Platform is required."); return; }
+    if (!platformEmails[0].trim()) { alert("At least one Contact Email is required."); return; }
+    if (!platformPhones[0].trim()) { alert("At least one Support Phone is required."); return; }
+    if (!platformAddress.trim()) { alert("Address is required."); return; }
+    setPlatformUpdating(true);
+    try {
+      const res = await updatePlatformDetails({
+        name: platformName,
+        tagline: platformTagline,
+        about: platformAbout,
+        email: platformEmails.filter(Boolean),
+        phone: platformPhones.filter(Boolean),
+        address: platformAddress,
+      });
+      const p = res.data;
+      setPlatformName(p.name || "");
+      setPlatformTagline(p.tagline || "");
+      setPlatformAbout(p.about || "");
+      setPlatformEmails([p.email?.[0] || "", p.email?.[1] || ""]);
+      setPlatformPhones([p.phone?.[0] || "", p.phone?.[1] || ""]);
+      setPlatformAddress(p.address || "");
+      alert("Platform details updated successfully.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update platform details.");
+    } finally {
+      setPlatformUpdating(false);
     }
   };
 
@@ -154,30 +203,38 @@ const Settings = () => {
           <h2>Platform Information</h2>
           <p>Update your platform details and branding</p>
           <div className='platforminfoinput'>
-            <h3>Platform Name</h3>
-            <input type='text' placeholder='Billionaire Auction'></input>
+            <h3>Platform Name <span style={{ color: 'red' }}>*</span></h3>
+            <input type='text' placeholder='Billionaire Auction' value={platformName} onChange={(e) => setPlatformName(e.target.value)}></input>
           </div>
           <div className='platforminfoinput'>
-            <h3>Tagline</h3>
-            <input type='text' placeholder='Luxury Items for the Elite'></input>
+            <h3>Tagline <span style={{ color: 'red' }}>*</span></h3>
+            <input type='text' placeholder='Luxury Items for the Elite' value={platformTagline} onChange={(e) => setPlatformTagline(e.target.value)}></input>
           </div>
           <div className='platforminfoinput1'>
-            <h3>About Platform</h3>
-            <input type='text' className='platformaboutinfo'></input>
+            <h3>About Platform <span style={{ color: 'red' }}>*</span></h3>
+            <textarea className='platformaboutinfo' value={platformAbout} onChange={(e) => setPlatformAbout(e.target.value)} rows={3}></textarea>
           </div>
           <div className='platformcontactinfo'>
           <div className='platforminfoinput2'>
-            <h3>Contact Email</h3>
-            <input type='text' placeholder='contact@billionaire.com'></input></div>
+            <h3>Contact Email 1 <span style={{ color: 'red' }}>*</span></h3>
+            <input type='text' placeholder='contact@billionaire.com' value={platformEmails[0]} onChange={(e) => setPlatformEmails([e.target.value, platformEmails[1]])}></input></div>
           <div className='platforminfoinput3'>
-            <h3>Support Phone</h3>
-          <input type='text' placeholder='+91 22 1234 5678'></input></div>
+            <h3>Contact Email 2</h3>
+            <input type='text' placeholder='support@billionaire.com' value={platformEmails[1]} onChange={(e) => setPlatformEmails([platformEmails[0], e.target.value])}></input></div>
+          </div>
+          <div className='platformcontactinfo'>
+          <div className='platforminfoinput2'>
+            <h3>Support Phone 1 <span style={{ color: 'red' }}>*</span></h3>
+            <input type='text' placeholder='+91 22 1234 5678' value={platformPhones[0]} onChange={(e) => setPlatformPhones([e.target.value, platformPhones[1]])}></input></div>
+          <div className='platforminfoinput3'>
+            <h3>Support Phone 2</h3>
+            <input type='text' placeholder='+91 22 1234 5678' value={platformPhones[1]} onChange={(e) => setPlatformPhones([platformPhones[0], e.target.value])}></input></div>
           </div>
           <div className='platforminfoinput1'>
-            <h3>Address</h3>
-            <input type='text' className='platformaboutinfo'></input>
+            <h3>Address <span style={{ color: 'red' }}>*</span></h3>
+            <textarea className='platformaboutinfo' value={platformAddress} onChange={(e) => setPlatformAddress(e.target.value)} rows={3}></textarea>
           </div>
-          <button className='sendreply1'>Save Changes</button>
+          <button className='sendreply1' onClick={handlePlatformUpdate} disabled={platformUpdating}>{platformUpdating ? "Saving..." : "Save Changes"}</button>
         </div>
       </div>
     </div>)}
@@ -219,21 +276,17 @@ const Settings = () => {
             onChange={handleFileSelect}
           />
         </div>
-        <div className='platformcontactinfo1'>
-          <div className='platforminfoinput2'>
-            <h3>First Name</h3>
-            <input type='text' placeholder='Super' value={firstName} onChange={(e) => setFirstName(e.target.value)}></input></div>
-          <div className='platforminfoinput3'>
-            <h3>Last Name</h3>
-          <input type='text' placeholder='Admin' value={lastName} onChange={(e) => setLastName(e.target.value)}></input></div>
+        <div className='platforminfoinput'>
+            <h3>Name</h3>
+            <input type='text' placeholder='Super Admin' value={adminName} onChange={(e) => setAdminName(e.target.value)}></input>
           </div>
           <div className='platformcontactinfo1'>
           <div className='platforminfoinput2'>
             <h3>Email</h3>
-            <input type='text' placeholder='admin@billionaire.com' value={admin?.email || ''} readOnly></input></div>
+            <input type='text' placeholder='admin@billionaire.com' value={admin?.email || ''} disabled style={{ opacity: 0.6, cursor: 'not-allowed' }}></input></div>
           <div className='platforminfoinput3'>
             <h3>Phone</h3>
-          <input type='text' placeholder='+91 98765 00000' value={admin?.phone || ''} readOnly></input></div>
+          <input type='text' placeholder='+91 98765 00000' value={phone} onChange={(e) => setPhone(e.target.value)}></input></div>
           </div>
           <button className='sendreply2' onClick={handleProfileUpdate} disabled={profileUpdating}>{profileUpdating ? "Updating..." : "Update Profile"}</button>
       </div>

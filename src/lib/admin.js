@@ -29,3 +29,13 @@ export async function getPresignedUrl(key) {
   const res = await api.get(`/api/media/presigned?key=${encodeURIComponent(key)}`);
   return res.data;
 }
+
+export async function getPlatformDetails() {
+  const res = await api.get("/api/platform");
+  return res.data;
+}
+
+export async function updatePlatformDetails(data) {
+  const res = await api.patch("/api/platform", data);
+  return res.data;
+}
