@@ -62,6 +62,7 @@ const DashboardPage = () => {
     totalUsers: 0,
     activeLeads: 0,
     totalEmployees: 0,
+    monthlyRevenue: 0,
     pendingApprovals: 0,
     featuredCount: 0,
     recommendedCount: 0,
@@ -73,7 +74,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [productsRes, usersRes, enquiryStats, employeesRes, pendingRes, featuredRes, recommendedRes, auctionRes] = await Promise.all([
+        const [productsRes, usersRes, enquiryStats, employeesRes, pendingRes, featuredRes, recommendedRes, auctionRes, revenueRes] = await Promise.all([
           api.get('/api/product').catch(() => ({ data: { data: [] } })),
           getUsers().catch(() => ({ data: [] })),
           getEnquiryStats().catch(() => ({})),
@@ -82,6 +83,7 @@ const DashboardPage = () => {
           api.get('/api/product', { params: { isFeatured: 'true', approvalStatus: 'APPROVED' } }).catch(() => ({ data: { data: [] } })),
           api.get('/api/product', { params: { isRecommended: 'true', approvalStatus: 'APPROVED' } }).catch(() => ({ data: { data: [] } })),
           api.get('/api/product', { params: { approvalStatus: 'APPROVED' } }).catch(() => ({ data: { data: [] } })),
+          api.get('/api/revenue/stats').catch(() => ({ data: { data: {} } })),
         ]);
 
         const allProducts = productsRes.data?.data || [];
@@ -93,8 +95,9 @@ const DashboardPage = () => {
         const approved = auctionRes.data?.data || [];
         const auctions = approved.filter(p => p.listingType === 'AUCTIONS');
 
-        const totalNewEnquiries = enquiryStats?.byStatus?.NEW || 0;
-        const totalInProgress = enquiryStats?.byStatus?.IN_PROGRESS || 0;
+        const totalNewEnquiries = enquiryStats?.new || 0;
+        const totalInProgress = enquiryStats?.inProgress || 0;
+        const monthlyRevenuePaise = revenueRes.data?.data?.monthlyRecurring || 0;
 
         const categoryCounts = {};
         allProducts.forEach(p => {
@@ -106,6 +109,7 @@ const DashboardPage = () => {
           totalUsers: users.length,
           activeLeads: totalNewEnquiries + totalInProgress,
           totalEmployees: employees.length,
+          monthlyRevenue: monthlyRevenuePaise,
           pendingApprovals: pending.length,
           featuredCount: featured.length,
           recommendedCount: recommended.length,
@@ -180,9 +184,9 @@ const DashboardPage = () => {
               <BsCurrencyRupee />
             </span>
           </div>
-          <h2>—</h2>
+          <h2>{loading ? '...' : `₹${(stats.monthlyRevenue / 100).toLocaleString('en-IN')}`}</h2>
           <div className='dashgrowth'>
-            <MdArrowOutward /> Coming soon
+            <MdArrowOutward /> This month's revenue
           </div>
         </div>
       </div>
