@@ -113,8 +113,8 @@ const Settings = () => {
       alert("Please fill in all password fields.");
       return;
     }
-    if (newPassword.length < 6) {
-      alert("New password must be at least 6 characters.");
+    if (newPassword.length < 6 || newPassword.length > 12) {
+      alert("Password must be between 6 and 12 characters.");
       return;
     }
     if (newPassword !== confirmPassword) {

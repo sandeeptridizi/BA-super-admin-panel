@@ -37,6 +37,10 @@ const CreateNewUser = () => {
       setError("Name, email and password are required.");
       return;
     }
+    if (form.password.length < 6 || form.password.length > 12) {
+      setError("Password must be between 6 and 12 characters.");
+      return;
+    }
     setSubmitting(true);
     try {
       await createUser({

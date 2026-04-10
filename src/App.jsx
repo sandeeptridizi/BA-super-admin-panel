@@ -18,7 +18,7 @@ import ProductPage from "./pages/ProductPage/ProductPage";
 import ProductEdit from "./pages/ProductEdit/ProductEdit";
 import CreateNewUser from "./pages/CreateNewUser/CreateNewUser";
 import UserProfile from "./pages/UserProfile/UserProfile";
-import LeadDetails from "./pages/LeadDetails/LeadDetails";
+
 import AddLead from "./pages/AddLead/AddLead";
 import EmployeeDetails from "./pages/EmployeeDetails/EmployeeDetails";
 import CreateEmployee from "./pages/CreateEmployee/CreateEmployee";
@@ -57,7 +57,7 @@ const App = () => {
           <Route path='productedit/:id' element={<ProductEdit/>} />
           <Route path="create-user" element={<CreateNewUser />} />
           <Route path="userprofile/:id" element={<UserProfile />} />
-          <Route path='leaddetails' element={ <LeadDetails /> } />
+
           <Route path="/addlead" element={<AddLead />} />
           <Route path="/employeedetails/:id" element={isAdmin() ? <EmployeeDetails /> : <Navigate to="/dashboard" replace />} />
           <Route path="/createemployee" element={isAdmin() ? <CreateEmployee /> : <Navigate to="/dashboard" replace />} />

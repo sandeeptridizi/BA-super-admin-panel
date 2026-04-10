@@ -173,13 +173,6 @@ const UserProfile = () => {
           <h3 className="statcardvalue">{user.leads ?? 0}</h3>
         </div>
 
-        <div className="statCard">
-            <div className="statcardrow">
-          <LuUsers className="useremailicon yellow1" />
-          <p className="statcardname yellow2">REVENUE</p></div>
-          <h3 className="statcardvalue gold">-</h3>
-        </div>
-
 
       </div>
 

@@ -1,6 +1,6 @@
 import './Users.css';
 import { useState, useEffect, useRef } from "react";
-import PublishedProductsPopup from "../../components/ProductPopup/productpopup";
+
 import { useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlineShop } from "react-icons/ai";
@@ -11,13 +11,11 @@ import { FiSearch } from "react-icons/fi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit, FiTrash2, FiEye } from "react-icons/fi";
 import { getUsers, deleteUser } from "../../lib/users";
+import api from "../../lib/api";
 
 const Users = () => {
 
   const [selectedCat, setSelectedCat] = useState("marketplace");
-  const [showPopup, setShowPopup] = useState(false);
-  const openPopup = () => {setShowPopup(true);};
-  const closePopup = () => {setShowPopup(false);};
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
@@ -26,6 +24,7 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [actionMenuId, setActionMenuId] = useState(null);
   const actionMenuRef = useRef(null);
+  const [productStats, setProductStats] = useState({ marketplace: 0, buynow: 0, auctions: 0, tolet: 0 });
 
   useEffect(() => {
     let cancelled = false;
@@ -43,6 +42,21 @@ const Users = () => {
     })();
     return () => { cancelled = true; };
   }, [searchQuery]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get("/api/product");
+        const products = res?.data?.data || [];
+        setProductStats({
+          marketplace: products.filter((p) => p.listingType === "MARKETPLACE").length,
+          buynow: products.filter((p) => p.listingType === "BUY_NOW").length,
+          auctions: products.filter((p) => p.listingType === "AUCTIONS").length,
+          tolet: products.filter((p) => p.listingType === "TO_LET").length,
+        });
+      } catch {}
+    })();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -86,7 +100,7 @@ const Users = () => {
       </td>
       <td><span className={tierClass(u.subscriptionStatus)}>{tierLabel(u.subscriptionStatus)}</span></td>
       <td><span className={u.isActive ? 'userstatustags' : 'userstatustags1'}>{u.isActive ? "active" : "inactive"}</span></td>
-      <td><span onClick={() => setShowPopup(true)} className='userproductnum'>{u._count?.ownedProducts ?? 0}</span></td>
+      <td><span onClick={() => navigate(`/userprofile/${u.id}`)} className='userproductnum'>{u._count?.ownedProducts ?? 0}</span></td>
       <td><span onClick={() => navigate(`/userprofile/${u.id}?tab=leads`)} className='userleadsnum'>{u.leads ?? 0}</span></td>
       <td><span className='userdatenum'>{formatDate(u.createdAt)}</span></td>
       <td className="actionCell">
@@ -139,7 +153,6 @@ const Users = () => {
           )}
         </tbody>
       </table>
-      <PublishedProductsPopup open={showPopup} onClose={() => setShowPopup(false)}/>
     </div>
   );
 
@@ -200,87 +213,24 @@ const Users = () => {
             <FiHome /> To-let
           </li>
       </ul>
-
-      {selectedCat === "marketplace" && <div>
-      <ul className='userstats1'>
-        <li className='userstat1'>
-          <div className='userstattitle'>Users Selling</div>
-          <div className='userstatvalue'>2,345</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle'>Active Listings</div>
-          <div className='userstatvalue'>8,932</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle'>Avg Price</div>
-          <div className='userstatvalue'>₹45L</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle'>Total Value</div>
-          <div className='userstatvalue'>₹165Cr</div>
-        </li>
-      </ul>
-      </div>}
-      {selectedCat === "buynow" && <div>
-      <ul className='userstats1'>
-        <li className='userstat1'>
-          <div className='userstattitle1'>Users Selling</div>
-          <div className='userstatvalue1'>2,345</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle1'>Active Listings</div>
-          <div className='userstatvalue1'>8,932</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle1'>Avg Price</div>
-          <div className='userstatvalue1'>₹45L</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle1'>Total Value</div>
-          <div className='userstatvalue1'>₹165Cr</div>
-        </li>
-      </ul>
-      </div>}
-      {selectedCat === "auctions" && <div>
-      <ul className='userstats1'>
-        <li className='userstat1'>
-          <div className='userstattitle2'>Users Selling</div>
-          <div className='userstatvalue2'>2,345</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle2'>Active Listings</div>
-          <div className='userstatvalue2'>8,932</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle2'>Avg Price</div>
-          <div className='userstatvalue2'>₹45L</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle2'>Total Value</div>
-          <div className='userstatvalue2'>₹165Cr</div>
-        </li>
-      </ul>
-      </div>}
-      {selectedCat === "tolet" && <div>
-      <ul className='userstats1'>
-        <li className='userstat1'>
-          <div className='userstattitle3'>Users Selling</div>
-          <div className='userstatvalue3'>2,345</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle3'>Active Listings</div>
-          <div className='userstatvalue3'>8,932</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle3'>Avg Price</div>
-          <div className='userstatvalue3'>₹45L</div>
-        </li>
-        <li className='userstat1'>
-          <div className='userstattitle3'>Total Value</div>
-          <div className='userstatvalue3'>₹165Cr</div>
-        </li>
-      </ul>
-      </div>}
+      <div className='productstatsrow'>
+        <div className='productstatbox'>
+          <span className='productstatlabel'><AiOutlineShop /> Marketplace</span>
+          <span className='productstatcount'>{productStats.marketplace}</span>
+        </div>
+        <div className='productstatbox'>
+          <span className='productstatlabel'><BsLightningCharge /> Buy Now</span>
+          <span className='productstatcount'>{productStats.buynow}</span>
+        </div>
+        <div className='productstatbox'>
+          <span className='productstatlabel'><TbHammer /> Auctions</span>
+          <span className='productstatcount'>{productStats.auctions}</span>
+        </div>
+        <div className='productstatbox'>
+          <span className='productstatlabel'><FiHome /> To-let</span>
+          <span className='productstatcount'>{productStats.tolet}</span>
+        </div>
+      </div>
       </div>
       {selectedCat === "marketplace" && renderCategoryTable("marketplace")}
       {selectedCat === "buynow" && renderCategoryTable("buynow")}

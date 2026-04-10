@@ -608,7 +608,7 @@
 }
 
 .financialserv {
-  height: 476px;
+  min-height: 380px;
   width: 1040px;
   border-radius: 14px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);

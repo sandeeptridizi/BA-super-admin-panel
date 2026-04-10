@@ -55,6 +55,10 @@ export default function CreateEmployee() {
       setError("Password is required.");
       return;
     }
+    if (form.password.length < 6 || form.password.length > 12) {
+      setError("Password must be between 6 and 12 characters.");
+      return;
+    }
     if (form.password !== form.confirmPassword) {
       setError("Password and Confirm password do not match.");
       return;

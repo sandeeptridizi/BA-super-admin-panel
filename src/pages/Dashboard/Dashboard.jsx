@@ -21,8 +21,6 @@ import { BsLightningCharge } from 'react-icons/bs';
 import { FaStar } from 'react-icons/fa6';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import { FaArrowTrendUp } from 'react-icons/fa6';
-import { IoCardOutline } from 'react-icons/io5';
-import { VscPercentage } from 'react-icons/vsc';
 import { BsStars } from 'react-icons/bs';
 import { LuAward } from 'react-icons/lu';
 import { LuCrown } from 'react-icons/lu';
@@ -32,6 +30,8 @@ import api from '../../lib/api';
 import { getUsers } from '../../lib/users';
 import { getEnquiryStats } from '../../lib/enquiries';
 import { getEmployees } from '../../lib/employees';
+import { getAdvertisements } from '../../lib/advertisements';
+import { isAdmin } from '../../lib/auth';
 
 const categoryIcons = {
   REAL_ESTATE: <FiHome />,
@@ -67,6 +67,7 @@ const DashboardPage = () => {
     featuredCount: 0,
     recommendedCount: 0,
     auctionCount: 0,
+    activeAds: 0,
     categoryCounts: {},
   });
   const [loading, setLoading] = useState(true);
@@ -74,7 +75,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [productsRes, usersRes, enquiryStats, employeesRes, pendingRes, featuredRes, recommendedRes, auctionRes, revenueRes] = await Promise.all([
+        const [productsRes, usersRes, enquiryStats, employeesRes, pendingRes, featuredRes, recommendedRes, auctionRes, revenueRes, adsRes] = await Promise.all([
           api.get('/api/product').catch(() => ({ data: { data: [] } })),
           getUsers().catch(() => ({ data: [] })),
           getEnquiryStats().catch(() => ({})),
@@ -84,9 +85,11 @@ const DashboardPage = () => {
           api.get('/api/product', { params: { isRecommended: 'true', approvalStatus: 'APPROVED' } }).catch(() => ({ data: { data: [] } })),
           api.get('/api/product', { params: { approvalStatus: 'APPROVED' } }).catch(() => ({ data: { data: [] } })),
           api.get('/api/revenue/stats').catch(() => ({ data: { data: {} } })),
+          getAdvertisements({ status: 'ACTIVE' }).catch(() => ({ data: [] })),
         ]);
 
         const allProducts = productsRes.data?.data || [];
+        const ads = adsRes?.data || [];
         const users = usersRes.data || [];
         const employees = employeesRes.data || [];
         const pending = pendingRes.data?.data || [];
@@ -114,6 +117,7 @@ const DashboardPage = () => {
           featuredCount: featured.length,
           recommendedCount: recommended.length,
           auctionCount: auctions.length,
+          activeAds: ads.length,
           categoryCounts,
         });
       } catch (err) {
@@ -177,18 +181,20 @@ const DashboardPage = () => {
             <MdArrowOutward /> New + In Progress enquiries
           </div>
         </div>
-        <div className='dashinsight3' onClick={() => navigate('/financials')}>
-          <div className='dashinsightrow'>
-            <p>Monthly Revenue</p>
-            <span>
-              <BsCurrencyRupee />
-            </span>
+        {isAdmin() && (
+          <div className='dashinsight3' onClick={() => navigate('/financials')}>
+            <div className='dashinsightrow'>
+              <p>Monthly Revenue</p>
+              <span>
+                <BsCurrencyRupee />
+              </span>
+            </div>
+            <h2>{loading ? '...' : `₹${(stats.monthlyRevenue / 100).toLocaleString('en-IN')}`}</h2>
+            <div className='dashgrowth'>
+              <MdArrowOutward /> This month's revenue
+            </div>
           </div>
-          <h2>{loading ? '...' : `₹${(stats.monthlyRevenue / 100).toLocaleString('en-IN')}`}</h2>
-          <div className='dashgrowth'>
-            <MdArrowOutward /> This month's revenue
-          </div>
-        </div>
+        )}
       </div>
       <div className='categoryperformance'>
         <div className='catperformanceheader'>
@@ -284,7 +290,7 @@ const DashboardPage = () => {
               </p>
               <p className='dashactivitytag1'>Live</p>
             </div>
-            <h2 className='dashactivitynum'>—</h2>
+            <h2 className='dashactivitynum'>{fmt(stats.activeAds)}</h2>
             <p className='dashactivitynote'>Active Ads</p>
           </div>
           <div
@@ -389,53 +395,6 @@ const DashboardPage = () => {
               Photo, video & social media package
             </p>
             <p className='dashactivityendnotes7'>View Package</p>
-          </div>
-        </div>
-        <div className='dashboardrow'>
-          <div className='finservshort' onClick={() => navigate('/financials')}>
-            <div className='finserveshorticon'>
-              <IoCardOutline />
-            </div>
-            <div className='finservshortdetails'>
-              <h2>—</h2>
-              <p>Subscriptions</p>
-            </div>
-          </div>
-          <div
-            className='finservshort1'
-            onClick={() => navigate('/financials')}
-          >
-            <div className='finserveshorticon1'>
-              <VscPercentage />
-            </div>
-            <div className='finservshortdetails'>
-              <h2>—</h2>
-              <p>Coupon Discounts</p>
-            </div>
-          </div>
-          <div
-            className='finservshort2'
-            onClick={() => navigate('/financials')}
-          >
-            <div className='finserveshorticon2'>
-              <LuUsers />
-            </div>
-            <div className='finservshortdetails'>
-              <h2>—</h2>
-              <p>Lead Unlocks</p>
-            </div>
-          </div>
-          <div
-            className='finservshort3'
-            onClick={() => navigate('/financials')}
-          >
-            <div className='finserveshorticon3'>
-              <BsStars />
-            </div>
-            <div className='finservshortdetails'>
-              <h2>—</h2>
-              <p>Digital Media</p>
-            </div>
           </div>
         </div>
       </div>
