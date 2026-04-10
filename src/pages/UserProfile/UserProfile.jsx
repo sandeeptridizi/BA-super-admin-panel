@@ -11,12 +11,10 @@ import { LuUsers } from "react-icons/lu";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { PiCube } from "react-icons/pi";
-import { FaArrowTrendUp } from "react-icons/fa6";
+
 
 import { MdEmail } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
-import { HiOutlineTrendingUp } from "react-icons/hi";
-import { IoTimeOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { FiTrash2 } from "react-icons/fi";
 import { getUser, updateUser, deleteUser } from "../../lib/users";
@@ -47,6 +45,10 @@ const UserProfile = () => {
         const res = await getUser(id);
         if (!cancelled) {
           setUser(res.data);
+          if (searchParams.get("tab")) {
+            setActiveTab(searchParams.get("tab"));
+            setSearchParams({}, { replace: true });
+          }
           if (searchParams.get("edit") === "true") {
             setEditForm({
               name: res.data.name || "",
@@ -121,6 +123,9 @@ const UserProfile = () => {
   if (error || !user) return <div className="userProfileContainer"><div className="userTopBar"><div className="backUsers" onClick={() => navigate("/users")}><BiLeftArrowAlt /> Back to Users</div></div><p>{error || "User not found."}</p></div>;
 
   const productCount = user.ownedProducts?.length ?? 0;
+  const allLeads = (user.ownedProducts || []).flatMap((p) =>
+    (p.enquiries || []).map((e) => ({ ...e, productTitle: p.title }))
+  ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div className="userProfileContainer">
@@ -180,8 +185,7 @@ const UserProfile = () => {
 
        <ul className='activitycat'>
               <li className={`catmenu3 ${activeTab === "products" ? "active-products" : ""}`} onClick={() => setActiveTab("products")}><PiCube />Products <span className='catnum1'>({productCount})</span> </li>
-              <li className={`catmenu3 ${activeTab === "leads" ? "active-leads" : ""}`} onClick={() => setActiveTab("leads")}><LuUsers />Leads <span className='catnum1'>(0)</span> </li>
-              <li className={`catmenu3 ${activeTab === "activity" ? "active-activity" : ""}`} onClick={() => setActiveTab("activity")}><FaArrowTrendUp />Activity</li>
+              <li className={`catmenu3 ${activeTab === "leads" ? "active-leads" : ""}`} onClick={() => setActiveTab("leads")}><LuUsers />Leads <span className='catnum1'>({allLeads.length})</span> </li>
         </ul>
         {activeTab === "products" && (<div className="productTable">
 
@@ -212,7 +216,7 @@ const UserProfile = () => {
                   <td className="price">{p.value != null ? `\u20B9${(p.value / 1e5).toFixed(1)}L` : "-"}</td>
                   <td className="pricetier">{p.tier || "-"}</td>
                   <td><span className={`status ${p.approvalStatus?.toLowerCase()}`}>{p.approvalStatus?.toLowerCase() || "-"}</span></td>
-                  <td className="userleads">0</td>
+                  <td className="userleads">{p._count?.enquiries || 0}</td>
                 </tr>
               ))
             )}
@@ -237,178 +241,41 @@ const UserProfile = () => {
         </thead>
 
         <tbody>
-          <tr>
-            <td>
-              <div className="leadInfo">
-                <div className="avatar">SN</div>
-                <span>Suresh Nair</span>
-              </div>
-            </td>
-
-            <td>
-              <div className="contactBox email">
-                <MdEmail className="icon" /> suresh@example.com
-              </div>
-              <div className="contactBox phone">
-                <FiPhone className="icon" /> +91 98765 12345
-              </div>
-            </td>
-
-            <td className="productinterest">2BHK Apartment</td>
-
-            <td>
-              <div className="dateBox">
-                <IoCalendarOutline className="dateIcon" /> 28 Jan 2024
-              </div>
-            </td>
-
-            <td>
-              <span className="status new">new</span>
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <div className="leadInfo">
-                <div className="avatar">MS</div>
-                <span>Meera Shah</span>
-              </div>
-            </td>
-
-            <td>
-              <div className="contactBox email">
-                <MdEmail className="icon" /> meera@example.com
-              </div>
-              <div className="contactBox phone">
-                <FiPhone className="icon" /> +91 98765 12346
-              </div>
-            </td>
-
-            <td className="productinterest">Vintage Watch</td>
-
-            <td>
-              <div className="dateBox">
-                <IoCalendarOutline className="dateIcon" /> 27 Jan 2024
-              </div>
-            </td>
-
-            <td>
-              <span className="status contacted">contacted</span>
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <div className="leadInfo">
-                <div className="avatar">KJ</div>
-                <span>Karan Johar</span>
-              </div>
-            </td>
-
-            <td>
-              <div className="contactBox email">
-                <MdEmail className="icon" /> karan@example.com
-              </div>
-              <div className="contactBox phone">
-                <FiPhone className="icon" /> +91 98765 12347
-              </div>
-            </td>
-
-            <td className="productinterest">2BHK Apartment</td>
-
-            <td>
-              <div className="dateBox">
-                <IoCalendarOutline className="dateIcon" /> 26 Jan 2024
-              </div>
-            </td>
-
-            <td>
-              <span className="status qualified">qualified</span>
-            </td>
-          </tr>
+          {allLeads.length === 0 ? (
+            <tr><td colSpan={5}>No leads yet</td></tr>
+          ) : (
+            allLeads.map((lead) => (
+              <tr key={lead.id}>
+                <td>
+                  <div className="leadInfo">
+                    <div className="avatar">{(lead.visitorName || "").split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}</div>
+                    <span>{lead.visitorName}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="contactBox email">
+                    <MdEmail className="icon" /> {lead.visitorEmail}
+                  </div>
+                  {lead.visitorPhone && (
+                    <div className="contactBox phone">
+                      <FiPhone className="icon" /> {lead.visitorPhone}
+                    </div>
+                  )}
+                </td>
+                <td className="productinterest">{lead.productTitle}</td>
+                <td>
+                  <div className="dateBox">
+                    <IoCalendarOutline className="dateIcon" /> {formatDate(lead.createdAt)}
+                  </div>
+                </td>
+                <td>
+                  <span className={`status ${lead.status?.toLowerCase()}`}>{lead.status?.toLowerCase() || "-"}</span>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-    </div>)}
-        {activeTab === "activity" && (<div className="activityWrapper">
-      <div className="activityHeader">
-        <HiOutlineTrendingUp className="activityHeaderIcon" />
-        <h3>Recent Activity</h3>
-      </div>
-
-      <div className="timeline">
-
-        <div className="timelineItem">
-          <div className="timelineLeft">
-            <div className="circle">1</div>
-            <div className="verticalLine"></div>
-          </div>
-
-          <div className="timelineContent">
-            <div>
-              <h4>Listed a new product</h4>
-              <p>2BHK Apartment</p>
-            </div>
-
-            <span className="timeBadge">
-              <IoTimeOutline /> 2 days ago
-            </span>
-          </div>
-        </div>
-
-        <div className="timelineItem">
-          <div className="timelineLeft">
-            <div className="circle">2</div>
-            <div className="verticalLine"></div>
-          </div>
-
-          <div className="timelineContent">
-            <div>
-              <h4>Received a lead</h4>
-              <p>From Suresh Nair</p>
-            </div>
-
-            <span className="timeBadge">
-              <IoTimeOutline /> 3 days ago
-            </span>
-          </div>
-        </div>
-
-        <div className="timelineItem">
-          <div className="timelineLeft">
-            <div className="circle">3</div>
-            <div className="verticalLine"></div>
-          </div>
-
-          <div className="timelineContent">
-            <div>
-              <h4>Updated product</h4>
-              <p>Vintage Watch</p>
-            </div>
-
-            <span className="timeBadge">
-              <IoTimeOutline /> 5 days ago
-            </span>
-          </div>
-        </div>
-
-        <div className="timelineItem">
-          <div className="timelineLeft">
-            <div className="circle">4</div>
-          </div>
-
-          <div className="timelineContent">
-            <div>
-              <h4>Product sold</h4>
-              <p>Antique Chair</p>
-            </div>
-
-            <span className="timeBadge">
-              <IoTimeOutline /> 1 week ago
-            </span>
-          </div>
-        </div>
-
-      </div>
     </div>)}
 
       {showEditModal && (

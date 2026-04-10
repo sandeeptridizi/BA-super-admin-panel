@@ -1,7 +1,6 @@
 import './Users.css';
 import { useState, useEffect, useRef } from "react";
 import PublishedProductsPopup from "../../components/ProductPopup/productpopup";
-import LeadsPopup from "../../components/LeadsPopup/LeadsPopup";
 import { useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
 import { AiOutlineShop } from "react-icons/ai";
@@ -20,9 +19,6 @@ const Users = () => {
   const openPopup = () => {setShowPopup(true);};
   const closePopup = () => {setShowPopup(false);};
   const navigate = useNavigate();
-  const [showLeadsPopup, setShowLeadsPopup] = useState(false);
-  const openLeadsPopup = () => setShowLeadsPopup(true);
-  const closeLeadsPopup = () => setShowLeadsPopup(false);
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,7 +87,7 @@ const Users = () => {
       <td><span className={tierClass(u.subscriptionStatus)}>{tierLabel(u.subscriptionStatus)}</span></td>
       <td><span className={u.isActive ? 'userstatustags' : 'userstatustags1'}>{u.isActive ? "active" : "inactive"}</span></td>
       <td><span onClick={() => setShowPopup(true)} className='userproductnum'>{u._count?.ownedProducts ?? 0}</span></td>
-      <td><span onClick={openLeadsPopup} className='userleadsnum'>{u.leads ?? 0}</span></td>
+      <td><span onClick={() => navigate(`/userprofile/${u.id}?tab=leads`)} className='userleadsnum'>{u.leads ?? 0}</span></td>
       <td><span className='userdatenum'>{formatDate(u.createdAt)}</span></td>
       <td className="actionCell">
         <div className="actionWrapper" ref={actionMenuId === u.id ? actionMenuRef : null}>
@@ -144,7 +140,6 @@ const Users = () => {
         </tbody>
       </table>
       <PublishedProductsPopup open={showPopup} onClose={() => setShowPopup(false)}/>
-      <LeadsPopup open={showLeadsPopup} onClose={closeLeadsPopup} />
     </div>
   );
 

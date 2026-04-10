@@ -387,7 +387,7 @@ const Products = () => {
                         </span>
                       </div>
                       <div className="productviewtag">
-                        <span className="productleadcount">
+                        <span className={`productleadcount${product.owner?.leads && (product._count?.enquiries || 0) >= product.owner.leads ? ' productleadcount-exceeded' : ''}`}>
                           <FiUser />
                           {product._count?.enquiries || 0} Leads
                         </span>

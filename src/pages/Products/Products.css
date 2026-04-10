@@ -410,6 +410,14 @@
     gap: 4px;
 }
 
+.productleadcount-exceeded{
+    background-color: #DC2626;
+    color: #fff;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
 .producttaggrow3{
     margin-left: auto ;
 }

@@ -259,6 +259,14 @@
     margin-top: 20px;
 }
 
+.performancecount-exceeded{
+    background-color: #DC2626;
+    color: #fff;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 4px;
+}
+
 .productpagebuttons{
     height: auto;
     padding: 16px 0;
