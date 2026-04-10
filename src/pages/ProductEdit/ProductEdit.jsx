@@ -216,7 +216,7 @@ const TOLET_RESIDENTIAL = [
   [sel("Ownership", ["Owner", "Agent", "Builder"]), sel("Rental Type", ["Flat", "Apartment", "Independent House", "Villa", "Studio", "Penthouse"]), f("Bedrooms", "number"), f("Bathrooms", "number")],
   [f("Property Floor", "number"), f("Total No of Floors", "number"), f("Carpet Area"), f("Built-up Area")],
   [f("Facing"), f("Maintenance Charges"), f("Available From"), f("Preferred Tenants")],
-  [sel("Furnished Status", ["Fully - Furnished", "Unfurnished", "Semi-Furnished"], true), f("Furnishing Items"), f("Society Amenities")],
+  [f("Furnishing Items"), f("Society Amenities")],
 ];
 
 const TOLET_GENERIC = [
