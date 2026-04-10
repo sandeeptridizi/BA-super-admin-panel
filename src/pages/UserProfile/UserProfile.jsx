@@ -8,7 +8,7 @@ import { FiPhone } from "react-icons/fi";
 import { HiOutlineCube } from "react-icons/hi2";
 
 import { LuUsers } from "react-icons/lu";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
 import { PiCube } from "react-icons/pi";
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -29,11 +29,12 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("products");
   const navigate = useNavigate();
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState({ name: "", phone: "", city: "", state: "" });
+  const [editForm, setEditForm] = useState({ name: "", phone: "", city: "", state: "", leads: 10 });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -44,7 +45,20 @@ const UserProfile = () => {
       setError(null);
       try {
         const res = await getUser(id);
-        if (!cancelled) setUser(res.data);
+        if (!cancelled) {
+          setUser(res.data);
+          if (searchParams.get("edit") === "true") {
+            setEditForm({
+              name: res.data.name || "",
+              phone: res.data.phone || "",
+              city: res.data.city || "",
+              state: res.data.state || "",
+              leads: res.data.leads ?? 10,
+            });
+            setShowEditModal(true);
+            setSearchParams({}, { replace: true });
+          }
+        }
       } catch (err) {
         if (!cancelled) setError(err.response?.data?.message || "Failed to load user.");
       } finally {
@@ -64,6 +78,7 @@ const UserProfile = () => {
       phone: user.phone || "",
       city: user.city || "",
       state: user.state || "",
+      leads: user.leads ?? 10,
     });
     setShowEditModal(true);
   };
@@ -150,7 +165,7 @@ const UserProfile = () => {
             <div className="statcardrow">
           <LuUsers className="useremailicon green1" />
           <p className="statcardname green2">LEADS</p></div>
-          <h3 className="statcardvalue">0</h3>
+          <h3 className="statcardvalue">{user.leads ?? 0}</h3>
         </div>
 
         <div className="statCard">
@@ -412,6 +427,8 @@ const UserProfile = () => {
               <input type="text" value={editForm.city} onChange={(e) => setEditForm({ ...editForm, city: e.target.value })} />
               <label>State</label>
               <input type="text" value={editForm.state} onChange={(e) => setEditForm({ ...editForm, state: e.target.value })} />
+              <label>Leads</label>
+              <input type="number" min="0" value={editForm.leads} onChange={(e) => setEditForm({ ...editForm, leads: parseInt(e.target.value) || 0 })} />
             </div>
             <div className="editModalFooter">
               <button className="editModalCancel" onClick={() => setShowEditModal(false)}>Cancel</button>

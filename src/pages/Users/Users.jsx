@@ -91,7 +91,7 @@ const Users = () => {
       <td><span className={tierClass(u.subscriptionStatus)}>{tierLabel(u.subscriptionStatus)}</span></td>
       <td><span className={u.isActive ? 'userstatustags' : 'userstatustags1'}>{u.isActive ? "active" : "inactive"}</span></td>
       <td><span onClick={() => setShowPopup(true)} className='userproductnum'>{u._count?.ownedProducts ?? 0}</span></td>
-      <td><span onClick={openLeadsPopup} className='userleadsnum'>0</span></td>
+      <td><span onClick={openLeadsPopup} className='userleadsnum'>{u.leads ?? 0}</span></td>
       <td><span className='userdatenum'>{formatDate(u.createdAt)}</span></td>
       <td className="actionCell">
         <div className="actionWrapper" ref={actionMenuId === u.id ? actionMenuRef : null}>
@@ -99,7 +99,7 @@ const Users = () => {
           {actionMenuId === u.id && (
             <div className="actionMenu">
               <button onClick={() => { setActionMenuId(null); navigate(`/userprofile/${u.id}`); }}><FiEye /> View</button>
-              <button onClick={() => { setActionMenuId(null); navigate(`/userprofile/${u.id}`); }}><FiEdit /> Edit</button>
+              <button onClick={() => { setActionMenuId(null); navigate(`/userprofile/${u.id}?edit=true`); }}><FiEdit /> Edit</button>
               <button className="actionMenuDelete" onClick={() => handleDeleteUser(u.id, u.name)}><FiTrash2 /> Delete</button>
             </div>
           )}
