@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRef } from "react";
 import api from "../../../src/lib/api";
+import { MAJOR_CITIES } from "../../../src/lib/cities";
 import './productcreation.css';
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -340,7 +341,7 @@ const ProductCreation = () => {
         if (!title) missing.push("Title");
         if (!description?.trim()) missing.push("Description");
         if (!rawValue) missing.push(listingMode === "tolet" ? "Rent" : "Value");
-        if (marketplaceFilePreviews.length === 0) missing.push("Product Images / Video");
+        if (marketplaceFilePreviews.length === 0) missing.push("At least one product image");
 
         const inputDivs = Array.from(root?.querySelectorAll(".basicinfoinputdiv") || []);
         for (const div of inputDivs) {
@@ -349,6 +350,7 @@ const ProductCreation = () => {
           const label = h.textContent?.replace(/\*/g, "").trim();
           if (!label) continue;
           if (label === "Product Video") continue;
+          if (label === "Social Media Link") continue;
           const input = div.querySelector("input, select, textarea");
           if (!input || input.type === "file") continue;
           if (!input.value?.trim()) missing.push(label);
@@ -728,7 +730,10 @@ const ProductCreation = () => {
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
-                <input type="text" placeholder="Enter City" className="basicinfoinput1" />
+                <input type="text" list="majorCitiesList" placeholder="Select or type city" className="basicinfoinput1" />
+                <datalist id="majorCitiesList">
+                    {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
+                </datalist>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Country<span className="required-star">*</span></h3>
@@ -748,7 +753,7 @@ const ProductCreation = () => {
                 </select>
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Social Media Link<span className="required-star">*</span></h3>
+                <h3 className='basicinfotitle'>Social Media Link</h3>
                 <input type="url" placeholder="Youtube, Instagram url" className="basicinfoinput1" />
             </div>
         </div>
@@ -2239,7 +2244,10 @@ const ProductCreation = () => {
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
-                <input type="text" placeholder="Enter City" className="basicinfoinput1" />
+                <input type="text" list="majorCitiesList" placeholder="Select or type city" className="basicinfoinput1" />
+                <datalist id="majorCitiesList">
+                    {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
+                </datalist>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Country<span className="required-star">*</span></h3>
@@ -2259,7 +2267,7 @@ const ProductCreation = () => {
                 </select>
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Social Media Link<span className="required-star">*</span></h3>
+                <h3 className='basicinfotitle'>Social Media Link</h3>
                 <input type="url" placeholder="Youtube, Instagram url" className="basicinfoinput1" />
             </div>
         </div>
@@ -3724,7 +3732,10 @@ const ProductCreation = () => {
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
-                <input type="text" placeholder="Enter City" className="basicinfoinput1" />
+                <input type="text" list="majorCitiesList" placeholder="Select or type city" className="basicinfoinput1" />
+                <datalist id="majorCitiesList">
+                    {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
+                </datalist>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Country<span className="required-star">*</span></h3>
@@ -3744,7 +3755,7 @@ const ProductCreation = () => {
                 </select>
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Social Media Link<span className="required-star">*</span></h3>
+                <h3 className='basicinfotitle'>Social Media Link</h3>
                 <input type="url" placeholder="Youtube, Instagram url" className="basicinfoinput1" />
             </div>
         </div>
@@ -5211,7 +5222,10 @@ const ProductCreation = () => {
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
-                <input type="text" placeholder="Enter City" className="basicinfoinput1" />
+                <input type="text" list="majorCitiesList" placeholder="Select or type city" className="basicinfoinput1" />
+                <datalist id="majorCitiesList">
+                    {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
+                </datalist>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Country<span className="required-star">*</span></h3>
@@ -5231,7 +5245,7 @@ const ProductCreation = () => {
                 </select>
             </div>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Social Media Link<span className="required-star">*</span></h3>
+                <h3 className='basicinfotitle'>Social Media Link</h3>
                 <input type="url" placeholder="Youtube, Instagram url" className="basicinfoinput1" />
             </div>
         </div>

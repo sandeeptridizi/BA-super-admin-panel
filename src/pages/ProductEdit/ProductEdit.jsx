@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../lib/api";
 import { getFile } from "../../lib/s3";
+import { MAJOR_CITIES } from "../../lib/cities";
 import { AiOutlineShop } from "react-icons/ai";
 import { BsLightningCharge, BsStars } from "react-icons/bs";
 import { TbHammer } from "react-icons/tb";
@@ -438,7 +439,7 @@ const ProductEdit = () => {
     if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : "Value");
     if (!city?.trim()) missing.push("City");
     if (!country?.trim()) missing.push("Country");
-    if (!socialMediaLink?.trim()) missing.push("Social Media Link");
+    if (existingMedia.length + newFiles.length === 0) missing.push("At least one product image");
     if (mode === "auction") {
       if (!meta.auctionVenue?.toString().trim()) missing.push("Auction Venue");
       if (!meta.auctionDate?.toString().trim()) missing.push("Auction Date");
@@ -698,10 +699,14 @@ const ProductEdit = () => {
             <input
               className="basicinfoinput1"
               type="text"
-              placeholder="City"
+              list="majorCitiesList"
+              placeholder="Select or type city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
+            <datalist id="majorCitiesList">
+              {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
+            </datalist>
           </div>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">Country<span className="required-star">*</span></div>
@@ -725,7 +730,7 @@ const ProductEdit = () => {
             </select>
           </div>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Social Media Link<span className="required-star">*</span></div>
+            <div className="basicinfotitle">Social Media Link</div>
             <input
               className="basicinfoinput1"
               type="url"
