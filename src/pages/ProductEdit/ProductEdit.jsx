@@ -429,20 +429,28 @@ const ProductEdit = () => {
   const handleSave = async () => {
     if (!id) return;
 
-    // ── validate required fields ──��────────────────────────────────────
+    // ── validate required fields (all mandatory except Product Video) ──
     const activeTabVal = mode === "tolet" ? toletTab : tab;
     const fields = getCategoryFields(mode, activeTabVal, meta);
     const missing = [];
+    if (!title.trim()) missing.push("Title");
+    if (!description.trim()) missing.push("Description");
+    if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : "Value");
+    if (!city?.trim()) missing.push("City");
+    if (!country?.trim()) missing.push("Country");
+    if (!socialMediaLink?.trim()) missing.push("Social Media Link");
+    if (mode === "auction") {
+      if (!meta.auctionVenue?.toString().trim()) missing.push("Auction Venue");
+      if (!meta.auctionDate?.toString().trim()) missing.push("Auction Date");
+    }
     for (const row of fields) {
       for (const field of row) {
-        if (field.required) {
-          const key = normalizeMetaKey(field.label);
-          if (!meta[key]?.trim()) missing.push(field.label);
-        }
+        const key = normalizeMetaKey(field.label);
+        if (!meta[key]?.toString().trim()) missing.push(field.label);
       }
     }
     if (missing.length > 0) {
-      alert(`Please fill the required fields:\n${missing.join(", ")}`);
+      alert(`Please fill the required fields:\n${Array.from(new Set(missing)).join(", ")}`);
       return;
     }
 
@@ -508,11 +516,10 @@ const ProductEdit = () => {
   const renderField = (field) => {
     const key = normalizeMetaKey(field.label);
     const val = meta[key] || "";
-    const star = field.required ? <span className="required-star">*</span> : null;
     if (field.type === "select") {
       return (
         <div className="basicinfoinputdiv" key={key}>
-          <div className="basicinfotitle">{field.label}{star}</div>
+          <div className="basicinfotitle">{field.label}<span className="required-star">*</span></div>
           <select
             className="basicinfoinput2"
             value={val}
@@ -528,7 +535,7 @@ const ProductEdit = () => {
     }
     return (
       <div className="basicinfoinputdiv" key={key}>
-        <div className="basicinfotitle">{field.label}{star}</div>
+        <div className="basicinfotitle">{field.label}<span className="required-star">*</span></div>
         <input
           className="basicinfoinput2"
           type={field.type === "number" ? "number" : "text"}
@@ -664,7 +671,7 @@ const ProductEdit = () => {
         <div className="productcreatehead">Basic Information</div>
         <span className="productheaddesc1">Fill in the product details</span>
 
-        <div className="basicinfotitle">Title</div>
+        <div className="basicinfotitle">Title<span className="required-star">*</span></div>
         <input
           className="basicinfoinput"
           type="text"
@@ -676,7 +683,7 @@ const ProductEdit = () => {
         <div className="basicinforow" style={{ marginTop: 12 }}>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">
-              {mode === "tolet" ? "Rent" : "Value"}
+              {mode === "tolet" ? "Rent" : "Value"}<span className="required-star">*</span>
             </div>
             <input
               className="basicinfoinput1"
@@ -687,7 +694,7 @@ const ProductEdit = () => {
             />
           </div>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">City</div>
+            <div className="basicinfotitle">City<span className="required-star">*</span></div>
             <input
               className="basicinfoinput1"
               type="text"
@@ -697,7 +704,7 @@ const ProductEdit = () => {
             />
           </div>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Country</div>
+            <div className="basicinfotitle">Country<span className="required-star">*</span></div>
             <select
               className="basicinfoinput1"
               value={country}
@@ -718,7 +725,7 @@ const ProductEdit = () => {
             </select>
           </div>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Social Media Link</div>
+            <div className="basicinfotitle">Social Media Link<span className="required-star">*</span></div>
             <input
               className="basicinfoinput1"
               type="url"
@@ -729,7 +736,7 @@ const ProductEdit = () => {
           </div>
         </div>
 
-        <div className="basicinfotitle">Description</div>
+        <div className="basicinfotitle">Description<span className="required-star">*</span></div>
         <textarea
           className="basicinfoinput"
           rows={4}
@@ -740,7 +747,7 @@ const ProductEdit = () => {
 
         <div className="basicinforow" style={{ marginTop: 12 }}>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Status</div>
+            <div className="basicinfotitle">Status<span className="required-star">*</span></div>
             <select
               className="basicinfoinput2"
               value={status}
@@ -751,7 +758,7 @@ const ProductEdit = () => {
             </select>
           </div>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Tier</div>
+            <div className="basicinfotitle">Tier<span className="required-star">*</span></div>
             <select
               className="basicinfoinput2"
               value={tier}
@@ -769,7 +776,7 @@ const ProductEdit = () => {
 
         <div style={{ marginTop: 12 }}>
           <div className="basicinfoinputdiv">
-            <div className="basicinfotitle">Approval Status</div>
+            <div className="basicinfotitle">Approval Status<span className="required-star">*</span></div>
             <select
               className="basicinfoinput2"
               value={approvalStatus}
@@ -790,7 +797,7 @@ const ProductEdit = () => {
           <span className="productheaddesc1">Set the auction venue and date</span>
           <div className="basicinforow" style={{ marginTop: 12 }}>
             <div className="basicinfoinputdiv">
-              <div className="basicinfotitle">Auction Venue</div>
+              <div className="basicinfotitle">Auction Venue<span className="required-star">*</span></div>
               <input
                 className="basicinfoinput1"
                 type="text"
@@ -800,7 +807,7 @@ const ProductEdit = () => {
               />
             </div>
             <div className="basicinfoinputdiv">
-              <div className="basicinfotitle">Auction Date</div>
+              <div className="basicinfotitle">Auction Date<span className="required-star">*</span></div>
               {meta.auctionDate && meta.auctionDate !== "TBA" ? (
                 <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <input

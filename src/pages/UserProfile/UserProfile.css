@@ -213,6 +213,10 @@
     margin-top: 16px;
 }
 
+.statcardvalue.statcardvalueexceeded{
+    color: #b91c1c;
+}
+
 .gold{color: #D4AF37;}
 
 .catmenu3{

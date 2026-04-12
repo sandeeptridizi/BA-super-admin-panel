@@ -101,7 +101,8 @@ const Users = () => {
       <td><span className={tierClass(u.subscriptionStatus)}>{tierLabel(u.subscriptionStatus)}</span></td>
       <td><span className={u.isActive ? 'userstatustags' : 'userstatustags1'}>{u.isActive ? "active" : "inactive"}</span></td>
       <td><span onClick={() => navigate(`/userprofile/${u.id}`)} className='userproductnum'>{u._count?.ownedProducts ?? 0}</span></td>
-      <td><span onClick={() => navigate(`/userprofile/${u.id}?tab=leads`)} className='userleadsnum'>{u.leads ?? 0}</span></td>
+      <td><span onClick={() => navigate(`/userprofile/${u.id}?tab=leads`)} className={`userleadsnum ${(u.currentLeads ?? 0) > (u.leads ?? 0) ? 'userleadsexceeded' : ''}`}>{u.currentLeads ?? 0}</span></td>
+      <td><span onClick={() => navigate(`/userprofile/${u.id}`)} className='userleadsnum'>{u.leads ?? 0}</span></td>
       <td><span className='userdatenum'>{formatDate(u.createdAt)}</span></td>
       <td className="actionCell">
         <div className="actionWrapper" ref={actionMenuId === u.id ? actionMenuRef : null}>
@@ -139,15 +140,16 @@ const Users = () => {
             <th>Status</th>
             <th>Products</th>
             <th>Leads</th>
+            <th>Max Leads</th>
             <th>Joined</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
-            <tr><td colSpan={7}>Loading users...</td></tr>
+            <tr><td colSpan={8}>Loading users...</td></tr>
           ) : users.length === 0 ? (
-            <tr><td colSpan={7}>No users found</td></tr>
+            <tr><td colSpan={8}>No users found</td></tr>
           ) : (
             users.map(renderUserRow)
           )}

@@ -170,6 +170,13 @@ const UserProfile = () => {
             <div className="statcardrow">
           <LuUsers className="useremailicon green1" />
           <p className="statcardname green2">LEADS</p></div>
+          <h3 className={`statcardvalue ${allLeads.length > (user.leads ?? 0) ? 'statcardvalueexceeded' : ''}`}>{allLeads.length}</h3>
+        </div>
+
+        <div className="statCard">
+            <div className="statcardrow">
+          <LuUsers className="useremailicon yellow1" />
+          <p className="statcardname yellow2">MAX LEADS ALLOWED</p></div>
           <h3 className="statcardvalue">{user.leads ?? 0}</h3>
         </div>
 

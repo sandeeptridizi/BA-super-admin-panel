@@ -327,6 +327,13 @@
     font-size: 14px;
 }
 
+.userleadsnum.userleadsexceeded{
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
 .userdatenum{
     color: #52525C;
     font-size: 14px;
