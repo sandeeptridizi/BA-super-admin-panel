@@ -16,6 +16,7 @@ import api from "../../lib/api";
 const Users = () => {
 
   const [selectedCat, setSelectedCat] = useState("marketplace");
+  const [tierFilter, setTierFilter] = useState("all");
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
@@ -79,6 +80,15 @@ const Users = () => {
     }
   };
 
+  const matchesTier = (u) => {
+    if (tierFilter === "all") return true;
+    if (tierFilter === "basic") return u.subscriptionStatus === "INACTIVE" || !u.subscriptionStatus;
+    if (tierFilter === "elite") return u.subscriptionStatus === "ACTIVE";
+    if (tierFilter === "pro") return u.subscriptionStatus === "EXPIRED" || u.subscriptionStatus === "CANCELLED";
+    return true;
+  };
+  const filteredUsers = users.filter(matchesTier);
+
   const totalUsers = users.length;
   const activeUsers = users.filter((u) => u.isActive).length;
   const inactiveUsers = totalUsers - activeUsers;
@@ -126,10 +136,10 @@ const Users = () => {
         <input type="text" placeholder="Search users by name or email..." className="searchInput1" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
       </div>
       <ul className='userscategory'>
-        <li className='usercategoryname'>All Users</li>
-        <li className='usercategoryname'>Basic</li>
-        <li className='usercategoryname'>Elite</li>
-        <li className='usercategoryname'>Pro</li>
+        <li className={`usercategoryname ${tierFilter === "all" ? "active" : ""}`} onClick={() => setTierFilter("all")}>All Users</li>
+        <li className={`usercategoryname ${tierFilter === "basic" ? "active" : ""}`} onClick={() => setTierFilter("basic")}>Basic</li>
+        <li className={`usercategoryname ${tierFilter === "elite" ? "active" : ""}`} onClick={() => setTierFilter("elite")}>Elite</li>
+        <li className={`usercategoryname ${tierFilter === "pro" ? "active" : ""}`} onClick={() => setTierFilter("pro")}>Pro</li>
       </ul>
       {error && <p className="userError">{error}</p>}
       <table className="producttable">
@@ -148,10 +158,10 @@ const Users = () => {
         <tbody>
           {loading ? (
             <tr><td colSpan={8}>Loading users...</td></tr>
-          ) : users.length === 0 ? (
+          ) : filteredUsers.length === 0 ? (
             <tr><td colSpan={8}>No users found</td></tr>
           ) : (
-            users.map(renderUserRow)
+            filteredUsers.map(renderUserRow)
           )}
         </tbody>
       </table>
