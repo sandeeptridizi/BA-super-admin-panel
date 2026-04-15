@@ -1,0 +1,75 @@
+.city-dropdown {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.city-dropdown-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.city-dropdown-input {
+  margin-top: 0 !important;
+  padding-right: 34px !important;
+  width: 100%;
+}
+
+.city-dropdown-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.18);
+}
+
+.city-dropdown-chevron {
+  position: absolute;
+  right: 12px;
+  color: #717182;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+  font-size: 16px;
+}
+
+.city-dropdown-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.city-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.city-dropdown-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.city-dropdown-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #b8941f;
+}
+
+.city-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.city-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.35);
+  border-radius: 4px;
+}
+
+.city-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}

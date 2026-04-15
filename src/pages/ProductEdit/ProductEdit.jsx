@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../lib/api";
 import { getFile } from "../../lib/s3";
 import { MAJOR_CITIES } from "../../lib/cities";
+import CityDropdown from "../../components/CityDropdown/CityDropdown";
 import { AiOutlineShop } from "react-icons/ai";
 import { BsLightningCharge, BsStars } from "react-icons/bs";
 import { TbHammer } from "react-icons/tb";
@@ -696,17 +697,7 @@ const ProductEdit = () => {
           </div>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">City<span className="required-star">*</span></div>
-            <input
-              className="basicinfoinput1"
-              type="text"
-              list="majorCitiesList"
-              placeholder="Select or type city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <datalist id="majorCitiesList">
-              {MAJOR_CITIES.map((c) => (<option key={c} value={c} />))}
-            </datalist>
+            <CityDropdown value={city} onChange={setCity} suggestions={MAJOR_CITIES} />
           </div>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">Country<span className="required-star">*</span></div>
