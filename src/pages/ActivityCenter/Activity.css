@@ -398,6 +398,22 @@
   align-items: center;
 }
 
+.viewtag {
+  height: 36px;
+  width: 80px;
+  border: 1px solid #8ec5ff;
+  border-radius: 8px;
+  color: #1447e6;
+  gap: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.viewtag:hover {
+  background-color: #eff6ff;
+}
+
 .rejecttag {
   height: 36px;
   width: 86px;
@@ -898,12 +914,21 @@ input:checked + .slider:before {
 
   .activitycat {
     width: 90%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .activitycat::-webkit-scrollbar {
+    display: none;
   }
 
   .catmenu2 {
     width: fit-content;
     height: fit-content;
     font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .activitydetail {
@@ -937,6 +962,7 @@ input:checked + .slider:before {
     width: 100%;
   }
 
+  .viewtag,
   .generaltag,
   .luxurytag,
   .classictag,

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import './Activity.css';
 import { FiActivity } from "react-icons/fi"
 import { MdAccessTime, MdVerified } from "react-icons/md";
@@ -47,6 +48,7 @@ const PLACEMENT_LABELS = { homepage_banner: "Homepage Banner", popup_ad: "Popup 
 const PLACEMENT_DIMENSIONS = { homepage_banner: "1356 × 428", popup_ad: "398 × 404", product_listing: "398 × 404" };
 
 const Activitypage = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("approvals");
     const [pendingProducts, setPendingProducts] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -361,7 +363,7 @@ const Activitypage = () => {
                     <ul className='activityinfotags'>
                         <li className={isMarketplace ? 'businesscat' : 'businesscat1'}><ListingIcon />{LISTING_LABELS[product.listingType] || product.listingType}</li>
                         <li className='productcat'>{CATEGORY_LABELS[product.category] || product.category}</li>
-                        {product.tier && <li className='plancat'><LuCrown />{product.tier}</li>}
+                        {product.tier && product.tier !== "GENERAL" && <li className='plancat'><LuCrown />{product.tier}</li>}
                     </ul>
                 </div>
                 <div className='activityinfodetails'>
@@ -376,6 +378,7 @@ const Activitypage = () => {
                 <div className='activityapprovedtags'>
                     <h2 className='activityapprovedtitle'>Approve as Tier:</h2>
                     <ul className='activityapprovedtag'>
+                        <li className='viewtag' onClick={() => navigate(`/productpage/${product.id}`)} style={{ cursor: "pointer" }}><FaRegEye />View</li>
                         <li className='generaltag' onClick={() => !actioningId && handleApprove(product.id, "APPROVED", "GENERAL")} style={{ cursor: actioningId ? "default" : "pointer" }}><SlBadge />General</li>
                         <li className='luxurytag' onClick={() => !actioningId && handleApprove(product.id, "APPROVED", "LUXURY")} style={{ cursor: actioningId ? "default" : "pointer" }}><LuCrown />Luxury</li>
                         <li className='classictag' onClick={() => !actioningId && handleApprove(product.id, "APPROVED", "CLASSIC")} style={{ cursor: actioningId ? "default" : "pointer" }}><BsStars />Classic</li>
