@@ -223,7 +223,7 @@ const TOLET_RESIDENTIAL = [
 
 const TOLET_GENERIC = [
   [f("Rent per Month (₹)", "number", undefined, true), f("Security Deposit (₹)", "number", undefined, true)],
-  [sel("Lease Duration", ["11 Months", "1 Year", "2 Years", "3 Years"], true), sel("Furnishing Status", ["Furnished", "Semi Furnished", "Unfurnished", "Other"], true)],
+  [sel("Lease Duration", ["3 Months", "6 Months", "11 Months", "1 Year", "2 Years", "3 Years"], true), sel("Furnishing Status", ["Furnished", "Semi Furnished", "Unfurnished", "Other"], true)],
 ];
 
 // ── get fields for current state ─────────────────────────────────────────────
