@@ -460,7 +460,8 @@ const ProductEdit = () => {
       setSaving(true);
 
       // build meta
-      const finalMeta = { ...meta, city, socialMediaLink, status };
+      const { description: _d, title: _t, value: _v, rent: _r, ...cleanMeta } = meta;
+      const finalMeta = { ...cleanMeta, city, socialMediaLink, status };
       if (mode === "tolet") finalMeta.toletCategory = toletTab;
 
       const activeTab = mode === "tolet" ? toletTab : tab;

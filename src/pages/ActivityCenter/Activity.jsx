@@ -27,6 +27,7 @@ import {
 } from "../../lib/activity";
 import { getFile } from "../../lib/s3";
 import api from "../../lib/api";
+import { getUserType } from "../../lib/auth";
 import {
   getAdvertisements,
   getAdvertisementStats,
@@ -68,19 +69,26 @@ const Activitypage = () => {
     const [adSubmitting, setAdSubmitting] = useState(false);
     const adFileInputRef = useRef(null);
 
+    const isEmployee = getUserType() === "employee";
+
     const loadData = useCallback(async () => {
         setLoading(true);
         setError("");
         try {
             const [pRes, fRes] = await Promise.all([fetchPendingApprovals(), fetchAllApprovedProducts()]);
-            setPendingProducts(pRes.data || []);
+            const pendingList = pRes.data || [];
+            setPendingProducts(
+                isEmployee
+                    ? pendingList.filter((p) => p.listingType !== "AUCTIONS")
+                    : pendingList,
+            );
             setFeaturedProducts(fRes.data || []);
         } catch (err) {
             setError(err?.response?.data?.message || err?.message || "Failed to load activity");
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [isEmployee]);
 
     useEffect(() => { loadData(); }, [loadData]);
 

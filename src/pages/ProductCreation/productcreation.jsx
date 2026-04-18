@@ -213,7 +213,7 @@ const ProductCreation = () => {
           if (!rawLabel) continue;
           let key = normalizeMetaKey(rawLabel);
           if (!key) continue;
-          if (key === "description" || key === "title" || key === "value" || key === "rent") continue;
+          if (key === "description" || key === "title" || key === "value" || key === "rent" || key === "country") continue;
 
           if (meta[key] !== undefined) {
             let suffix = 2;
@@ -2269,7 +2269,7 @@ const ProductCreation = () => {
             </div>
         </div>
         <h3 className='basicinfotitle'>Description<span className="required-star">*</span></h3>
-        <textarea rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
+        <textarea ref={marketplaceDescriptionRef} rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
     </div>
     {activeTab === "realestate" &&
         <div className='basiccatinputs'>
@@ -3764,7 +3764,7 @@ const ProductCreation = () => {
             </div>
         </div>
         <h3 className='basicinfotitle'>Description<span className="required-star">*</span></h3>
-        <textarea rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
+        <textarea ref={marketplaceDescriptionRef} rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
     </div>
     {activeTab === "realestate" &&
         <div className='basiccatinputs'>
@@ -5241,7 +5241,7 @@ const ProductCreation = () => {
             </div>
         </div>
         <h3 className='basicinfotitle'>Description<span className="required-star">*</span></h3>
-        <textarea rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
+        <textarea ref={marketplaceDescriptionRef} rows={4} placeholder="Provide a detailed description of the product..." className="basicinfoinput" />
     </div>
     {activeTab === "residential" &&
         <div className='basiccatinputs'>
