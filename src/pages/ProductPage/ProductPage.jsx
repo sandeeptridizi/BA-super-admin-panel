@@ -280,30 +280,29 @@ const ProductPage = () => {
               </div>
             </div>
           )}
-          <div className="productdescription">
-            <h2 className="producttitle">Key Features</h2>
-            <div className="productfeatures">
-              <ul className="productfeaturesleft">
-                {features.slice(0, 3).map((f, i) => (
-                  <li key={i} className="productfeaturelist">
-                    <LuDot className="featuredoticon" />
-                    {typeof f === "string" ? f : JSON.stringify(f)}
-                  </li>
-                ))}
-                {features.length === 0 && (
-                  <li className="productfeaturelist">—</li>
-                )}
-              </ul>
-              <ul className="productfeaturesright">
-                {features.slice(3, 6).map((f, i) => (
-                  <li key={i} className="productfeaturelist">
-                    <LuDot className="featuredoticon" />
-                    {typeof f === "string" ? f : JSON.stringify(f)}
-                  </li>
-                ))}
-              </ul>
+          {features.length > 0 && (
+            <div className="productdescription">
+              <h2 className="producttitle">Key Features</h2>
+              <div className="productfeatures">
+                <ul className="productfeaturesleft">
+                  {features.slice(0, 3).map((f, i) => (
+                    <li key={i} className="productfeaturelist">
+                      <LuDot className="featuredoticon" />
+                      {typeof f === "string" ? f : JSON.stringify(f)}
+                    </li>
+                  ))}
+                </ul>
+                <ul className="productfeaturesright">
+                  {features.slice(3, 6).map((f, i) => (
+                    <li key={i} className="productfeaturelist">
+                      <LuDot className="featuredoticon" />
+                      {typeof f === "string" ? f : JSON.stringify(f)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           <div className="productowner">
             <h2 className="producttitle">Owner Information</h2>
             <div className="productownerinfo">
