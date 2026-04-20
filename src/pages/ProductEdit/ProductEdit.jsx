@@ -437,13 +437,17 @@ const ProductEdit = () => {
     const missing = [];
     if (!title.trim()) missing.push("Title");
     if (!description.trim()) missing.push("Description");
-    if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : "Value");
+    if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Price" : "Value");
     if (!city?.trim()) missing.push("City");
     if (!country?.trim()) missing.push("Country");
     if (existingMedia.length + newFiles.length === 0) missing.push("At least one product image");
     if (mode === "auction") {
       if (!meta.auctionVenue?.toString().trim()) missing.push("Auction Venue");
       if (!meta.auctionDate?.toString().trim()) missing.push("Auction Date");
+      const rp = meta.reservePrice;
+      if (rp === undefined || rp === null || rp === "" || Number.isNaN(Number(rp)) || Number(rp) < 0) {
+        missing.push("Reserve Price");
+      }
     }
     for (const row of fields) {
       for (const field of row) {
@@ -686,12 +690,13 @@ const ProductEdit = () => {
         <div className="basicinforow" style={{ marginTop: 12 }}>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">
-              {mode === "tolet" ? "Rent" : "Value"}<span className="required-star">*</span>
+              {mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Price" : "Value"}<span className="required-star">*</span>
             </div>
             <input
               className="basicinfoinput1"
               type="number"
-              placeholder={mode === "tolet" ? "Monthly rent" : "Value (₹)"}
+              min="0"
+              placeholder={mode === "tolet" ? "Monthly rent" : mode === "auction" ? "Starting price (₹)" : "Value (₹)"}
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
@@ -791,8 +796,19 @@ const ProductEdit = () => {
       {mode === "auction" && (
         <div className="basicinfoform">
           <div className="productcreatehead">Auction Details</div>
-          <span className="productheaddesc1">Set the auction venue and date</span>
+          <span className="productheaddesc1">Set the reserve price, auction venue and date</span>
           <div className="basicinforow" style={{ marginTop: 12 }}>
+            <div className="basicinfoinputdiv">
+              <div className="basicinfotitle">Reserve Price<span className="required-star">*</span></div>
+              <input
+                className="basicinfoinput1"
+                type="number"
+                min="0"
+                placeholder="Reserve price (₹)"
+                value={meta.reservePrice ?? ""}
+                onChange={(e) => setMeta((prev) => ({ ...prev, reservePrice: e.target.value }))}
+              />
+            </div>
             <div className="basicinfoinputdiv">
               <div className="basicinfotitle">Auction Venue<span className="required-star">*</span></div>
               <input
