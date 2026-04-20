@@ -25,6 +25,7 @@ import { LiaCertificateSolid } from "react-icons/lia";
 import { FiTrash2 } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import api from "../../lib/api";
+import { isAdmin } from "../../lib/auth";
 
 const LISTING_TYPE_BY_TAB = {
   marketplace: "MARKETPLACE",
@@ -358,17 +359,19 @@ const Products = () => {
                             <h2 className="producattitle">{product.title}</h2>
                           )}
                         </div>
-                        <div
-                          className="productdeleteicon"
-                          title="Delete product"
-                          onClick={(e) => handleDelete(e, product.id)}
-                        >
-                          {deletingId === product.id ? (
-                            <span>...</span>
-                          ) : (
-                            <FiTrash2 />
-                          )}
-                        </div>
+                        {isAdmin() && (
+                          <div
+                            className="productdeleteicon"
+                            title="Delete product"
+                            onClick={(e) => handleDelete(e, product.id)}
+                          >
+                            {deletingId === product.id ? (
+                              <span>...</span>
+                            ) : (
+                              <FiTrash2 />
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {selectedCat !== "tolet" && (

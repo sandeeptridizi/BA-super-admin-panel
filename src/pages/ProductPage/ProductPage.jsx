@@ -19,6 +19,7 @@ import { BsStars } from "react-icons/bs";
 
 
 import api from "../../lib/api";
+import { isAdmin } from "../../lib/auth";
 
 const PLACEHOLDER_IMAGES = [];
 
@@ -394,14 +395,16 @@ const ProductPage = () => {
               <FiEdit />
               Edit Product
             </button>
-            <button
-              className="deleteproductbutton"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
-              <FiTrash2 />
-              {deleting ? "Deleting..." : "Delete Product"}
-            </button>
+            {isAdmin() && (
+              <button
+                className="deleteproductbutton"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                <FiTrash2 />
+                {deleting ? "Deleting..." : "Delete Product"}
+              </button>
+            )}
             <button
               className="productsbackbutton"
               onClick={() => navigate("/products")}
