@@ -343,7 +343,7 @@ const ProductCreation = () => {
 
         if (!title) missing.push("Title");
         if (!description?.trim()) missing.push("Description");
-        if (!rawValue) missing.push(listingMode === "tolet" ? "Rent" : listingMode === "auction" ? "Starting Price" : "Value");
+        if (!rawValue) missing.push(listingMode === "tolet" ? "Rent" : listingMode === "auction" ? "Starting Bid" : "Value");
         if (marketplaceFilePreviews.length === 0) missing.push("At least one product image");
 
         const inputDivs = Array.from(root?.querySelectorAll(".basicinfoinputdiv") || []);
@@ -3724,8 +3724,11 @@ const ProductCreation = () => {
         <input type="text" placeholder="e.g., Luxury 4BHK Penthouse in South Mumbai" className="basicinfoinput" />
         <div className='basicinforow'>
             <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>Starting Price<span className="required-star">*</span></h3>
+                <h3 className='basicinfotitle'>Starting Bid<span className="required-star">*</span></h3>
                 <input type="number" inputMode="numeric" min="0" placeholder="e.g., 55000000" className="basicinfoinput1" />
+                <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
+                  Minimum price where bidding starts. Buyers can bid equal or higher from this amount.
+                </span>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
@@ -3757,6 +3760,9 @@ const ProductCreation = () => {
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Reserve Price<span className="required-star">*</span></h3>
                 <input type='number' inputMode='numeric' min="0" placeholder='e.g., 60000000' className='basicinfoinput1' />
+                <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
+                  Minimum price you are willing to accept. Item won't be sold if this price is not reached.
+                </span>
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Auction Venue<span className="required-star">*</span></h3>

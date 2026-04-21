@@ -437,7 +437,7 @@ const ProductEdit = () => {
     const missing = [];
     if (!title.trim()) missing.push("Title");
     if (!description.trim()) missing.push("Description");
-    if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Price" : "Value");
+    if (!value.trim()) missing.push(mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Bid" : "Value");
     if (!city?.trim()) missing.push("City");
     if (!country?.trim()) missing.push("Country");
     if (existingMedia.length + newFiles.length === 0) missing.push("At least one product image");
@@ -690,16 +690,21 @@ const ProductEdit = () => {
         <div className="basicinforow" style={{ marginTop: 12 }}>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">
-              {mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Price" : "Value"}<span className="required-star">*</span>
+              {mode === "tolet" ? "Rent" : mode === "auction" ? "Starting Bid" : "Value"}<span className="required-star">*</span>
             </div>
             <input
               className="basicinfoinput1"
               type="number"
               min="0"
-              placeholder={mode === "tolet" ? "Monthly rent" : mode === "auction" ? "Starting price (₹)" : "Value (₹)"}
+              placeholder={mode === "tolet" ? "Monthly rent" : mode === "auction" ? "Starting Bid (₹)" : "Value (₹)"}
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
+            {mode === "auction" && (
+              <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
+                Minimum price where bidding starts. Buyers can bid equal or higher from this amount.
+              </span>
+            )}
           </div>
           <div className="basicinfoinputdiv">
             <div className="basicinfotitle">City<span className="required-star">*</span></div>
@@ -808,6 +813,9 @@ const ProductEdit = () => {
                 value={meta.reservePrice ?? ""}
                 onChange={(e) => setMeta((prev) => ({ ...prev, reservePrice: e.target.value }))}
               />
+              <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
+                Minimum price you are willing to accept. Item won't be sold if this price is not reached.
+              </span>
             </div>
             <div className="basicinfoinputdiv">
               <div className="basicinfotitle">Auction Venue<span className="required-star">*</span></div>
