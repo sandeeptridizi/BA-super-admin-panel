@@ -702,7 +702,7 @@ const ProductEdit = () => {
             />
             {mode === "auction" && (
               <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
-                Minimum price where bidding starts. Buyers can bid equal or higher from this amount.
+                Minimum price where bidding starts. Buyers can bid equal or higher from this amount. (Suggested: Keep starting bid 10–30% lower than reserve price to attract more bidders)
               </span>
             )}
           </div>

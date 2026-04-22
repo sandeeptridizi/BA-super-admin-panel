@@ -378,9 +378,11 @@ const Products = () => {
                         <h2 className="producattitle">{product.title}</h2>
                       )}
 
-                      <span className="productcatdesc">
-                        📍 {getLocationText(product.meta)}
-                      </span>
+                      {product.listingType !== "AUCTIONS" && (
+                        <span className="productcatdesc">
+                          📍 {getLocationText(product.meta)}
+                        </span>
+                      )}
                       <div className="productpricetag">
                         <h3 className="productprice">
                           {formatCurrency(product.value)}

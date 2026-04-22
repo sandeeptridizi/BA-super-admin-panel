@@ -178,9 +178,11 @@ const ProductPage = () => {
               <HiOutlineCube />{" "}
               {CATEGORY_LABELS[product.category] || product.category}
             </span>
-            <span className="productheaddesc1">
-              <IoLocationOutline /> {getLocationText(meta)}
-            </span>
+            {product.listingType !== "AUCTIONS" && (
+              <span className="productheaddesc1">
+                <IoLocationOutline /> {getLocationText(meta)}
+              </span>
+            )}
             {product.listingType && (
               <span className="productheaddesc1">
                 <AiOutlineShop />{" "}

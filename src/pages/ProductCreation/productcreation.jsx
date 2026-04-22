@@ -3727,12 +3727,8 @@ const ProductCreation = () => {
                 <h3 className='basicinfotitle'>Starting Bid<span className="required-star">*</span></h3>
                 <input type="number" inputMode="numeric" min="0" placeholder="e.g., 55000000" className="basicinfoinput1" />
                 <span style={{ fontSize: 12, color: "#6b7280", marginTop: 4, display: "block" }}>
-                  Minimum price where bidding starts. Buyers can bid equal or higher from this amount.
+                  Minimum price where bidding starts. Buyers can bid equal or higher from this amount. (Suggested: Keep starting bid 10–30% lower than reserve price to attract more bidders)
                 </span>
-            </div>
-            <div className='basicinfoinputdiv'>
-                <h3 className='basicinfotitle'>City<span className="required-star">*</span></h3>
-                <CityDropdown value={city} onChange={setCity} suggestions={MAJOR_CITIES} />
             </div>
             <div className='basicinfoinputdiv'>
                 <h3 className='basicinfotitle'>Country<span className="required-star">*</span></h3>

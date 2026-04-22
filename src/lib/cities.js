@@ -1,11 +1,11 @@
 export const MAJOR_CITIES = [
-  "Mumbai",
-  "Delhi",
-  "Bangalore",
   "Hyderabad",
-  "Ahmedabad",
+  "Mumbai",
+  "Bangalore",
+  "Delhi",
   "Chennai",
   "Kolkata",
+  "Ahmedabad",
   "Pune",
   "Surat",
 ];

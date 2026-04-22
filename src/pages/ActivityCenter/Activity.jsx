@@ -376,7 +376,9 @@ const Activitypage = () => {
                 </div>
                 <div className='activityinfodetails'>
                     <div className='activityinfodetailrow'>
-                        <span className='activityinfoicon'><CiLocationOn />{getLocation(product.meta)}</span>
+                        {product.listingType !== "AUCTIONS" && (
+                          <span className='activityinfoicon'><CiLocationOn />{getLocation(product.meta)}</span>
+                        )}
                         <span className='activityinfoicon'><MdAccessTime />Submitted: {formatDate(product.createdAt)}</span>
                     </div>
                     <div className='activityinfodetailrow'>
@@ -522,7 +524,9 @@ const Activitypage = () => {
                         </li>
                     </ul>
                 </div>
-                <span className='activityinfoicon'><CiLocationOn />{getLocation(product.meta)}</span>
+                {product.listingType !== "AUCTIONS" && (
+                  <span className='activityinfoicon'><CiLocationOn />{getLocation(product.meta)}</span>
+                )}
                 <div className='activityapprovedtags1'>
                     <div>
                         <label className="switcher">
