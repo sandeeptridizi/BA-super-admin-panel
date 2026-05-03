@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { IoCameraOutline } from "react-icons/io5";
 import { getAdminProfile, updateAdminProfile, updateAdminProfilePicture, removeAdminProfilePicture, getPresignedUrl, changeAdminPassword, getPlatformDetails, updatePlatformDetails } from "../../lib/admin";
 
-const CDN_ENDPOINT = import.meta.env.VITE_AWS_CDN_ENDPOINT || "https://bauctionprod.s3.ap-south-1.amazonaws.com";
+const CDN_ENDPOINT = import.meta.env.VITE_AWS_CDN_ENDPOINT;
 const BUCKET_PREFIX = import.meta.env.VITE_AWS_BUCKET_PREFIX || "ba";
 
 const Settings = () => {
